@@ -202,6 +202,15 @@
         }
 
         .add-row { display: flex; gap: 10px; align-items: stretch; }
+        .checkbox-row:has(input:checked) { border-color: var(--neon-purple); background: rgba(181, 42, 255, 0.18); }
+        .opt-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 2px; margin-top: 4px; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
+        .opt-text { font-size: 14px; font-weight: 600; color: #cfd3dc; text-align: left; }
+        .opt-text small { display: block; font-size: 12px; font-weight: 400; color: #7d8190; margin-top: 2px; }
+        input[type="checkbox"].switch { -webkit-appearance: none; appearance: none; flex: 0 0 auto; width: 51px; height: 31px; margin: 0; border: 0; border-radius: 999px; background: #48484a; position: relative; cursor: pointer; transition: background 0.2s; }
+        input[type="checkbox"].switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); transition: transform 0.2s; }
+        input[type="checkbox"].switch:checked { background: #34c759; }
+        input[type="checkbox"].switch:checked::after { transform: translateX(20px); }
+        input[type="checkbox"].switch:focus-visible { outline: 2px solid var(--neon-cyan); outline-offset: 2px; }
         .add-row input[type="text"] { flex: 1; min-width: 0; width: auto; }
         .add-btn { flex: 0 0 56px; padding: 0; font-size: 32px; line-height: 1; background: #22c55e; color: #052e14; box-shadow: none; border-radius: 8px; }
 
@@ -264,6 +273,10 @@
         <div class="player-count" id="player-count">0 jogadores na roda</div>
         <ul id="players-ul" class="player-list"></ul>
         
+        <label class="opt-row">
+            <span class="opt-text">Contar doses?<small>Quando ativado, calcula quantos shots cada jogador bebeu.</small></span>
+            <input type="checkbox" id="count-drinks" class="switch">
+        </label>
         <button class="btn-purple" onclick="startGame()" style="margin-top: 10px;">Começar Jogo</button>
         <button class="btn-outline" onclick="toggleCatalog()">Ver todas as cartas</button>
     </div>
@@ -276,9 +289,9 @@
                 <button id="menu-btn" aria-label="Menu" aria-expanded="false" onclick="toggleMenu(event)">☰</button>
                 <div id="menu-panel" class="menu-panel">
                     <button onclick="menuGo('history')">📜 Ver histórico</button>
-                    <button onclick="menuGo('ranking')">🏆 Ver ranking</button>
+                    <button id="menu-ranking" onclick="menuGo('ranking')">🏆 Ver ranking</button>
                     <button onclick="menuGo('catalog')">🃏 Ver todas as cartas</button>
-                    <button class="menu-danger" onclick="menuGo('end')">🏁 Encerrar e ver ranking</button>
+                    <button id="menu-end" class="menu-danger" onclick="menuGo('end')">🏁 Encerrar e ver ranking</button>
                 </div>
             </div>
         </div>
@@ -307,7 +320,7 @@
             <div id="display-scope" style="display:none;"></div>
             <div class="card-text" id="display-text">Texto da carta vai aqui...</div>
         </div>
-        <button onclick="goToAssignDrinks()">Quem Bebeu?</button>
+        <button id="btn-next-card" onclick="goToAssignDrinks()">Quem Bebeu?</button>
         <button class="btn-outline" onclick="skipCard()">Pular Carta (Não conta)</button>
     </div>
 
@@ -325,8 +338,8 @@
 
         <!-- Bloco simplificado APENAS para Acordo -->
         <div id="single-selection-block" style="display: none; text-align: center;">
-            <p style="margin-bottom: 30px; font-size: 20px; font-weight: bold; padding: 20px; background: var(--card-bg); border-radius: 10px;">Você aceitou o acordo?</p>
-            <button class="btn-purple" onclick="confirmSingleDrink(true)" style="width: 100%; margin-bottom: 15px;">Sim, eu bebi!</button>
+            <p style="margin-bottom: 30px; font-size: 20px; font-weight: bold; padding: 20px; background: var(--card-bg); border-radius: 10px;"><span id="single-q">Você aceitou o acordo?</span><br><small id="single-rule" style="color:#999; font-weight:normal; font-size:14px;"></small></p>
+            <button class="btn-purple" onclick="confirmSingleDrink(true)" style="width: 100%; margin-bottom: 15px;">Aceitei o acordo</button>
             <button class="btn-outline" onclick="confirmSingleDrink(false)" style="width: 100%; border-color: #555; color: #999;">Não aceitei</button>
         </div>
     </div>
@@ -393,23 +406,103 @@
         const B = (cat, t) => ({ cat: cat, text: t });
         const REV = ['já fingiu que entendeu uma piada só para não passar vergonha.','já ficou olhando a geladeira aberta sem saber o que queria.','já disse “estou chegando” ainda deitado no sofá.','já ouviu a própria voz gravada e quis sumir.','já pesquisou um sintoma no Google e achou que ia morrer.','já gastou dinheiro em algo e escondeu do parceiro(a).','já usou o “estou em reunião” para fugir de uma ligação.','já esqueceu o aniversário de alguém importante.','já dormiu antes das 22h num sábado e achou ótimo.','já “emprestou” o carregador de alguém e nunca devolveu.','já mandou “kkkk” sem ter rido nem um pouco.','já chorou de raiva no trabalho e voltou como se nada tivesse acontecido.','já ficou stalkeando o perfil de um ex às 3 da manhã.','já bebeu demais e prometeu nunca mais fazer isso na vida.','já comprou algo parcelado e esqueceu quantas parcelas faltam.','já começou uma dieta e desistiu antes do primeiro final de semana.','já se arrependeu de um corte de cabelo e usou boné por semanas.','já errou o nome de alguém depois de conversar por uma hora.','já deu “curtir” sem querer numa foto antiga de alguém.','já ficou acordado até tarde vendo vídeos aleatórios sem motivo.','já foi pego cantando sozinho no carro.','já respondeu “tudo bem” quando estava tudo péssimo.','já viu a mensagem, pensou “respondo depois” e esqueceu por dias.','já virou a noite achando que dava conta no dia seguinte.','já pediu comida mesmo com a casa cheia de mantimentos.','já fingiu estar no telefone para evitar conversar com alguém.','já contou uma história exagerando bastante nos detalhes.','já tropeçou em público e fingiu que foi proposital.','já esqueceu onde estacionou o carro.','já deixou uma planta morrer por pura falta de cuidado.','já discutiu com o(a) parceiro(a) por um motivo ridículo.','já ficou com a mesma música grudada na cabeça por dias.','já comprou um aparelho de academia ou um curso e nunca usou.','já sentiu vergonha alheia de um parente em público.','já passou mal de tanto comer em um churrasco.','já cancelou um compromisso em cima da hora por preguiça.','já descobriu que estava com a blusa do avesso o dia todo.','já mandou mensagem de amor para o grupo errado.','já fingiu que dirige melhor do que realmente dirige.','já pegou no sono em um show ou em um evento caro.','já usou o celular escondido durante uma cerimônia.','já disse “só mais um” e ficou até o fim da festa.','já se emocionou com uma propaganda de TV.','já ficou sem falar com alguém por puro orgulho.','já terminou um namoro por mensagem.','já guardou segredo de alguém e acabou contando para outra pessoa.','já saiu de casa e voltou porque esqueceu algo importante.'];
         const COM = ['já mandou uma foto sua sem querer para a pessoa errada.','já sentiu ciúme de alguém e negou até o fim.','já disse “hoje eu não bebo” e foi o último a ir embora.','já dividiu a conta sem concordar e ficou quieto.','já fez um “rolê rápido” que durou até o dia seguinte.','já esqueceu uma senha importante e precisou recuperar.','já assistiu a uma série inteira em um fim de semana.','já mentiu no currículo, nem que fosse um pouquinho.','já dormiu na casa de alguém sem avisar em casa.','já combinou algo no grupo e foi o primeiro a furar.','já se achou muito bem vestido e depois se arrependeu da foto.','já ficou sem falar com um amigo por semanas por bobagem.','já quebrou algo na casa dos outros e não contou.','já mandou um “oi sumido” só por interesse.','já usou uma música para indiretar alguém.','já deixou um prato sujo na pia até o dia seguinte.','já pediu um Uber para ir a um lugar a dois quarteirões.','já tirou mais de 20 selfies para postar só uma.','já ficou preso em um elevador ou em um lugar sem sinal.','já saiu de um grupo de WhatsApp sem avisar.','já tomou café às 22h e depois reclamou que não conseguia dormir.','já esqueceu de pagar uma conta e pagou multa.','já perdeu o celular dentro de casa e procurou por meia hora.','já deu uma desculpa esfarrapada para ir embora mais cedo.','já fingiu estar dormindo para evitar uma conversa.','já se perdeu mesmo usando o GPS.','já quis largar tudo e viver em um sítio.','já viu o dia amanhecer sem ter planejado.','já abriu a geladeira de madrugada só para ver o que tinha.','já brigou com um objeto, tipo impressora ou cadeira.','já recebeu um elogio e não soube o que responder.','já esqueceu uma bebida no congelador.','já falou sozinho em voz alta e alguém ouviu.'];
-        const DES = ['Imite um animal escolhido pelo grupo por 10 segundos. Se não fizer, beba 2 goles.','Fale um trava-língua sem errar. Se errar, beba 1 gole.','Mostre a última foto da galeria do celular. Se não mostrar, beba 2 goles.','Leia em voz alta a última mensagem que você enviou. Se recusar, beba 2 goles.','Dance sem música por 15 segundos. Se não dançar, beba 2 goles.','Faça uma declaração de amor dramática para um objeto da sala. Se não fizer, beba 2 goles.','Fique em silêncio por 30 segundos sem rir. Se rir, beba 2 goles.','Diga o nome de 5 filmes em 10 segundos. Se não conseguir, beba 2 goles.','Elogie sinceramente cada pessoa da roda. Se não fizer, beba 3 goles.','Imite a voz de alguém da roda e o grupo tenta adivinhar quem é. Se ninguém acertar, beba 1 gole.','Conte uma história engraçada em 30 segundos. Se o grupo não rir, beba 2 goles.','Faça 10 agachamentos agora. Se não fizer, beba 3 goles.','Mostre o último print que você tirou. Se não mostrar, beba 2 goles.','Cante o refrão de uma música escolhida pelo grupo. Se não cantar, beba 2 goles.','Feche os olhos e aponte para a pessoa que estiver à sua frente. Se errar, beba 1 gole.','Fale o alfabeto de trás para frente. Se errar, beba 2 goles.','Diga 5 países que começam com a letra B. Se não conseguir, beba 2 goles.','Mande um áudio de 5 segundos dizendo “estou com saudade” para um contato escolhido pelo grupo. Se não mandar, beba 3 goles.','Faça uma pose de modelo por 10 segundos. Se não fizer, beba 2 goles.','Mostre as últimas 3 pesquisas do seu navegador. Se não mostrar, beba 3 goles.','Equilibre uma colher no nariz por 5 segundos. Se não conseguir, beba 1 gole.','Faça a mímica de um filme e o grupo tenta adivinhar. Se ninguém acertar, beba 2 goles.','Passe 1 minuto sem dizer a palavra “não”. Se falar, beba 2 goles.','Diga o nome completo de todos os jogadores. Se esquecer algum, beba 2 goles.','Faça cara de bravo por 10 segundos sem rir. Se rir, beba 1 gole.','Conte o seu maior mico em 20 segundos. Se não contar, beba 3 goles.','Fale como a pessoa à sua esquerda por 30 segundos. Se não fizer, beba 2 goles.','Descreva a pessoa à sua direita em 3 palavras. Se ela discordar, beba 1 gole.'];
+        const DES = ['Imite um animal escolhido pelo grupo por 10 segundos. Se não fizer, beba 2 goles.','Fale um trava-língua sem errar. Se errar, beba 1 gole.','Dance sem música por 15 segundos. Se não dançar, beba 2 goles.','Faça uma declaração de amor dramática para um objeto da sala. Se não fizer, beba 2 goles.','Fique em silêncio por 30 segundos sem rir. Se rir, beba 2 goles.','Diga o nome de 5 filmes em 10 segundos. Se não conseguir, beba 2 goles.','Elogie sinceramente cada pessoa da roda. Se não fizer, beba 3 goles.','Imite a voz de alguém da roda e o grupo tenta adivinhar quem é. Se ninguém acertar, beba 1 gole.','Conte uma história engraçada em 30 segundos. Se o grupo não rir, beba 2 goles.','Faça 10 agachamentos agora. Se não fizer, beba 3 goles.','Cante o refrão de uma música escolhida pelo grupo. Se não cantar, beba 2 goles.','Feche os olhos e aponte para a pessoa que estiver à sua frente. Se errar, beba 1 gole.','Fale o alfabeto de trás para frente. Se errar, beba 2 goles.','Diga 5 países que começam com a letra B. Se não conseguir, beba 2 goles.','Faça uma pose de modelo por 10 segundos. Se não fizer, beba 2 goles.','Equilibre uma colher no nariz por 5 segundos. Se não conseguir, beba 1 gole.','Faça a mímica de um filme e o grupo tenta adivinhar. Se ninguém acertar, beba 2 goles.','Passe 1 minuto sem dizer a palavra “não”. Se falar, beba 2 goles.','Diga o nome completo de todos os jogadores. Se esquecer algum, beba 2 goles.','Faça cara de bravo por 10 segundos sem rir. Se rir, beba 1 gole.','Conte o seu maior mico em 20 segundos. Se não contar, beba 3 goles.','Fale como a pessoa à sua esquerda por 30 segundos. Se não fizer, beba 2 goles.','Descreva a pessoa à sua direita em 3 palavras. Se ela discordar, beba 1 gole.'];
         const INS = ['estiver usando relógio ou pulseira','estiver de tênis','estiver usando algo azul','estiver de óculos','tiver tatuagem','estiver sem meias','tiver mais de 100 fotos de comida na galeria','estiver com o celular em modo silencioso','abriu o aplicativo do banco hoje','estiver com mais de 10 abas abertas no navegador','estiver com a tela do celular trincada','tiver mais de 50 mensagens não lidas','estiver usando brinco ou piercing','estiver de bermuda ou short','tiver um pet em casa','tiver mais de 20 notificações não lidas','tiver nascido em um mês com 31 dias','estiver de cabelo preso','tiver irmão ou irmã mais velho(a)','tiver quebrado o celular este ano','estiver usando algo vermelho','tiver a letra A no nome','estiver descalço','tiver carro','estiver de barba','usar o modo escuro no celular','tiver mais de 3 aplicativos de delivery instalados'];
-        const ACO = ['ficar um mês sem celular em troca de R$ 5.000','abrir mão do seu café ou refrigerante favorito por um ano em troca de R$ 2.000','cantar no karaokê na frente de desconhecidos em troca de R$ 1.000','passar uma semana sem tomar banho quente por R$ 1.500','nunca mais usar o Instagram em troca de R$ 15.000','ganhar um mês de férias pagas, mas sem poder usar a internet','mostrar seu histórico de pesquisas para a roda em troca de R$ 3.000','ficar um ano sem comer carne em troca de R$ 8.000','ir de pijama para o trabalho por uma semana em troca de R$ 2.000','ficar 6 meses sem ver séries e filmes em troca de R$ 10.000','morar 6 meses em outro país por R$ 20.000','dormir no chão por um mês em troca de R$ 4.000','pagar a próxima rodada de todos em troca de um jantar grátis por um mês','nunca mais usar sapatos em troca de R$ 25.000','ficar uma semana sem falar com seu parceiro(a) em troca de R$ 3.000','ficar um ano sem redes sociais em troca de uma viagem','entregar seu celular desbloqueado para a roda por 1 minuto em troca de R$ 2.000','cortar o cabelo do jeito que o grupo escolher em troca de R$ 1.500','fazer um discurso no casamento de um desconhecido em troca de R$ 1.000','acordar às 5h todos os dias durante 3 meses em troca de R$ 6.000','ficar um ano sem fazer compras online em troca de R$ 5.000','usar a mesma roupa por 7 dias em troca de R$ 2.500','ficar um mês sem música em troca de R$ 2.000','limpar a casa de todos da roda em troca de R$ 4.000','pular de paraquedas em troca de R$ 2.000','comer a pimenta mais forte do mundo em troca de R$ 1.000','ficar 24 horas sem falar nada em troca de R$ 1.000'];
+        const ACO = ['ficar um mês sem celular em troca de R$ 5.000','abrir mão do seu café ou refrigerante favorito por um ano em troca de R$ 2.000','cantar no karaokê na frente de desconhecidos em troca de R$ 1.000','passar uma semana sem tomar banho quente por R$ 1.500','nunca mais usar o Instagram em troca de R$ 15.000','ganhar um mês de férias pagas, mas sem poder usar a internet','ficar um ano sem comer carne em troca de R$ 8.000','ir de pijama para o trabalho por uma semana em troca de R$ 2.000','ficar 6 meses sem ver séries e filmes em troca de R$ 10.000','morar 6 meses em outro país por R$ 20.000','dormir no chão por um mês em troca de R$ 4.000','pagar a próxima rodada de todos em troca de um jantar grátis por um mês','nunca mais usar sapatos em troca de R$ 25.000','ficar uma semana sem falar com seu parceiro(a) em troca de R$ 3.000','ficar um ano sem redes sociais em troca de uma viagem','cortar o cabelo do jeito que o grupo escolher em troca de R$ 1.500','fazer um discurso no casamento de um desconhecido em troca de R$ 1.000','acordar às 5h todos os dias durante 3 meses em troca de R$ 6.000','ficar um ano sem fazer compras online em troca de R$ 5.000','usar a mesma roupa por 7 dias em troca de R$ 2.500','ficar um mês sem música em troca de R$ 2.000','limpar a casa de todos da roda em troca de R$ 4.000','pular de paraquedas em troca de R$ 2.000','comer a pimenta mais forte do mundo em troca de R$ 1.000','ficar 24 horas sem falar nada em troca de R$ 1.000'];
         const ALT = ['Quem é mais provável de chegar atrasado ao próprio casamento?','Quem é mais provável de perder o celular hoje?','Quem mais reclama do trânsito?','Quem é mais provável de ganhar na loteria e sumir?','Quem é mais ciumento(a) da roda?','Quem tem o pior gosto musical?','Quem seria o primeiro a morrer num filme de terror?','Quem mais come escondido?','Quem é mais provável de chorar em um filme?','Quem tem mais fotos no celular?','Quem é mais provável de esquecer a carteira em casa?','Quem dirige pior?','Quem é o mais gastão da roda?','Quem tem o sono mais pesado?','Quem mais mente sobre a hora em que está chegando?','Quem seria a pior pessoa para guardar um segredo?','Quem é mais provável de adotar mais um pet sem pensar?','Quem mais ronca?','Quem é mais provável de virar influenciador?','Quem é mais provável de discutir com um atendente de telemarketing?','Quem demora mais para responder mensagem?','Quem é mais teimoso(a)?'];
         // Revelação individual: 'self' = só quem tirou a carta; 'vote' = o grupo vota em alguém
         const IND_SELF = ['conta a maior vergonha que já passou em uma festa. Se o grupo achar fraca, beba 2 goles.','revela o último segredo que guardou de alguém. Se não contar, beba 2 goles.','conta a pior mentira que já contou para um amigo ou parceiro(a). Se o grupo não acreditar, beba 2 goles.','conta como foi o pior encontro da vida. Se o grupo não rir, beba 2 goles.','diz qual foi a última coisa que pesquisou no Google. Se não disser, beba 2 goles.','conta o hábito mais estranho que tem. Se o grupo achar comum, beba 1 gole.','revela o maior mico que já pagou no trabalho. Se não contar, beba 2 goles.','conta o que faria se ganhasse R$ 1 milhão amanhã. Se o grupo achar sem graça, beba 1 gole.'];
         const IND_VOTE = ['já ter passado vergonha em um encontro.','já ter mentido a idade.','já ter mandado mensagem para o ex de madrugada.','já ter chorado no trabalho.','já ter dormido em um evento importante.','já ter fingido estar doente para faltar.','já ter esquecido o aniversário do(a) parceiro(a).'];
-        deck.push(
-            ...REV.slice(0, 32).map(t => B('Revelação', 'Beba se você ' + t)),
-            ...IND_SELF.map(t => ({ cat: 'Revelação', scope: 'self', text: 'Quem tirou a carta ' + t })),
-            ...IND_VOTE.map(t => ({ cat: 'Revelação', scope: 'vote', text: 'O grupo vota: quem é a pessoa mais provável de ' + t + ' A pessoa mais votada bebe.' })),
-            ...COM.map(t => B('Comum', 'Beba se você ' + t)),
-            ...DES.map(t => B('Desafio', t)),
-            ...INS.map(t => B('Inspeção', 'Quem ' + t + ' bebe.')),
-            ...ACO.map(t => B('Acordo', 'Você toparia ' + t + '? Se aceitar, beba 1 gole.')),
-            ...ALT.map(t => B('Modo Alternativo', 'ESCOLHA ALGUÉM: ' + t + ' (Se acertar, ela bebe. Se errar, você bebe).'))
-        );
+        // ===== Mais cartas (scope: self = individual, all = todos, vote = grupo vota) =====
+const REV2 = ['já mandou um áudio e tentou apagar antes de a pessoa ouvir.','já fingiu que gostou de uma comida só para não ofender quem cozinhou.','já ficou horas em uma fila só para desistir no final.','já chamou alguém pelo nome errado por meses.','já esqueceu a senha do próprio celular.','já foi dormir prometendo acordar cedo e perdeu a hora.','já deu uma resposta errada com total confiança.','já comeu escondido para não dividir.','já passou vontade por vergonha de pedir algo no restaurante.','já saiu de uma festa sem se despedir de ninguém.','já mentiu que estava doente para faltar a um compromisso.','já se fingiu de morto em uma brincadeira.','já tomou um susto e gritou mais do que devia.','já deu risada de algo só porque todo mundo riu.','já esqueceu o fogão ou o ferro de passar ligado.','já assistiu a um filme de terror com os olhos tapados.','já teve medo de ir ao banheiro de noite.','já tentou cozinhar algo e deu muito errado.','já deixou a comida queimar por distração.','já passou mais de uma hora decidindo o que assistir.','já fingiu que não viu um conhecido na rua.','já ficou trancado do lado de fora de casa.','já bateu o carro ou a moto, mesmo que de leve.','já foi convidado a sair de algum lugar.','já falou algo e logo percebeu que não devia.','já se meteu em uma briga que não era sua.','já cantou parabéns desafinado de propósito.','já pegou carona e fingiu que ia pagar depois.','já chorou de rir até doer a barriga.','já levou um tombo feio e fingiu que não doeu.','já ficou sem graça com um elogio exagerado.','já comeu tudo sozinho de madrugada.','já dormiu com a TV ligada a noite toda.','já esqueceu um presente e comprou em cima da hora.','já se arrependeu de uma mensagem enviada de madrugada.','já foi trabalhar ou estudar sem dormir nada.','já comprou algo por impulso e se arrependeu no dia seguinte.','já viajou e esqueceu algo essencial em casa.','já inventou um compromisso para sair de um lugar.','já fingiu ouvir uma história pela décima vez.','já ficou sem internet em um momento crucial.','já deixou a música errada tocando no som alto.','já foi a um casamento só pela comida e pela bebida.','já errou um passo de dança e fingiu que era de propósito.','já se achou mais bêbado do que realmente estava.','já tomou banho de chuva por diversão.','já pulou uma refeição por preguiça de cozinhar.','já ligou sem querer para alguém e ficou ouvindo chamar.','já contou um machucado bobo como se fosse uma grande aventura.','já pagou mico em uma videochamada.'];
+const COM2 = ['já foi o último a saber de uma fofoca.','já dividiu o Uber e esqueceu de mandar a parte.','já esqueceu o que ia falar no meio da frase.','já ficou rindo sozinho lembrando de algo.','já pediu desculpa para um objeto depois de bater nele.','já tropeçou no próprio pé sem motivo.','já fez uma promessa de ano novo e desistiu em janeiro.','já fingiu estar ouvindo música para não conversar.','já passou da hora de dormir vendo só mais um episódio.','já se sentiu a pessoa mais velha da festa.','já foi ao mercado e voltou sem o que precisava.','já mandou um pix para a pessoa errada.','já usou o mesmo pijama por mais de uma semana.','já ficou duas horas olhando fotos antigas.','já viu o dia amanhecer conversando com alguém.','já correu atrás do ônibus e perdeu mesmo assim.','já escondeu uma bagunça jogando tudo no armário.','já disse “estou saindo agora” sem ter tomado banho ainda.','já cantou a música errada em um karaokê.','já fez amizade com um desconhecido no meio de uma festa.','já foi dormir com fome por preguiça de cozinhar.','já disse “vamos marcar” sem a menor intenção de marcar.','já se emocionou em um casamento de pessoas que nem conhecia.','já torceu para o evento ser cancelado.','já pediu a sobremesa só para provar a dos outros.','já ficou olhando a chuva pela janela sem fazer nada.','já inventou uma desculpa para chegar mais tarde.','já caiu de sono no meio de uma conversa.','já dirigiu sem saber exatamente para onde ia.','já esqueceu o guarda-chuva em algum lugar.','já deu uma volta extra só para terminar uma música no carro.','já ganhou algo em um sorteio.','já perdeu uma aposta boba para um amigo.','já conversou com o pet como se ele entendesse tudo.','já tirou foto da comida antes de comer.','já se arrumou todo e o rolê foi cancelado.','já comeu a última fatia sem perguntar.','já passou a noite em claro conversando bobagens.','já deixou o celular cair na própria cara deitado.','já saiu de casa com a cara amassada de travesseiro.','já se perdeu em um shopping.','já mandou uma figurinha na hora errada.','já se escondeu em uma festa chata.','já inventou um nome falso para um desconhecido.','já dormiu em um transporte e passou do ponto.'];
+
+const _MIM = ['um filme','uma profissão','um animal','um esporte','uma música','um personagem de desenho','um aplicativo','uma comida','uma celebridade','uma novela','um objeto da casa','uma cena de terror','um super-herói','um instrumento musical','uma atividade do dia a dia'];
+const _CANT = ['um sertanejo','um funk','um pagode','um rock','uma MPB','um forró','uma música de desenho animado','um jingle de propaganda','uma música de festa junina','uma música romântica','uma música de axé','uma balada internacional'];
+const _DANC = ['funk','forró','sertanejo','como se estivesse em um clipe','como um robô','como se ninguém estivesse olhando','como em um casamento','como um pinguim','como a pessoa à sua esquerda','em câmera lenta','a coreografia de uma música viral','samba'];
+const _IMIT = ['um bebê chorando','um locutor de futebol','um professor bravo','um cantor famoso','um bicho do mato','um político discursando','um narrador de documentário','uma criança birrenta'];
+const DES_SELF = [
+  ..._MIM.map(x => 'Mímica: o grupo escolhe ' + x + ' e você representa sem falar. Se ninguém acertar em 30 segundos, beba 2 goles.'),
+  ..._CANT.map(x => 'Cante um trecho de ' + x + ' com muita emoção. Se o grupo achar sem graça, beba 2 goles.'),
+  ..._DANC.map(x => 'Dance ' + x + ' por 15 segundos. Se o grupo achar fraco, beba 2 goles.'),
+  ..._IMIT.map(x => 'Imite ' + x + ' por 15 segundos. Se o grupo não rir, beba 2 goles.'),
+  'Faça um discurso de 20 segundos como se fosse o noivo ou a noiva de um casamento. Se o grupo não aplaudir, beba 2 goles.',
+  'Conte uma piada. Se ninguém rir, beba 2 goles.',
+  'Faça uma declaração de amor para a pessoa à sua direita, sem rir. Se rir, beba 2 goles.',
+  'Narre como locutor esportivo alguém da roda bebendo. Se o grupo achar ruim, beba 1 gole.',
+  'Fale por 30 segundos com um sotaque diferente do seu. Se o grupo não acreditar, beba 2 goles.',
+  'Faça 5 flexões de braço. Se não fizer, beba 3 goles.',
+  'Fique 30 segundos em posição de prancha. Se não aguentar, beba 2 goles.',
+  'Diga um trava-língua difícil três vezes seguidas. Se errar, beba 2 goles.',
+  'Faça uma propaganda de 20 segundos vendendo o copo de alguém da roda. Se o grupo não comprar, beba 2 goles.',
+  'Faça um rap de 4 versos sobre a pessoa à sua esquerda. Se o grupo não curtir, beba 3 goles.',
+  'Faça o seu melhor choro falso por 10 segundos. Se não convencer, beba 1 gole.',
+  'Imite a sua própria risada mais escandalosa. Se o grupo não rir, beba 2 goles.'
+];
+const DES_ALL = [
+  ..._MIM.slice(0, 10).map(x => 'Todos: a roda inteira faz a mímica de ' + x + ' ao mesmo tempo. O grupo vota no pior e ele bebe.'),
+  ...['parabéns pra você','uma música de festa junina','o refrão de um sertanejo famoso','uma música de desenho animado','o hino do seu time','um jingle de comercial','uma música dos anos 2000','uma música em inglês'].map(x => 'Todos cantam juntos ' + x + '. Quem errar a letra ou parar primeiro bebe.'),
+  ...['funk','forró','sertanejo','música eletrônica','a coreografia de uma música viral','como em um casamento','como robôs','no estilo mais ridículo possível','em câmera lenta'].map(x => 'Todos: dancem ' + x + ' por 20 segundos. O grupo vota no mais desengonçado, e ele bebe.'),
+  ...['nomes de frutas','marcas de carro','países','filmes de comédia','nomes de cidades','animais','artistas brasileiros','comidas típicas','times de futebol','profissões'].map(x => 'Todos: digam, um de cada vez, ' + x + ' sem repetir. Quem travar ou repetir bebe.'),
+  'Todos: joguem pedra, papel e tesoura em eliminatória. Quem perder a final bebe.',
+  'Todos: fiquem em silêncio por 30 segundos sem rir. Quem rir primeiro bebe.',
+  'Todos: levantem ao mesmo tempo. O último a ficar de pé bebe.',
+  'Todos: toquem o nariz ao mesmo tempo quando alguém gritar “já”. O último bebe.',
+  'Todos: fechem os olhos e apontem para quem mentiria melhor. O mais apontado bebe.',
+  'Todos: façam cara de bravo olhando um para o outro. Quem rir primeiro bebe.',
+  'Todos: batam palmas no ritmo de uma música escolhida pelo grupo. Quem errar o ritmo bebe.',
+  'Todos: contem até 30, um de cada vez, e quem estiver no número 7 ou múltiplo de 7 diz “pum”. Quem errar bebe.'
+];
+const INS2 = ['estiver usando algo verde','estiver usando algo branco','estiver de boné ou chapéu','tiver cabelo cacheado','tiver cabelo curto','já tiver quebrado um osso','for filho(a) único(a)','for o(a) mais novo(a) da roda','for o(a) mais velho(a) da roda','tiver mais de 1,80 m','tiver menos de 1,65 m','estiver usando colar ou corrente','estiver com unha pintada','tiver cicatriz visível','não souber nadar','nunca tiver andado de avião','tiver dormido menos de 6 horas esta noite','já tiver tomado café hoje','tiver comido carne hoje','for de signo de fogo (Áries, Leão ou Sagitário)','for de signo de água (Câncer, Escorpião ou Peixes)','tiver nascido em outro estado','estiver de casaco ou moletom','estiver com a mesma roupa de ontem','estiver de calça jeans','estiver usando anel ou aliança','tiver o nome com mais de 7 letras','tiver olhos claros','tiver mais de 2 tatuagens','tiver furos nas orelhas','estiver de chinelo','estiver com o cabelo molhado','já tiver visto o nascer do sol este mês','já tiver ido ao dentista este ano','estiver de camiseta de banda ou de time','tiver um apelido de infância vergonhoso','tiver mais de 30 anos','tiver menos de 25 anos','for canhoto(a)','tiver gato em casa'];
+
+const ABS = [['beber um copo de xixi',300000],['passar 1 mês em uma casa lotada de aranhas',500000],['comer um pedaço de barata em todas as refeições por 1 semana',400000],['dormir 1 noite dentro de um caixão fechado',150000],['passar 24 horas em uma sala escura com cobras soltas',800000],['comer uma colher de minhocas vivas',120000],['tomar um shake de sardinha, ovo cru e leite azedo',100000],['lamber o chão de um banheiro público',250000],['ficar 1 semana sem tomar banho e sem escovar os dentes',80000],['passar a noite sozinho em um cemitério',200000],['viver 1 mês em uma ilha deserta comendo só peixe cru',300000],['ficar 2 horas preso em um elevador com um rato',150000],['beber um copo de água de aquário',60000],['comer um prato de grilos fritos',50000],['colocar a mão por 1 minuto em uma caixa cheia de baratas',350000],['raspar a cabeça e as sobrancelhas',100000],['comer um prato de ração de cachorro',80000],['acampar sozinho no meio da mata por 1 mês',120000],['ficar 1 semana trancado em um quarto escuro sem celular',150000],['mergulhar em uma gaiola entre tubarões',200000],['pular de bungee jump de uma ponte de 100 metros',70000],['beber um copo com um pouquinho de saliva de cada pessoa da roda',250000],['beber um copo pequeno de vinagre',30000],['beber um copo de leite batido com sardinha',70000],['comer uma cebola crua inteira como se fosse uma maçã',40000],['dormir 1 mês em um quarto cheio de bonecas antigas',400000],['ficar 1 mês sem falar com ninguém da sua família',90000],['ficar 48 horas sem dormir',60000],['tomar um banho de gelo por 10 minutos',40000],['comer uma pimenta malagueta inteira e ficar 10 minutos sem beber água',20000],['viver 1 ano em uma casa assombrada',600000],['ficar enterrado até o pescoço por 1 hora',100000]];
+const MILD = [['ficar um mês sem açúcar',2000],['dormir no sofá por um mês',3000],['acordar às 6h todos os dias por 1 mês',3000],['ficar uma semana sem redes sociais',1500],['usar roupa social todos os dias por 1 mês',2500],['ir ao trabalho de bicicleta por 3 meses',4000],['ficar um mês sem delivery',2500],['passar o verão inteiro sem ar-condicionado',8000],['comer a mesma refeição por 1 semana',2000],['tomar banho gelado por 1 mês',5000],['ficar uma semana sem falar palavrão',1000],['passar um fim de semana sem eletrônicos',1500],['andar com a roupa do avesso o dia todo',500],['usar uma fantasia em público por um dia',2000],['fazer 100 flexões por dia por uma semana',3000]];
+
+const ALT_X = ['Quem gasta mais dinheiro com comida por mês?','Quem demora mais para se arrumar para sair?','Quem tem o pior gosto para filmes?','Quem é o mais gastão da roda?','Quem tem o sono mais pesado?','Quem mais ronca?','Quem demora mais para responder mensagem?','Quem é o mais teimoso?','Quem dirige pior?','Quem tem o pior gosto musical?','Quem mais come escondido?','Quem é o mais ciumento?'];
+const ALT2 = ['perder a hora no dia mais importante','chorar na formatura dos filhos','virar famoso na internet','esquecer o próprio aniversário','ser o primeiro a dormir na festa','ser o último a ir embora','pagar a conta de todo mundo sem pensar','brigar com o garçom','cantar no karaokê sem ser chamado','se perder em um lugar que conhece','comer a última fatia de pizza sem avisar','falar mal de alguém e a pessoa ouvir','adotar um animal de rua hoje','sobreviver a um apocalipse zumbi','ganhar um reality show','cair em um golpe','mandar mensagem para o ex bêbado','casar primeiro entre todos','virar monge','ficar milionário','acreditar em teoria da conspiração','contar um segredo sem querer','ficar bêbado primeiro','passar mal na montanha-russa','ter medo de barata','gritar em um filme de terror','ficar sem bateria na hora errada','dormir no meio de uma conversa','rir no momento errado','esquecer o nome de alguém importante','dirigir muito rápido','se meter em briga de bar','dançar em cima da mesa','fazer um discurso bêbado em um casamento','se apaixonar em uma viagem','ser pego mentindo','usar roupa do avesso sem perceber','ficar preso em uma sala trancada','levar o cachorro para todo lugar','falar sozinho na rua','se atrasar para o aeroporto','esquecer o passaporte','chorar vendo um vídeo de animal','correr de um cachorro','achar que é o melhor cozinheiro do mundo','ser o melhor dançarino da roda','organizar a festa surpresa','procurar o ex nas redes sociais','dar conselho de amor sem entender nada','ter uma vida dupla secreta','virar vegetariano de repente','abandonar tudo e morar no mato','fazer uma tatuagem bêbado','ter um pet exótico','falar três línguas','pedir sempre a mesma comida','cancelar o rolê em cima da hora','falar alto no cinema','ficar famoso por um vídeo vergonhoso','acordar sem lembrar da noite anterior','comprar algo inútil em promoção','pedir música no bar','passar o dia inteiro de pijama','chegar cedo demais em qualquer lugar','dar risada na hora de uma bronca','esquecer onde guardou as chaves','invadir o palco em um show','tomar banho gelado sem reclamar','acordar às 5 da manhã por vontade própria','assistir a uma série inteira em um dia','se esconder em uma festa chata','dormir de sapato','perder o voo','ser o chato da festa','comprar um carro só pela cor','falar com a planta','pedir demissão de impulso','virar youtuber','sair correndo de uma barata'];
+
+const money = v => 'R$ ' + v.toLocaleString('pt-BR');
+function mkAcordo(deal, v, rule, i) {
+    const all = i % 2 === 1;
+    const q = (all ? 'Quem toparia ' : 'Você toparia ') + deal + (v ? ' por ' + money(v) : '') + '? ';
+    const pen = rule === 'refuse' ? (all ? 'Quem NÃO topar, bebe.' : 'Se NÃO aceitar, beba.') : (all ? 'Quem aceitar, bebe.' : 'Se aceitar, beba.');
+    return { cat: 'Acordo', scope: all ? 'all' : 'self', rule: rule, text: q + pen };
+}
+const altText = q => 'O grupo escolhe: ' + q + ' O mais votado bebe.';
+const X = (cat, scope, text) => ({ cat: cat, scope: scope, text: text });
+
+for (let i = deck.length - 1; i >= 0; i--) if (deck[i].cat === 'Modo Alternativo') deck.splice(i, 1);
+deck.push(
+    ...REV.map(t => X('Revelação', 'all', 'Beba se você ' + t)),
+    ...REV2.map(t => X('Revelação', 'all', 'Beba se você ' + t)),
+    ...IND_SELF.map(t => X('Revelação', 'self', 'Quem tirou a carta ' + t)),
+    ...IND_VOTE.map(t => X('Revelação', 'vote', 'O grupo vota: quem é a pessoa mais provável de ' + t + ' A pessoa mais votada bebe.')),
+    ...COM.map(t => X('Comum', 'all', 'Beba se você ' + t)),
+    ...COM2.map(t => X('Comum', 'all', 'Beba se você ' + t)),
+    ...DES.map(t => X('Desafio', 'self', t)),
+    ...DES_SELF.map(t => X('Desafio', 'self', t)),
+    ...DES_ALL.map(t => X('Desafio', 'all', t)),
+    ...INS.map(t => X('Inspeção', 'all', 'Quem ' + t + ' bebe.')),
+    ...INS2.map(t => X('Inspeção', 'all', 'Quem ' + t + ' bebe.')),
+    ...ACO.map((t, i) => mkAcordo(t, 0, 'accept', i)),
+    ...ABS.map(([d, v], i) => mkAcordo(d, v, 'refuse', i)),
+    ...MILD.map(([d, v], i) => mkAcordo(d, v, 'accept', i + 1)),
+    ...ALT.map(q => X('Modo Alternativo', 'vote', altText(q))),
+    ...ALT_X.map(q => X('Modo Alternativo', 'vote', altText(q))),
+    ...ALT2.map(t => X('Modo Alternativo', 'vote', altText('Quem é mais provável de ' + t + '?')))
+);
+const SCOPE_DEFAULT = { 'Revelação': 'all', 'Comum': 'all', 'Inspeção': 'all', 'Desafio': 'self', 'Acordo': 'self', 'Modo Alternativo': 'vote' };
+deck.forEach(c => {
+    if (!c.scope) c.scope = SCOPE_DEFAULT[c.cat];
+    if (c.cat === 'Acordo' && !c.rule) c.rule = /Se sim|coragem/.test(c.text) ? 'refuse' : 'accept';
+});
+(function () { const seen = new Set(); for (let i = 0; i < deck.length; i++) { if (seen.has(deck[i].text)) { deck.splice(i, 1); i--; } else seen.add(deck[i].text); } })();
+function scopeLabel(c) {
+    if (c.scope === 'self') return 'INDIVIDUAL';
+    if (c.scope === 'vote') return c.cat === 'Revelação' ? 'INDIVIDUAL · O GRUPO VOTA' : 'O GRUPO VOTA';
+    return 'TODOS';
+}
+
 
         let players = [];
         const CAT_COLORS = {
@@ -463,7 +556,17 @@
             updatePlayerList();
         }
 
+        let countDrinks = false;
+
+        function applyCountMode() {
+            countDrinks = document.getElementById('count-drinks').checked;
+            document.getElementById('btn-next-card').textContent = countDrinks ? 'Quem Bebeu?' : 'Próxima carta';
+            document.getElementById('menu-ranking').style.display = countDrinks ? '' : 'none';
+            document.getElementById('menu-end').textContent = countDrinks ? '🏁 Encerrar e ver ranking' : '🏁 Encerrar jogo';
+        }
+
         function startGame() {
+            applyCountMode();
             if (players.length < 2) {
                 alert("Adicione pelo menos 2 jogadores para jogar!");
                 return;
@@ -494,12 +597,8 @@
             document.getElementById('display-category').innerText = activeCard.cat;
             const cc = CAT_COLORS[activeCard.cat];
             const sc = document.getElementById('display-scope');
-            if (activeCard.cat === 'Revelação') {
-                sc.textContent = activeCard.scope === 'self' ? 'INDIVIDUAL' : activeCard.scope === 'vote' ? 'INDIVIDUAL · O GRUPO VOTA' : 'TODOS';
+            sc.textContent = scopeLabel(activeCard);
                 sc.style.cssText = `display:inline-block; border:2px solid ${cc.bg}; color:${cc.bg}; padding:4px 14px; border-radius:999px; font-size:13px; font-weight:800; letter-spacing:1px; margin-bottom:18px;`;
-            } else {
-                sc.style.display = 'none';
-            }
             const catBox = document.getElementById('display-category');
             catBox.style.background = cc.bg;
             catBox.style.color = cc.fg;
@@ -519,11 +618,13 @@
         }
 
         function goToAssignDrinks() {
+            if (!countDrinks) { playedCards.push(activeCard); updateHistoryUI(); nextTurn(); return; }
             playedCards.push(activeCard);
             updateHistoryUI();
             showScreen('assign-drinks-screen');
             
-            if (activeCard.cat === 'Acordo') {
+            if (activeCard.cat === 'Acordo' && activeCard.scope === 'self') {
+                document.getElementById('single-rule').textContent = activeCard.rule === 'refuse' ? 'Regra: se NÃO aceitar, você bebe.' : 'Regra: se aceitar, você bebe.';
                 // Modo Exclusivo para Carta Acordo
                 document.getElementById('multiple-selection-block').style.display = 'none';
                 document.getElementById('single-selection-block').style.display = 'block';
@@ -538,22 +639,29 @@
         function renderCheckboxes() {
             renderCheckboxesBase();
             const hint = document.getElementById('assign-hint');
-            hint.textContent = '';
-            if (activeCard.cat === 'Revelação') {
-                if (activeCard.scope === 'self') {
-                    const c = document.getElementById(`drink-${currentTurnIndex}`);
-                    c.checked = true;
-                    c.closest('.checkbox-row').classList.add('selected');
-                    hint.textContent = 'Carta individual: já marcamos quem tirou a carta. Ajuste se precisar.';
-                } else if (activeCard.scope === 'vote') {
-                    hint.textContent = 'Votação: marque a pessoa mais votada pelo grupo.';
-                } else {
-                    hint.textContent = 'Marque todos que já viveram a situação.';
-                }
+            const c = activeCard;
+            let t;
+            if (c.cat === 'Revelação' && c.scope === 'self') {
+                const chk = document.getElementById(`drink-${currentTurnIndex}`);
+                chk.checked = true;
+                chk.closest('.checkbox-row').classList.add('selected');
+                t = 'Carta individual: já marcamos quem tirou a carta. Ajuste se precisar.';
+            } else if (c.scope === 'vote') {
+                t = 'Votação: marque a pessoa mais votada pelo grupo.';
+            } else if (c.cat === 'Desafio') {
+                t = 'Marque quem perdeu ou não cumpriu o desafio.';
+            } else if (c.cat === 'Acordo') {
+                t = c.rule === 'refuse' ? 'Marque quem NÃO aceitou o acordo (esses bebem).' : 'Marque quem aceitou o acordo (esses bebem).';
+            } else if (c.cat === 'Inspeção') {
+                t = 'Marque quem se encaixa na inspeção.';
+            } else {
+                t = 'Marque todos que já viveram a situação.';
             }
+            hint.textContent = t;
         }
 
         function renderCheckboxesBase() {
+
             const container = document.getElementById('drinks-checkboxes');
             container.innerHTML = '';
             allChecked = false;
@@ -600,8 +708,9 @@
         }
 
         // Lógica de Acordo: Pontua apenas quem puxou a carta
-        function confirmSingleDrink(drank) {
-            if (drank) {
+        function confirmSingleDrink(accepted) {
+            const rule = activeCard.rule;
+            if ((rule === 'accept' && accepted) || (rule === 'refuse' && !accepted)) {
                 players[currentTurnIndex].drinks++;
             }
             nextTurn();
@@ -614,6 +723,7 @@
         }
 
         function endGame() {
+            if (!countDrinks) { if (confirm('Encerrar o jogo?')) location.reload(); return; }
             showScreen('ranking-screen');
             const ul = document.getElementById('ranking-ul');
             ul.innerHTML = '';
@@ -689,18 +799,15 @@
 
             order.forEach(k => {
                 const list = groups[k];
-                let sub = '';
-                if (k === 'Revelação') {
-                    const t = list.filter(c => !c.scope).length;
-                    const s = list.filter(c => c.scope === 'self').length;
-                    const v = list.filter(c => c.scope === 'vote').length;
-                    sub = `<span class="sub">${t} para todos · ${s} individuais · ${v} individuais com votação do grupo</span>`;
-                }
-                html += `<details class="cat-block" style="border-left-color:${CAT_COLORS[k].bg};"><summary style="color:${CAT_COLORS[k].bg};">${k} — ${list.length} cartas${sub}</summary><ol>`;
+                const n = { self: 0, all: 0, vote: 0 };
+                list.forEach(c => n[c.scope]++);
+                const parts = [];
+                if (n.all) parts.push(`${n.all} para todos`);
+                if (n.self) parts.push(`${n.self} individuais`);
+                if (n.vote) parts.push(`${n.vote} com votação do grupo`);
+                html += `<details class="cat-block" style="border-left-color:${CAT_COLORS[k].bg};"><summary style="color:${CAT_COLORS[k].bg};">${k} — ${list.length} cartas<span class="sub">${parts.join(' · ')}</span></summary><ol>`;
                 list.forEach(c => {
-                    let tag = '';
-                    if (k === 'Revelação') tag = `<span class="scope-tag">${c.scope === 'self' ? 'INDIVIDUAL' : c.scope === 'vote' ? 'GRUPO VOTA' : 'TODOS'}</span>`;
-                    html += `<li>${tag}${esc(c.text)}</li>`;
+                    html += `<li><span class="scope-tag">${scopeLabel(c)}</span>${esc(c.text)}</li>`;
                 });
                 html += '</ol></details>';
             });
@@ -708,6 +815,7 @@
         }
 
         function toggleHistory() {
+
             const modal = document.getElementById('history-modal');
             modal.classList.toggle('active');
         }
