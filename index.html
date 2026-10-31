@@ -202,6 +202,29 @@
         }
 
         .add-row { display: flex; gap: 10px; align-items: stretch; }
+
+        /* Menu de jogos e jogo Desafios */
+        .home-title { color: #fff; font-size: 2rem; text-shadow: 0 0 6px rgba(0, 229, 255, 0.25); margin: 8px 0 14px; }
+        .game-card { display: block; width: 100%; text-align: left; text-transform: none; background: var(--card-bg); color: var(--text-light); border: 2px solid var(--neon-cyan); border-radius: 16px; padding: 20px 18px; box-shadow: none; }
+        .game-card.gc-dares { border-color: #ffd21f; }
+        .game-card span { display: block; }
+        .gc-name { font-size: 24px; font-weight: 900; color: #fff; margin-bottom: 6px; }
+        .gc-desc { font-size: 14px; font-weight: 400; color: #aab; line-height: 1.4; }
+        .gc-tag { display: inline-block !important; margin-top: 12px; font-size: 12px; font-weight: 800; padding: 3px 12px; border-radius: 999px; background: var(--neon-cyan); color: #000; }
+        .gc-dares .gc-tag { background: #ffd21f; }
+        .back-link { align-self: flex-start; background: transparent; color: var(--neon-cyan); box-shadow: none; padding: 6px 0; font-size: 14px; text-transform: none; }
+        .tabs { display: flex; gap: 8px; }
+        .tab { flex: 1; padding: 12px 8px; font-size: 14px; background: transparent; color: #ffd21f; border: 2px solid #ffd21f; box-shadow: none; text-transform: none; }
+        .tab.active { background: #ffd21f; color: #000; }
+        #dares-play { display: flex; flex-direction: column; gap: 15px; }
+        .dare-card { background: #fff; color: #111; border-radius: 18px; border-bottom: 14px solid #ffd21f; padding: 26px 22px 22px; min-height: 270px; text-align: left; }
+        .dare-title { text-align: center; font-weight: 900; font-size: 20px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 18px; }
+        .dare-card p { font-weight: 700; font-size: 18px; line-height: 1.4; margin: 0 0 14px; }
+        .dare-rule { background: var(--card-bg); border: 2px solid #ffd21f; border-radius: 12px; padding: 12px 14px; font-size: 14px; line-height: 1.45; text-align: left; }
+        .btn-dare { background: #ffd21f; color: #000; box-shadow: none; }
+        .dare-item { background: var(--card-bg); border-left: 5px solid #ffd21f; border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; text-align: left; font-size: 14px; line-height: 1.4; }
+        .dare-item b { display: block; text-transform: uppercase; color: #ffd21f; margin-bottom: 4px; }
+        .dare-item i { display: block; font-style: normal; color: #aab; margin-top: 4px; }
         .checkbox-row:has(input:checked) { border-color: var(--neon-purple); background: rgba(181, 42, 255, 0.18); }
         .opt-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 2px; margin-top: 4px; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
         .opt-text { font-size: 14px; font-weight: 600; color: #cfd3dc; text-align: left; }
@@ -349,7 +372,7 @@
         <h1 style="color: var(--neon-purple);">Fim de Jogo!</h1>
         <h2>Ranking dos que mais beberam:</h2>
         <ul id="ranking-ul" class="player-list"></ul>
-        <button onclick="location.reload()" style="margin-top: 20px;">Jogar Novamente</button>
+        <button onclick="resetGame()" style="margin-top: 20px;">Jogar Novamente</button>
     </div>
 
     <!-- MODAL DO RANKING -->
@@ -541,6 +564,7 @@ function scopeLabel(c) {
         }
 
         function updatePlayerList() {
+            saveState();
             const ul = document.getElementById('players-ul');
             ul.innerHTML = '';
             players.forEach((p, idx) => {
@@ -557,6 +581,81 @@ function scopeLabel(c) {
         }
 
         let countDrinks = false;
+
+        // ===== Salvar progresso no aparelho (sobrevive a atualizar a página) =====
+        const STORE_KEY = 'sefezbebe_v1';
+        let currentScreen = 'setup-screen';
+        let restoring = false;
+
+        function saveState() {
+            if (restoring) return;
+            try {
+                const st = {
+                    players: players,
+                    playedTexts: playedCards.map(c => c.text),
+                    turn: currentTurnIndex,
+                    active: activeCard ? activeCard.text : null,
+                    screen: currentScreen,
+                    count: document.getElementById('count-drinks').checked
+                };
+                if (typeof DARES !== 'undefined') st.dar = { order: darOrder, idx: darIdx };
+                localStorage.setItem(STORE_KEY, JSON.stringify(st));
+            } catch (e) {}
+        }
+
+        function resetGame() {
+            restoring = true;
+            try { localStorage.removeItem(STORE_KEY); } catch (e) {}
+            location.reload();
+        }
+
+        function restoreState() {
+            let st = null;
+            try { st = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); } catch (e) {}
+            if (!st) return;
+            restoring = true;
+            try {
+                if (Array.isArray(st.players)) {
+                    players = st.players.map(p => ({ name: String(p.name), drinks: +p.drinks || 0 }));
+                    updatePlayerList();
+                }
+                document.getElementById('count-drinks').checked = !!st.count;
+                const byText = new Map(deck.map(c => [c.text, c]));
+                playedCards = (st.playedTexts || []).map(t => byText.get(t)).filter(Boolean);
+                currentTurnIndex = players.length ? ((+st.turn || 0) % players.length) : 0;
+                activeCard = st.active ? (byText.get(st.active) || null) : null;
+                if (typeof DARES !== 'undefined' && st.dar && Array.isArray(st.dar.order) && st.dar.order.length === DARES.length) {
+                    darOrder = st.dar.order;
+                    darIdx = Math.min(st.dar.idx | 0, darOrder.length - 1);
+                }
+                const gameScreens = ['turn-screen', 'card-screen', 'assign-drinks-screen', 'ranking-screen'];
+                if (gameScreens.includes(st.screen) && players.length >= 2) {
+                    applyCountMode();
+                    let target = st.screen;
+                    if (target === 'assign-drinks-screen') {
+                        if (activeCard && playedCards[playedCards.length - 1] === activeCard) playedCards.pop();
+                        target = activeCard ? 'card-screen' : 'turn-screen';
+                    }
+                    if (target === 'card-screen' && !activeCard) target = 'turn-screen';
+                    updateHistoryUI();
+                    updateTurnUI();
+                    if (target === 'card-screen') renderActiveCard();
+                    else if (target === 'ranking-screen' && countDrinks) endGame();
+                    else showScreen(target === 'ranking-screen' ? 'turn-screen' : target);
+                } else if (st.screen === 'dares-screen' && typeof DARES !== 'undefined' && darOrder.length) {
+                    darTab('play');
+                    renderDare();
+                    showScreen('dares-screen');
+                } else if (st.screen === 'setup-screen') {
+                    showScreen('setup-screen');
+                }
+            } catch (e) {}
+            restoring = false;
+            saveState();
+        }
+        document.getElementById('count-drinks').addEventListener('change', saveState);
+
+        
 
         function applyCountMode() {
             countDrinks = document.getElementById('count-drinks').checked;
@@ -593,6 +692,10 @@ function scopeLabel(c) {
             
             const randIndex = Math.floor(Math.random() * availableCards.length);
             activeCard = availableCards[randIndex];
+            renderActiveCard();
+        }
+
+        function renderActiveCard() {
             
             document.getElementById('display-category').innerText = activeCard.cat;
             const cc = CAT_COLORS[activeCard.cat];
@@ -723,7 +826,7 @@ function scopeLabel(c) {
         }
 
         function endGame() {
-            if (!countDrinks) { if (confirm('Encerrar o jogo?')) location.reload(); return; }
+            if (!countDrinks) { if (confirm('Encerrar o jogo?')) resetGame(); return; }
             showScreen('ranking-screen');
             const ul = document.getElementById('ranking-ul');
             ul.innerHTML = '';
@@ -837,9 +940,13 @@ function scopeLabel(c) {
         }
 
         function showScreen(id) {
+            currentScreen = id;
+            saveState();
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
+    
+        restoreState();
     </script>
 </body>
 </html>
