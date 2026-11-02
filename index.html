@@ -2,818 +2,706 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Se Fez, Bebe!</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-color: #0b0b12;
-            --neon-cyan: #00e5ff;
-            --neon-purple: #b52aff;
-            --card-bg: #161622;
-            --text-light: #e2e8f0;
+            --bg-color: #F4EFE6;
+            --card-bg: #FFFFFF;
+            --primary-red: #FF3B30;
+            --dark-red: #D92B22;
+            --pure-black: #000000;
+            --text-dark: #1C1C1E;
+            --text-light: #F4EFE6;
+            --border-color: #E5DED1;
         }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             background-color: var(--bg-color);
-            color: var(--text-light);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
+            color: var(--text-dark);
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
+            padding: 16px;
+            overflow-x: hidden;
         }
-        body { justify-content: center; box-sizing: border-box; }
-        .screen { margin: 0 auto; }
-        .screen.active { text-align: center; }
-        .player-list li { text-align: left; }
-        h1, h2, h3 { text-align: center; }
-        h1 { 
-            color: var(--neon-cyan); 
-            text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan); 
-            font-style: italic;
-            font-size: 2.5rem;
-            margin-bottom: 5px;
+
+        h1 {
+            font-weight: 900;
+            font-size: 3.5rem;
+            line-height: 1;
+            letter-spacing: -2px;
+            color: var(--pure-black);
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            text-align: left;
+            width: 100%;
         }
-        .subtitle {
-            text-align: center; 
-            color: #888; 
-            margin-bottom: 25px;
-            font-size: 0.9rem;
+
+        h2 {
+            font-weight: 800;
+            font-size: 1.8rem;
+            letter-spacing: -0.5px;
+            color: var(--pure-black);
+            margin-bottom: 16px;
+            text-align: left;
+            width: 100%;
         }
-        .screen { display: none; width: 100%; max-width: 400px; }
-        .active { display: flex; flex-direction: column; gap: 15px; }
-        
-        input[type="text"] {
-            padding: 15px; 
-            border: 2px solid var(--neon-purple); 
-            border-radius: 8px;
-            background: #232332; 
-            color: white; 
-            font-size: 16px; 
+
+        /* Centralização perfeita das telas */
+        .screen { 
+            display: none; 
             width: 100%; 
-            box-sizing: border-box;
-            outline: none;
-            transition: 0.3s;
+            max-width: 400px; 
+            flex-direction: column; 
+            gap: 16px; 
+            margin: auto;
         }
-        input[type="text"]:focus {
-            box-shadow: 0 0 10px rgba(181, 42, 255, 0.5);
+        .screen.active { display: flex; animation: fadeIn 0.3s ease; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        input[type="text"] {
+            padding: 18px 20px;
+            border: 2px solid var(--pure-black);
+            border-radius: 100px;
+            background: transparent;
+            color: var(--pure-black);
+            font-size: 1.1rem;
+            font-weight: 600;
+            width: 100%;
+            outline: none;
+            transition: all 0.2s;
+        }
+        input[type="text"]::placeholder { color: #A09A8F; font-weight: 400; }
+        input[type="text"]:focus { border-color: var(--primary-red); }
+
+        .add-row { display: flex; gap: 12px; align-items: center; width: 100%; }
+        .add-btn { 
+            flex: 0 0 60px; height: 60px; 
+            border-radius: 100px; 
+            background: var(--pure-black); 
+            color: var(--text-light); 
+            font-size: 2rem; 
+            border: none;
+            display: flex; align-items: center; justify-content: center;
         }
         
         button {
-            padding: 16px; 
-            border: none; 
-            border-radius: 8px; 
-            font-size: 16px; 
-            font-weight: bold;
-            cursor: pointer; 
-            background: var(--neon-cyan); 
-            color: #000;
-            box-shadow: 0 0 15px rgba(0, 229, 255, 0.4); 
-            transition: 0.2s;
+            padding: 20px;
+            border: none;
+            border-radius: 100px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
             text-transform: uppercase;
+            letter-spacing: -0.5px;
+            transition: transform 0.1s, opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
         }
-        button:active { transform: scale(0.96); }
-        .btn-outline { 
-            background: transparent; 
-            border: 2px solid var(--neon-cyan); 
-            color: var(--neon-cyan); 
-            box-shadow: none;
-        }
-        .btn-purple { 
-            background: var(--neon-purple); 
-            color: white; 
-            box-shadow: 0 0 15px rgba(181, 42, 255, 0.4); 
-        }
+        button:active { transform: scale(0.97); }
         
-        .player-list { list-style: none; padding: 0; margin-bottom: 10px; }
+        .btn-main { background: var(--primary-red); color: var(--text-light); }
+        .btn-dark { background: var(--pure-black); color: var(--text-light); }
+        .btn-outline { background: transparent; border: 2px solid var(--pure-black); color: var(--pure-black); }
+        .btn-secondary { background: var(--card-bg); color: var(--text-dark); border: 1px solid var(--border-color); }
+
+        .player-count { font-size: 0.9rem; font-weight: 600; color: #8E8E93; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
+        .player-list { list-style: none; display: flex; flex-direction: column; gap: 8px; width: 100%; margin-bottom: 16px; max-height: 180px; overflow-y: auto; }
         .player-list li {
-            background: var(--card-bg); 
-            padding: 12px 15px; 
-            margin-bottom: 8px; 
-            border-radius: 6px; 
-            border-left: 4px solid var(--neon-purple); 
-            display: flex; 
+            background: var(--card-bg);
+            padding: 16px 20px;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: bold;
+            border: 1px solid var(--border-color);
         }
-        .player-count { text-align: center; color: var(--neon-purple); font-weight: bold; font-size: 14px;}
+        .remove-btn { color: var(--primary-red); cursor: pointer; font-size: 1.2rem; font-weight: 900; }
+
+        .opt-row { display: flex; align-items: center; justify-content: space-between; background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--border-color); margin-bottom: 8px; }
+        .opt-text { font-size: 1.1rem; font-weight: 800; display: flex; flex-direction: column; gap: 4px; }
+        .opt-text small { font-size: 0.85rem; font-weight: 400; color: #8E8E93; line-height: 1.3; }
         
-        .card-display {
-            background: var(--card-bg); 
-            border: 2px solid var(--neon-cyan); 
-            border-radius: 12px;
-            padding: 30px 20px; 
-            text-align: center; 
-            box-shadow: 0 0 25px rgba(0, 229, 255, 0.2);
-            min-height: 220px; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center;
-            margin-bottom: 10px;
+        input[type="checkbox"].switch {
+            -webkit-appearance: none; appearance: none;
+            width: 56px; height: 32px;
+            border-radius: 100px;
+            background: #E5E5EA;
+            position: relative; cursor: pointer; transition: background 0.3s;
         }
-        .card-category { 
-            font-size: 12px; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            color: var(--neon-purple); 
-            margin-bottom: 15px; 
-            background: rgba(181, 42, 255, 0.1);
-            padding: 4px 10px;
+        input[type="checkbox"].switch::after {
+            content: ''; position: absolute; top: 2px; left: 2px;
+            width: 28px; height: 28px; border-radius: 50%; background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        input[type="checkbox"].switch:checked { background: var(--primary-red); }
+        input[type="checkbox"].switch:checked::after { transform: translateX(24px); }
+
+        .game-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 2px solid var(--pure-black); margin-bottom: 16px; }
+        .stats-count { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; color: #8E8E93; letter-spacing: 1px; }
+        .menu-btn { background: var(--pure-black); color: var(--text-light); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; padding: 0; border: none; }
+        
+        .turn-display { text-align: left; margin-bottom: 16px; }
+        .turn-label { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; color: var(--primary-red); letter-spacing: 1px; margin-bottom: 2px; }
+        .turn-name { font-size: 2.4rem; font-weight: 900; line-height: 1; letter-spacing: -1px; color: var(--pure-black); word-break: break-word; }
+
+        /* Grid de Botões */
+        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .cat-btn {
+            border-radius: 20px; padding: 20px 16px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; border: 2px solid transparent; text-align: left;
+        }
+        .cat-btn .icon { font-size: 1.8rem; }
+        .cat-btn .label { font-size: 1.05rem; font-weight: 800; line-height: 1.1; }
+        .btn-full-width { grid-column: span 2; flex-direction: row; align-items: center; justify-content: center; padding: 18px; }
+
+        /* Exibição da Carta */
+        .card-container {
+            background: var(--pure-black); color: var(--text-light); border-radius: 32px; padding: 28px 24px; min-height: 360px;
+            display: flex; flex-direction: column; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.15); margin-bottom: 16px;
+        }
+        .card-container::before {
+            content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; border-radius: 50%; background: currentColor; opacity: 0.1; z-index: 0;
+        }
+        
+        .card-header-info { display: flex; justify-content: space-between; align-items: center; z-index: 1; margin-bottom: auto; }
+        .cat-badge { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 6px 14px; border-radius: 100px; background: rgba(255,255,255,0.2); }
+        .scope-badge { font-size: 0.75rem; font-weight: 800; border: 1px solid rgba(255,255,255,0.3); padding: 4px 10px; border-radius: 100px; }
+        
+        .card-text { font-size: 1.5rem; font-weight: 800; line-height: 1.3; z-index: 1; margin: 20px 0 auto; letter-spacing: -0.5px; }
+        .card-examples { font-size: 1rem; font-weight: 600; opacity: 0.8; margin-top: 16px; line-height: 1.4; display: block; }
+
+        /* Estilo da Roleta na Carta 'Tirar a Sorte' */
+        .roulette-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.4);
             border-radius: 20px;
-        }
-        .card-text { font-size: 20px; font-weight: bold; line-height: 1.4; }
-        
-        .checkbox-row { 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            background: var(--card-bg); 
-            padding: 15px; 
-            border-radius: 8px; 
-            margin-bottom: 8px; 
-            border: 1px solid #333;
-        }
-        input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--neon-purple); }
-        .checkbox-row { cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
-        .checkbox-row input[type="checkbox"] { pointer-events: none; }
-        .checkbox-row .chk-name { flex: 1; font-size: 18px; font-weight: bold; text-align: left; }
-        .checkbox-row.selected { border-color: var(--neon-purple); background: rgba(181, 42, 255, 0.18); }
-        
-        .stats-bar { 
-            display: flex; 
-            justify-content: space-between; 
-            font-size: 14px; 
-            margin-bottom: 25px; 
-            color: #999; 
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-        
-        /* Modal Histórico */
-        .modal { 
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.95); 
-            z-index: 100; 
-            padding: 20px; 
-            box-sizing: border-box; 
-            overflow-y: auto; 
-        }
-        .modal.active { display: block; }
-        .history-item { 
-            font-size: 14px; 
-            border-bottom: 1px solid #333; 
-            padding: 15px 0; 
-            line-height: 1.4;
-        }
-        
-        .grid-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        .grid-buttons button { padding: 20px 10px; font-size: 14px; }
-        .btn-full { grid-column: span 2; }
-
-        .game-title {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-style: italic;
-            font-weight: 800;
-            font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: clamp(1.8rem, 9.8vw, 2.6rem);
-            white-space: nowrap;
-            font-weight: 900;
-            text-transform: uppercase;
-            overflow-wrap: anywhere;
-            line-height: 1.1;
-            letter-spacing: -1px;
-            color: #fff;
-            text-shadow: 0 0 6px rgba(0, 229, 255, 0.25);
-            margin: 10px 0 26px;
-        }
-
-        .add-row { display: flex; gap: 10px; align-items: stretch; }
-
-        /* Menu de jogos e jogo Desafios */
-        .home-title { color: #fff; font-size: 2rem; text-shadow: 0 0 6px rgba(0, 229, 255, 0.25); margin: 8px 0 14px; }
-        .game-card { display: block; width: 100%; text-align: left; text-transform: none; background: var(--card-bg); color: var(--text-light); border: 2px solid var(--neon-cyan); border-radius: 16px; padding: 20px 18px; box-shadow: none; }
-        .game-card.gc-dares { border-color: #ffd21f; }
-        .game-card span { display: block; }
-        .gc-name { font-size: 24px; font-weight: 900; color: #fff; margin-bottom: 6px; }
-        .gc-desc { font-size: 14px; font-weight: 400; color: #aab; line-height: 1.4; }
-        .gc-tag { display: inline-block !important; margin-top: 12px; font-size: 12px; font-weight: 800; padding: 3px 12px; border-radius: 999px; background: var(--neon-cyan); color: #000; }
-        .gc-dares .gc-tag { background: #ffd21f; }
-        .back-link { align-self: flex-start; background: transparent; color: var(--neon-cyan); box-shadow: none; padding: 6px 0; font-size: 14px; text-transform: none; }
-        .tabs { display: flex; gap: 8px; }
-        .tab { flex: 1; padding: 12px 8px; font-size: 14px; background: transparent; color: #ffd21f; border: 2px solid #ffd21f; box-shadow: none; text-transform: none; }
-        .tab.active { background: #ffd21f; color: #000; }
-        #dares-play { display: flex; flex-direction: column; gap: 15px; }
-        .dare-card { background: #fff; color: #111; border-radius: 18px; border-bottom: 14px solid #ffd21f; padding: 26px 22px 22px; min-height: 270px; text-align: left; }
-        .dare-title { text-align: center; font-weight: 900; font-size: 20px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 18px; }
-        .dare-card p { font-weight: 700; font-size: 18px; line-height: 1.4; margin: 0 0 14px; }
-        .dare-rule { background: var(--card-bg); border: 2px solid #ffd21f; border-radius: 12px; padding: 12px 14px; font-size: 14px; line-height: 1.45; text-align: left; }
-        .btn-dare { background: #ffd21f; color: #000; box-shadow: none; }
-        .dare-item { background: var(--card-bg); border-left: 5px solid #ffd21f; border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; text-align: left; font-size: 14px; line-height: 1.4; }
-        .dare-item b { display: block; text-transform: uppercase; color: #ffd21f; margin-bottom: 4px; }
-        .dare-item i { display: block; font-style: normal; color: #aab; margin-top: 4px; }
-        .checkbox-row:has(input:checked) { border-color: var(--neon-purple); background: rgba(181, 42, 255, 0.18); }
-        .opt-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 2px; margin-top: 4px; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
-        .opt-text { font-size: 14px; font-weight: 600; color: #cfd3dc; text-align: left; }
-        .opt-text small { display: block; font-size: 12px; font-weight: 400; color: #7d8190; margin-top: 2px; }
-        input[type="checkbox"].switch { -webkit-appearance: none; appearance: none; flex: 0 0 auto; width: 51px; height: 31px; margin: 0; border: 0; border-radius: 999px; background: #48484a; position: relative; cursor: pointer; transition: background 0.2s; }
-        input[type="checkbox"].switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); transition: transform 0.2s; }
-        input[type="checkbox"].switch:checked { background: #34c759; }
-        input[type="checkbox"].switch:checked::after { transform: translateX(20px); }
-        input[type="checkbox"].switch:focus-visible { outline: 2px solid var(--neon-cyan); outline-offset: 2px; }
-        .add-row input[type="text"] { flex: 1; min-width: 0; width: auto; }
-        .add-btn { flex: 0 0 56px; padding: 0; font-size: 32px; line-height: 1; background: #22c55e; color: #052e14; box-shadow: none; border-radius: 8px; }
-
-        .stats-bar { align-items: center; }
-        .menu-wrap { position: relative; }
-        #menu-btn { padding: 4px 14px; font-size: 24px; line-height: 1.2; text-transform: none; background: transparent; color: var(--neon-cyan); border: 2px solid var(--neon-cyan); box-shadow: none; }
-        .menu-panel { display: none; position: absolute; right: 0; top: calc(100% + 8px); min-width: 230px; background: var(--card-bg); border: 2px solid var(--neon-purple); border-radius: 12px; padding: 6px; z-index: 50; flex-direction: column; gap: 2px; }
-        .menu-panel.open { display: flex; }
-        .menu-panel button { background: transparent; color: #fff; box-shadow: none; text-align: left; text-transform: none; padding: 13px 14px; font-size: 15px; font-weight: 600; }
-        .menu-panel button:active { background: rgba(181, 42, 255, 0.25); }
-        .menu-panel .menu-danger { color: #ff6b6b; border-top: 1px solid #333; border-radius: 0 0 8px 8px; }
-
-        .cat-summary { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 20px; }
-        .cat-chip { padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 800; }
-        .cat-block { border-left: 5px solid var(--neon-cyan); background: var(--card-bg); border-radius: 8px; margin-bottom: 12px; padding: 4px 14px; }
-        .cat-block summary { cursor: pointer; padding: 12px 0; font-weight: bold; font-size: 16px; }
-        .cat-block .sub { color: #999; font-size: 13px; font-weight: normal; display: block; margin-top: 2px; }
-        .cat-block ol { padding-left: 22px; margin: 0 0 12px; }
-        .cat-block li { font-size: 14px; line-height: 1.4; padding: 6px 0; border-bottom: 1px solid #262636; }
-        .scope-tag { font-size: 11px; font-weight: 800; border: 1px solid currentColor; border-radius: 999px; padding: 1px 8px; margin-right: 6px; white-space: nowrap; }
-
-        .turn-box {
+            padding: 20px;
             text-align: center;
-            padding: 22px 12px;
-            margin-bottom: 20px;
-            background: var(--card-bg);
-            border: 2px solid var(--neon-purple);
-            border-radius: 14px;
-            box-shadow: none;
+            margin: 15px 0;
+            z-index: 1;
         }
-        .turn-label {
-            font-size: 14px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #999;
-            margin-bottom: 6px;
-        }
-        .turn-name {
-            font-size: clamp(2.4rem, 13vw, 3.6rem);
+        .roulette-display {
+            font-size: 1.8rem;
             font-weight: 900;
-            line-height: 1.1;
-            color: #fff;
-            text-shadow: none;
+            color: #FFD700;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             word-break: break-word;
         }
+
+        /* Tela Seleção (Quem Bebeu) */
+        .assign-header { font-size: 2.2rem; font-weight: 900; line-height: 1.1; letter-spacing: -1px; margin-bottom: 8px; color: var(--pure-black); }
+        .assign-hint { font-size: 1rem; color: #8E8E93; font-weight: 600; margin-bottom: 24px; line-height: 1.4; }
+        
+        .checkbox-row {
+            display: flex; align-items: center; gap: 16px; background: var(--card-bg); padding: 18px 20px; border-radius: 20px; border: 2px solid var(--border-color); margin-bottom: 10px; cursor: pointer; transition: all 0.2s;
+        }
+        .checkbox-row.selected { border-color: var(--pure-black); background: var(--pure-black); color: var(--text-light); }
+        .checkbox-row .chk-name { font-size: 1.2rem; font-weight: 800; flex: 1; }
+        .chk-box { width: 28px; height: 28px; border-radius: 8px; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; }
+        .checkbox-row.selected .chk-box { background: var(--text-light); color: var(--pure-black); }
+        .checkbox-row.selected .chk-box::after { content: '✓'; font-weight: 900; font-size: 16px; }
+
+        /* Acordo Box */
+        .acordo-box { background: var(--pure-black); color: var(--text-light); padding: 32px 24px; border-radius: 24px; text-align: center; margin-bottom: 24px; }
+        .acordo-q { font-size: 1.8rem; font-weight: 900; line-height: 1.2; margin-bottom: 16px; display: block; }
+        .acordo-rule { font-size: 1rem; color: #A09A8F; font-weight: 600; }
+
+        /* Ranking Final */
+        .ranking-item { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: var(--card-bg); border: 2px solid var(--pure-black); border-radius: 20px; margin-bottom: 12px; }
+        .rank-pos { font-size: 1.4rem; font-weight: 900; }
+        .rank-score { font-size: 1.4rem; font-weight: 900; color: var(--primary-red); }
+
+        /* Modais */
+        .menu-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; flex-direction: column; justify-content: flex-end; }
+        .menu-overlay.active { display: flex; }
+        .menu-sheet { background: var(--bg-color); border-radius: 32px 32px 0 0; padding: 32px 24px; width: 100%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .menu-sheet button { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--pure-black); justify-content: flex-start; padding: 20px; border-radius: 20px; }
+        .menu-sheet .btn-danger { color: var(--primary-red); border-color: rgba(255, 59, 48, 0.3); }
+
+        .modal { display: none; position: fixed; inset: 0; background: var(--bg-color); z-index: 200; overflow-y: auto; padding: 24px 16px; flex-direction: column; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { width: 100%; max-width: 400px; margin-bottom: 30px; }
+        
+        /* Banner Nova Regra */
+        .active-rule-banner { background: var(--primary-red); color: white; padding: 12px 16px; border-radius: 16px; margin-bottom: 16px; display: none; align-items: center; gap: 12px; font-weight: 800; font-size: 0.95rem; box-shadow: 0 4px 12px rgba(255,59,48,0.3); }
+        .active-rule-banner span { flex: 1; line-height: 1.3; }
+        .rule-turns { background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 8px; font-size: 0.8rem; white-space: nowrap;}
+
+        /* Estilos do Catálogo */
+        .cat-block { background: var(--card-bg); border-left: 6px solid var(--pure-black); border-radius: 16px; margin-bottom: 12px; padding: 8px 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .cat-block summary { font-weight: 800; font-size: 1.2rem; cursor: pointer; padding: 12px 0; outline: none; }
+        .cat-block .sub { display: block; font-size: 0.85rem; color: #8E8E93; font-weight: 600; margin-top: 4px; }
+        .cat-block ol { padding-left: 20px; margin-bottom: 12px; }
+        .cat-block li { padding: 10px 0; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; font-weight: 600; }
+        .scope-tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 100px; border: 1px solid currentColor; margin-right: 8px; vertical-align: middle; }
     </style>
 </head>
 <body>
 
     <!-- TELA 1: CADASTRO -->
     <div id="setup-screen" class="screen active">
-        <h1 class="game-title">Se Fez, Bebe!</h1>
-        
+        <h1>Se Fez,<br>Bebe!</h1>
         
         <div class="add-row">
-            <input type="text" id="player-input" placeholder="Nome do jogador..." onkeypress="handleEnter(event)">
-        <button class="add-btn" aria-label="Adicionar jogador" onclick="addPlayer()">+</button>
+            <input type="text" id="player-input" placeholder="Nome do jogador..." onkeypress="handleEnter(event)" autocapitalize="words">
+            <button class="add-btn" aria-label="Adicionar" onclick="addPlayer()">+</button>
         </div>
+        <div class="player-count" id="player-count">0 JOGADORES</div>
         
-        <div class="player-count" id="player-count">0 jogadores na roda</div>
         <ul id="players-ul" class="player-list"></ul>
         
-        <label class="opt-row">
-            <span class="opt-text">Contar doses?<small>Quando ativado, calcula quantos shots cada jogador bebeu.</small></span>
+        <label class="opt-row" style="margin-top: 10px;">
+            <span class="opt-text">
+                Contar Shots?
+                <small>Calcula os shots no final do jogo.</small>
+            </span>
             <input type="checkbox" id="count-drinks" class="switch">
         </label>
-        <button class="btn-purple" onclick="startGame()" style="margin-top: 10px;">Começar Jogo</button>
-        <button class="btn-outline" onclick="toggleCatalog()">Ver todas as cartas</button>
+        
+        <button class="btn-main" onclick="startGame()">Começar 🍻</button>
+        <button class="btn-outline" onclick="openModal('modal-catalog', renderModalCatalog)">Todas as Cartas 📖</button>
     </div>
 
-    <!-- TELA 2: VEZ DO JOGADOR / ESCOLHA DA CARTA -->
+    <!-- TELA 2: TURNO -->
     <div id="turn-screen" class="screen">
-        <div class="stats-bar">
-            <span id="cards-played-count">Cartas jogadas: 0</span>
-            <div class="menu-wrap">
-                <button id="menu-btn" aria-label="Menu" aria-expanded="false" onclick="toggleMenu(event)">☰</button>
-                <div id="menu-panel" class="menu-panel">
-                    <button onclick="menuGo('history')">📜 Ver histórico</button>
-                    <button id="menu-ranking" onclick="menuGo('ranking')">🏆 Ver ranking</button>
-                    <button onclick="menuGo('catalog')">🃏 Ver todas as cartas</button>
-                    <button id="menu-end" class="menu-danger" onclick="menuGo('end')">🏁 Encerrar e ver ranking</button>
-                </div>
-            </div>
+        <div class="game-header">
+            <span class="stats-count" id="cards-played-count">CARTAS: 0/0</span>
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
         </div>
-        <div class="turn-box">
+        
+        <!-- Banner de Regra Ativa (Mini-game) -->
+        <div id="active-rule-banner" class="active-rule-banner">
+            👑 <span>Atenção: A regra de <b id="rule-author"></b> está valendo!</span>
+            <div class="rule-turns" id="rule-turns-left"></div>
+        </div>
+        
+        <div class="turn-display">
             <div class="turn-label">Vez de</div>
             <div class="turn-name" id="current-player-name">...</div>
         </div>
-        <p style="text-align: center; margin-bottom: 20px;">Escolha o tipo de carta:</p>
         
-        <div class="grid-buttons">
-            <button class="btn-outline" onclick="drawCard('Revelação')">Revelação</button>
-            <button class="btn-outline" onclick="drawCard('Desafio')" style="border-color: #4ade80; color: #4ade80;">Desafio</button>
-            <button class="btn-outline" onclick="drawCard('Inspeção')" style="border-color: #ffd700; color: #ffd700;">Inspeção</button>
-            <button class="btn-outline" onclick="drawCard('Acordo')" style="border-color: #ff007f; color: #ff007f;">Acordo</button>
-            <button class="btn-outline btn-full" onclick="drawCard('Modo Alternativo')" style="border-color: #ff8c00; color: #ff8c00;">Modo Alternativo</button>
-            <button class="btn-purple btn-full" onclick="drawCard('Comum')">Aleatória (Surpresa) 🎲</button>
+        <h2 style="font-size: 1.2rem; margin-bottom: 8px;">Puxe uma carta:</h2>
+        
+        <div class="category-grid">
+            <button class="cat-btn" style="background: #FF3B30; color: #fff;" onclick="drawCard('Revelação')">
+                <span class="icon">🤫</span>
+                <span class="label">Revelação</span>
+            </button>
+            <button class="cat-btn" style="background: #000000; color: #fff;" onclick="drawCard('Desafio')">
+                <span class="icon">🎯</span>
+                <span class="label">Desafio</span>
+            </button>
+            <button class="cat-btn" style="background: #FF9F0A; color: #fff;" onclick="drawCard('Inspeção')">
+                <span class="icon">🔍</span>
+                <span class="label">Inspeção</span>
+            </button>
+            <button class="cat-btn" style="background: #5E5CE6; color: #fff;" onclick="drawCard('Acordo')">
+                <span class="icon">🤝</span>
+                <span class="label">Acordo</span>
+            </button>
+            
+            <button class="cat-btn" style="background: #FF3B30; color: #fff; border: 2px dashed rgba(255,255,255,0.7);" onclick="drawCard('Regra do Chefe')">
+                <span class="icon">👑</span>
+                <span class="label">Regra do Chefe</span>
+            </button>
+            
+            <button class="cat-btn" style="background: #FFD700; color: #000;" onclick="drawCard('Tirar a Sorte')">
+                <span class="icon">🎰</span>
+                <span class="label">Tirar a Sorte</span>
+            </button>
+            
+            <button class="cat-btn btn-full-width" style="background: #F4EFE6; border: 2px solid #000; color: #000; justify-content: space-between;" onclick="drawCard('Comum')">
+                <span class="label" style="font-size: 1.2rem;">Aleatória (Surpresa)</span>
+                <span class="icon">🎲</span>
+            </button>
         </div>
-        
-        
     </div>
 
-    <!-- TELA 3: CARTA NA TELA -->
+    <!-- TELA 3: CARTA -->
     <div id="card-screen" class="screen">
-        <div class="card-display">
-            <div class="card-category" id="display-category">CATEGORIA</div>
-            <div id="display-scope" style="display:none;"></div>
-            <div class="card-text" id="display-text">Texto da carta vai aqui...</div>
+        <div class="game-header" style="border-bottom: 2px solid var(--pure-black); padding-bottom: 12px; margin-bottom: 12px;">
+            <div style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: var(--primary-red);">Vez de: <span id="card-current-player" style="color: var(--pure-black); font-size: 1.1rem;">...</span></div>
+            <span class="stats-count" id="card-screen-count">0/0</span>
         </div>
-        <button id="btn-next-card" onclick="goToAssignDrinks()">Quem Bebeu?</button>
-        <button class="btn-outline" onclick="skipCard()">Pular Carta (Não conta)</button>
+
+        <div class="card-container" id="display-card-bg">
+            <div class="card-header-info">
+                <span class="cat-badge" id="display-category">CATEGORIA</span>
+                <span class="scope-badge" id="display-scope">ESCOPO</span>
+            </div>
+            
+            <div class="card-text" id="display-text">Texto...</div>
+            
+            <!-- Roleta interativa para a carta 'Tirar a Sorte' -->
+            <div id="roulette-section" style="display:none;">
+                <div class="roulette-box">
+                    <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; opacity: 0.8;">Sorteio da Roda</div>
+                    <div class="roulette-display" id="roulette-result">Toque em Sortear!</div>
+                </div>
+                <button class="btn-main" id="btn-spin" onclick="spinRoulette()" style="background: #FFD700; color: #000; border: none; margin-top: 10px;">Girar Roleta 🎰</button>
+            </div>
+        </div>
+        
+        <button class="btn-dark" id="btn-next-card" onclick="goToAssignDrinks()">Quem Bebeu? 🥃</button>
+        <button class="btn-secondary" onclick="skipCard()">Pular (Não conta) ⏭</button>
     </div>
 
-    <!-- TELA 4: QUEM BEBEU? -->
+    <!-- TELA 4: QUEM BEBEU -->
     <div id="assign-drinks-screen" class="screen">
-        <h2 style="color: var(--neon-cyan);">Quem virou o copo?</h2>
+        <h2 class="assign-header">Quem virou<br>o copo?</h2>
         
-        <!-- Bloco para cartas normais (Inspeção, Revelação, etc) -->
         <div id="multiple-selection-block">
-            <p id="assign-hint" style="color:#999; margin:0 0 15px; text-align:center;"></p>
-            <button id="btn-toggle-all" class="btn-outline" onclick="toggleAllDrinks()" style="margin-bottom: 20px; width: 100%;">Marcar Todos</button>
-            <div id="drinks-checkboxes" style="margin-bottom: 20px;"></div>
-            <button class="btn-purple" onclick="confirmDrinks()" style="width: 100%;">Confirmar Goles</button>
+            <p class="assign-hint" id="assign-hint">Selecione quem bebeu nesta rodada.</p>
+            <button id="btn-toggle-all" class="btn-outline" onclick="toggleAllDrinks()" style="margin-bottom: 24px;">Marcar Todos</button>
+            <div id="drinks-checkboxes" style="margin-bottom: 24px;"></div>
+            <button class="btn-main" onclick="confirmDrinks()">Confirmar Shots ✓</button>
         </div>
 
-        <!-- Bloco simplificado APENAS para Acordo -->
-        <div id="single-selection-block" style="display: none; text-align: center;">
-            <p style="margin-bottom: 30px; font-size: 20px; font-weight: bold; padding: 20px; background: var(--card-bg); border-radius: 10px;"><span id="single-q">Você aceitou o acordo?</span><br><small id="single-rule" style="color:#999; font-weight:normal; font-size:14px;"></small></p>
-            <button class="btn-purple" onclick="confirmSingleDrink(true)" style="width: 100%; margin-bottom: 15px;">Aceitei o acordo</button>
-            <button class="btn-outline" onclick="confirmSingleDrink(false)" style="width: 100%; border-color: #555; color: #999;">Não aceitei</button>
+        <div id="single-selection-block" style="display: none;">
+            <div class="acordo-box">
+                <span class="acordo-q" id="single-q">Você aceitou?</span>
+                <span class="acordo-rule" id="single-rule"></span>
+            </div>
+            <button class="btn-dark" onclick="confirmSingleDrink(true)" style="margin-bottom: 12px;">Aceitei o acordo 👍</button>
+            <button class="btn-secondary" onclick="confirmSingleDrink(false)">Não aceitei 👎</button>
         </div>
     </div>
 
     <!-- TELA 5: RANKING FINAL -->
     <div id="ranking-screen" class="screen">
-        <h1 style="color: var(--neon-purple);">Fim de Jogo!</h1>
-        <h2>Ranking dos que mais beberam:</h2>
-        <ul id="ranking-ul" class="player-list"></ul>
-        <button onclick="resetGame()" style="margin-top: 20px;">Jogar Novamente</button>
+        <h1>Fim de<br>Jogo! 🏁</h1>
+        <h2 style="font-size: 1.2rem; color: #8E8E93; text-transform: uppercase;">Ranking (Shots)</h2>
+        <ul id="ranking-ul" class="player-list" style="margin-top: 16px; max-height: 250px;"></ul>
+        <button class="btn-main" onclick="resetGame()" style="margin-top: 24px;">Jogar Novamente 🔄</button>
     </div>
 
-    <!-- MODAL DO RANKING -->
-    <div id="ranking-modal" class="modal">
-        <div style="max-width: 400px; margin: 0 auto;">
-            <h2 style="color: var(--neon-purple); margin-top: 10px;">Ranking até agora</h2>
-            <ul id="ranking-modal-ul" class="player-list"></ul>
-            <button class="btn-outline" style="width: 100%; margin-top: 20px;" onclick="toggleRanking()">Voltar ao jogo</button>
+    <!-- BOTTOM SHEET MENU -->
+    <div id="menu-overlay" class="menu-overlay" onclick="if(event.target === this) toggleMenu()">
+        <div class="menu-sheet">
+            <h2 style="font-size: 1.2rem; margin-bottom: 8px;">Menu</h2>
+            <button onclick="menuAction('history')">📜 Ver histórico de cartas</button>
+            <button id="menu-ranking" onclick="menuAction('ranking')">🏆 Ver ranking atual</button>
+            <button onclick="menuAction('catalog')">📖 Ver todas as cartas</button>
+            <button id="menu-end" class="btn-danger" onclick="menuAction('end')">🏁 Encerrar jogo</button>
+            <button class="btn-dark" onclick="toggleMenu()" style="margin-top: 8px; justify-content: center;">Fechar</button>
         </div>
     </div>
 
-    <!-- MODAL DE TODAS AS CARTAS -->
-    <div id="catalog-modal" class="modal">
-        <h2 style="color: var(--neon-cyan); margin-top: 10px;">Todas as Cartas</h2>
-        <div id="catalog-content" style="max-width: 600px; margin: 0 auto;"></div>
-        <button class="btn-outline" style="width: 100%; max-width: 600px; display: block; margin: 30px auto 0;" onclick="toggleCatalog()">Fechar</button>
+    <!-- MODAL RANKING PARCIAL -->
+    <div id="modal-ranking" class="modal">
+        <div class="modal-content">
+            <h2>Ranking 🏆</h2>
+            <ul id="ranking-modal-ul" class="player-list" style="margin-top: 24px; max-height: 250px;"></ul>
+            <button class="btn-dark" style="margin-top: 32px;" onclick="closeModal('modal-ranking')">Voltar ao Jogo</button>
+        </div>
     </div>
 
-    <!-- MODAL DE HISTÓRICO -->
-    <div id="history-modal" class="modal">
-        <h2 style="color: var(--neon-cyan); margin-top: 10px;">Cartas Já Lidas</h2>
-        <div id="history-list"></div>
-        <button class="btn-outline" style="width: 100%; margin-top: 30px;" onclick="toggleHistory()">Fechar Histórico</button>
+    <!-- MODAL HISTORICO -->
+    <div id="modal-history" class="modal">
+        <div class="modal-content">
+            <h2>Histórico 📜</h2>
+            <div id="history-list" style="display: flex; flex-direction: column; gap: 12px; margin-top: 24px; max-height: 250px; overflow-y: auto;"></div>
+            <button class="btn-dark" style="margin-top: 32px;" onclick="closeModal('modal-history')">Voltar ao Jogo</button>
+        </div>
+    </div>
+
+    <!-- MODAL CATALOGO COMPLETO -->
+    <div id="modal-catalog" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <h2>Todas as<br>Cartas 📖</h2>
+            <div id="catalog-content" style="margin-top: 16px; max-height: 300px; overflow-y: auto;"></div>
+            <button class="btn-dark" style="margin-top: 32px;" onclick="closeModal('modal-catalog')">Voltar</button>
+        </div>
     </div>
 
     <script>
-        // Banco de Dados Simulado - Focado em Adultos 27+ / Casais
-        const deck = [
-            // Revelação
-            { cat: "Revelação", text: "Beba se você já fingiu que a internet caiu ou a câmera quebrou numa reunião do trabalho." },
-            { cat: "Revelação", text: "Beba se você tem uma dor nas costas, joelho ou pescoço que já dura mais de meses." },
-            { cat: "Revelação", text: "Beba se você já cancelou um rolê inventando uma desculpa, mas na verdade só queria ficar em casa vendo série." },
-            // Desafio
-            { cat: "Desafio", text: "Abra o aplicativo do seu banco ou Shopee/Mercado Livre e leia em voz alta qual foi sua última compra. Se não fizer, beba 2 goles." },
-            { cat: "Desafio", text: "Faça um Pix de R$ 1,00 para a pessoa à sua direita. Se recusar, beba 3 goles." },
-            // Inspeção
-            { cat: "Inspeção", text: "Todo mundo que estiver usando uma peça de roupa preta bebe agora." },
-            { cat: "Inspeção", text: "Mostrem os celulares: quem estiver com menos de 20% de bateria bebe." },
-            { cat: "Inspeção", text: "Quem pagou um boleto ou fatura de cartão HOJE bebe." },
-            // Acordo (Dilemas individuais)
-            { cat: "Acordo", text: "Você beberia 2 copos agora em troca de alguém da roda lavar toda a sua louça amanhã?" },
-            { cat: "Acordo", text: "Você ficaria 1 ano sem pedir delivery (iFood/etc) em troca de R$ 10.000? Se sim (você toparia), não beba. Se não, beba." },
-            { cat: "Acordo", text: "Você passaria 3 meses sem usar nenhuma rede social por R$ 5.000? Se não tiver coragem, beba." },
-            // Modo Alternativo
-            { cat: "Modo Alternativo", text: "ESCOLHA ALGUÉM: Quem você acha que gasta mais dinheiro com comida por mês? (Se a pessoa concordar e assumir, ela bebe. Se ela negar, você bebe)." },
-            { cat: "Modo Alternativo", text: "ESCOLHA ALGUÉM: Quem demora mais pra se arrumar pra sair? (Se o grupo concordar com você, a pessoa bebe. Se não, você bebe)." },
-            { cat: "Modo Alternativo", text: "ESCOLHA ALGUÉM: Quem é mais provável de dormir no meio de um filme no sofá? (Se acertar, ela bebe. Se errar, você bebe)." },
-            // Comum (Gerais do rolê)
-            { cat: "Comum", text: "Beba se você já fez fofoca do seu colega de trabalho para o seu parceiro(a)." },
-            { cat: "Comum", text: "Beba se você já prometeu que ia 'começar a academia segunda-feira' e falhou miseravelmente neste ano." }
+        /* === BANCO DE DADOS DE CARTAS === */
+        const REV = ['já fingiu que entendeu uma piada só para não passar vergonha.','já ficou olhando a geladeira aberta sem saber o que queria.','já disse “estou chegando” ainda deitado no sofá.','já ouviu a própria voz gravada e quis sumir.','já pesquisou um sintoma no Google e achou que ia morrer.','já gastou dinheiro em algo e escondeu do parceiro(a).','já usou o “estou em reunião” para fugir de uma ligação.','já esqueceu o aniversário de alguém importante.','já dormiu antes das 22h num sábado e achou ótimo.','já “emprestou” o carregador de alguém e nunca devolveu.','já mandou “kkkk” sem ter rido nem um pouco.','já chorou de raiva no trabalho e voltou como se nada tivesse acontecido.','já ficou stalkeando o perfil de um ex às 3 da manhã.','já bebeu demais e prometeu nunca mais fazer isso na vida.','já começou uma dieta e desistiu antes do primeiro final de semana.','já se arrependeu de um corte de cabelo e usou boné por semanas.','já errou o nome de alguém depois de conversar por uma hora.','já deu “curtir” sem querer numa foto antiga de alguém.','já ficou acordado até tarde vendo vídeos aleatórios sem motivo.','já foi pego cantando sozinho no carro.','já respondeu “tudo bem” quando estava tudo péssimo.','já virou a noite achando que dava conta no dia seguinte.','já pediu comida mesmo com a casa cheia de mantimentos.','já fingiu estar no telefone para evitar conversar com alguém.','já contou uma história exagerando bastante nos detalhes.','já tropeçou em público e fingiu que foi proposital.','já esqueceu onde estacionou o carro.','já deixou uma planta morrer por pura falta de cuidado.','já discutiu com o(a) parceiro(a) por um motivo ridículo.','já comprou um aparelho de academia ou um curso e nunca usou.','já passou mal de tanto comer em um churrasco.','já cancelou um compromisso em cima da hora por preguiça.','já mandou mensagem de amor para o grupo errado.','já fingiu que dirige melhor do que realmente dirige.','já pegou no sono em um evento caro.','já usou o celular escondido durante uma cerimônia.','já disse “só mais um” e ficou até o fim da festa.','já se emocionou com uma propaganda de TV.','já terminou um namoro por mensagem.','já guardou segredo de alguém e acabou contando para outra pessoa.','já saiu de casa e voltou porque esqueceu algo importante.'];
+        const COM = ['já mandou uma foto sua sem querer para a pessoa errada.','já sentiu ciúme de alguém e negou até o fim.','já disse “hoje eu não bebo” e foi o último a ir embora.','já dividiu a conta sem concordar e ficou quieto.','já fez um “rolê rápido” que durou até o dia seguinte.','já esqueceu uma senha importante e precisou recuperar.','já mentiu no currículo, nem que fosse um pouquinho.','já dormiu na casa de alguém sem avisar em casa.','já combinou algo no grupo e foi o primeiro a furar.','já se achou muito bem vestido e depois se arrependeu da foto.','já ficou sem falar com um amigo por semanas por bobagem.','já quebrou algo na casa dos outros e não contou.','já mandou um “oi sumido” só por interesse.','já usou uma música para indiretar alguém.','já deixou um prato sujo na pia até o dia seguinte.','já pediu um Uber para ir a um lugar a dois quarteirões.','já tirou mais de 20 selfies para postar só uma.','já ficou preso em um elevador ou em um lugar sem sinal.','já saiu de um grupo de WhatsApp sem avisar.','já tomou café às 22h e depois reclamou que não conseguia dormir.','já perdeu o celular dentro de casa e procurou por meia hora.','já deu uma desculpa esfarrapada para ir embora mais cedo.','já fingiu estar dormindo para evitar uma conversa.','já se perdeu mesmo usando o GPS.','já quis largar tudo e viver em um sítio.','já viu o dia amanhecer sem ter planejado.','já abriu a geladeira de madrugada só para ver o que tinha.','já brigou com um objeto, tipo impressora ou cadeira.','já recebeu um elogio e não soube o que responder.','já esqueceu uma bebida no congelador.','já falou sozinho em voz alta e alguém ouviu.'];
+        const DES = ['Imite um animal escolhido pelo grupo por 10 segundos. Se não fizer, beba 2 shots.','Fale um trava-língua sem errar. Se errar, beba 1 shot.','Dance sem música por 15 segundos. Se não dançar, beba 2 shots.','Faça uma declaração de amor dramática para um objeto da sala. Se não fizer, beba 2 shots.','Fique em silêncio por 30 segundos sem rir. Se rir, beba 2 shots.','Diga o nome de 5 filmes em 10 segundos. Se não conseguir, beba 2 shots.','Elogie sinceramente cada pessoa da roda. Se não fizer, beba 3 shots.','Imite a voz de alguém da roda e o grupo tenta adivinhar. Se ninguém acertar, beba 1 shot.','Conte uma história engraçada em 30 segundos. Se o grupo não rir, beba 2 shots.','Faça 10 agachamentos agora. Se não fizer, beba 3 shots.','Cante o refrão de uma música. Se não cantar, beba 2 shots.','Feche os olhos e aponte para a pessoa que estiver à sua frente. Se errar, beba 1 shot.','Fale o alfabeto de trás para frente. Se errar, beba 2 shots.','Diga 5 países que começam com B. Se não conseguir, beba 2 shots.','Faça uma pose de modelo por 10 segundos. Se não fizer, beba 2 shots.','Equilibre uma colher no nariz por 5 segundos. Se não conseguir, beba 1 shot.','Faça a mímica de um filme. Se ninguém acertar, beba 2 shots.','Passe 1 minuto sem dizer a palavra “não”. Se falar, beba 2 shots.','Diga o nome completo de todos os jogadores. Se esquecer, beba 2 shots.','Faça cara de bravo por 10 segundos sem rir. Se rir, beba 1 shot.','Conte o seu maior mico em 20 segundos. Se não contar, beba 3 shots.','Descreva a pessoa à sua direita em 3 palavras. Se ela discordar, beba 1 shot.'];
+        const INS = ['estiver usando relógio ou pulseira','estiver de tênis','estiver usando algo azul','estiver de óculos','tiver tatuagem','estiver sem meias','tiver mais de 100 fotos de comida na galeria','estiver com o celular em modo silencioso','abriu o aplicativo do banco hoje','estiver com mais de 10 abas abertas no navegador','estiver com a tela do celular trincada','tiver mais de 50 mensagens não lidas','estiver usando brinco ou piercing','estiver de bermuda ou short','tiver um pet em casa','tiver nascido em um mês com 31 dias','estiver de cabelo preso','tiver irmão ou irmã mais velho(a)','tiver quebrado o celular este ano','estiver usando algo vermelho','tiver a letra A no nome','estiver descalço','tiver carro','estiver de barba','usar o modo escuro no celular','estiver usando algo branco','tiver cabelo cacheado','tiver cabelo curto','já tiver quebrado um osso','for filho(a) único(a)','for o(a) mais novo(a) da roda','for o(a) mais velho(a) da roda','tiver olhos claros','tiver furos nas orelhas','tiver mais de 30 anos','tiver menos de 25 anos'];
+        const ACO = ['ficar um mês sem celular','abrir mão do seu café ou refrigerante favorito por um ano','cantar no karaokê na frente de desconhecidos','passar uma semana sem tomar banho quente','nunca mais usar o Instagram','ficar um ano sem comer carne','ir de pijama para o trabalho por uma semana','ficar 6 meses sem ver séries e filmes','morar 6 meses em outro país','dormir no chão por um mês','pagar a próxima rodada de todos','nunca mais usar sapatos','ficar uma semana sem falar com seu parceiro(a)','cortar o cabelo do jeito que o grupo escolher','acordar às 5h todos os dias durante 3 meses','usar a mesma roupa por 7 dias','limpar a casa de todos da roda','pular de paraquedas','comer a pimenta mais forte do mundo','ficar 24 horas sem falar nada'];
+        const ALT = ['Quem é mais provável de chegar atrasado ao próprio casamento?','Quem é mais provável de perder o celular hoje?','Quem mais reclama do trânsito?','Quem é mais provável de ganhar na loteria e sumir?','Quem é mais ciumento(a) da roda?','Quem tem o pior gosto musical?','Quem seria o primeiro a morrer num filme de terror?','Quem mais come escondido?','Quem é mais provável de chorar em um filme?','Quem tem mais fotos no celular?','Quem é mais provável de esquecer a carteira em casa?','Quem dirige pior?','Quem é o mais gastão da roda?','Quem tem o sono mais pesado?','Quem mais mente sobre a hora em que está chegando?','Quem seria a pior pessoa para guardar um segredo?','Quem é mais provável de adotar mais um pet sem pensar?','Quem mais ronca?','Quem é mais provável de discutir com um atendente de telemarketing?','Quem demora mais para responder mensagem?','Quem é mais teimoso(a)?'];
+
+        const X = (cat, scope, text) => ({ cat, scope, text });
+        
+        let deck = [
+            X('Regra do Chefe', 'self', "Crie uma regra que todos devem seguir pelas próximas 3 rodadas na mesa.\n\n<span class='card-examples'>💡 Exemplos:\n• Só beber com a mão esquerda.\n• Proibido usar a palavra 'não'.</span>\n\nQuem quebrar a regra, bebe 1 shot extra!"),
+            X('Regra do Chefe', 'self', "Você é o Chefe! Dite uma postura física que deve ser mantida por 3 rodadas.\n\n<span class='card-examples'>💡 Exemplos:\n• Beber com o dedo mindinho levantado.\n• Falar sempre de pé.</span>\n\nQuem esquecer, bebe 1 shot."),
+            // Cartas especiais de Tirar a Sorte
+            X('Tirar a Sorte', 'self', "A sorte está lançada! Gire a roleta abaixo para descobrir quem foi o sortudo e quantos shots vai tomar."),
+            X('Tirar a Sorte', 'self', "Momento da Sorte! Gire a roleta e veja quem paga a prenda nesta rodada.")
         ];
 
-        // Cartas extras (total do baralho: 200)
-        const B = (cat, t) => ({ cat: cat, text: t });
-        const REV = ['já fingiu que entendeu uma piada só para não passar vergonha.','já ficou olhando a geladeira aberta sem saber o que queria.','já disse “estou chegando” ainda deitado no sofá.','já ouviu a própria voz gravada e quis sumir.','já pesquisou um sintoma no Google e achou que ia morrer.','já gastou dinheiro em algo e escondeu do parceiro(a).','já usou o “estou em reunião” para fugir de uma ligação.','já esqueceu o aniversário de alguém importante.','já dormiu antes das 22h num sábado e achou ótimo.','já “emprestou” o carregador de alguém e nunca devolveu.','já mandou “kkkk” sem ter rido nem um pouco.','já chorou de raiva no trabalho e voltou como se nada tivesse acontecido.','já ficou stalkeando o perfil de um ex às 3 da manhã.','já bebeu demais e prometeu nunca mais fazer isso na vida.','já comprou algo parcelado e esqueceu quantas parcelas faltam.','já começou uma dieta e desistiu antes do primeiro final de semana.','já se arrependeu de um corte de cabelo e usou boné por semanas.','já errou o nome de alguém depois de conversar por uma hora.','já deu “curtir” sem querer numa foto antiga de alguém.','já ficou acordado até tarde vendo vídeos aleatórios sem motivo.','já foi pego cantando sozinho no carro.','já respondeu “tudo bem” quando estava tudo péssimo.','já viu a mensagem, pensou “respondo depois” e esqueceu por dias.','já virou a noite achando que dava conta no dia seguinte.','já pediu comida mesmo com a casa cheia de mantimentos.','já fingiu estar no telefone para evitar conversar com alguém.','já contou uma história exagerando bastante nos detalhes.','já tropeçou em público e fingiu que foi proposital.','já esqueceu onde estacionou o carro.','já deixou uma planta morrer por pura falta de cuidado.','já discutiu com o(a) parceiro(a) por um motivo ridículo.','já ficou com a mesma música grudada na cabeça por dias.','já comprou um aparelho de academia ou um curso e nunca usou.','já sentiu vergonha alheia de um parente em público.','já passou mal de tanto comer em um churrasco.','já cancelou um compromisso em cima da hora por preguiça.','já descobriu que estava com a blusa do avesso o dia todo.','já mandou mensagem de amor para o grupo errado.','já fingiu que dirige melhor do que realmente dirige.','já pegou no sono em um show ou em um evento caro.','já usou o celular escondido durante uma cerimônia.','já disse “só mais um” e ficou até o fim da festa.','já se emocionou com uma propaganda de TV.','já ficou sem falar com alguém por puro orgulho.','já terminou um namoro por mensagem.','já guardou segredo de alguém e acabou contando para outra pessoa.','já saiu de casa e voltou porque esqueceu algo importante.'];
-        const COM = ['já mandou uma foto sua sem querer para a pessoa errada.','já sentiu ciúme de alguém e negou até o fim.','já disse “hoje eu não bebo” e foi o último a ir embora.','já dividiu a conta sem concordar e ficou quieto.','já fez um “rolê rápido” que durou até o dia seguinte.','já esqueceu uma senha importante e precisou recuperar.','já assistiu a uma série inteira em um fim de semana.','já mentiu no currículo, nem que fosse um pouquinho.','já dormiu na casa de alguém sem avisar em casa.','já combinou algo no grupo e foi o primeiro a furar.','já se achou muito bem vestido e depois se arrependeu da foto.','já ficou sem falar com um amigo por semanas por bobagem.','já quebrou algo na casa dos outros e não contou.','já mandou um “oi sumido” só por interesse.','já usou uma música para indiretar alguém.','já deixou um prato sujo na pia até o dia seguinte.','já pediu um Uber para ir a um lugar a dois quarteirões.','já tirou mais de 20 selfies para postar só uma.','já ficou preso em um elevador ou em um lugar sem sinal.','já saiu de um grupo de WhatsApp sem avisar.','já tomou café às 22h e depois reclamou que não conseguia dormir.','já esqueceu de pagar uma conta e pagou multa.','já perdeu o celular dentro de casa e procurou por meia hora.','já deu uma desculpa esfarrapada para ir embora mais cedo.','já fingiu estar dormindo para evitar uma conversa.','já se perdeu mesmo usando o GPS.','já quis largar tudo e viver em um sítio.','já viu o dia amanhecer sem ter planejado.','já abriu a geladeira de madrugada só para ver o que tinha.','já brigou com um objeto, tipo impressora ou cadeira.','já recebeu um elogio e não soube o que responder.','já esqueceu uma bebida no congelador.','já falou sozinho em voz alta e alguém ouviu.'];
-        const DES = ['Imite um animal escolhido pelo grupo por 10 segundos. Se não fizer, beba 2 goles.','Fale um trava-língua sem errar. Se errar, beba 1 gole.','Dance sem música por 15 segundos. Se não dançar, beba 2 goles.','Faça uma declaração de amor dramática para um objeto da sala. Se não fizer, beba 2 goles.','Fique em silêncio por 30 segundos sem rir. Se rir, beba 2 goles.','Diga o nome de 5 filmes em 10 segundos. Se não conseguir, beba 2 goles.','Elogie sinceramente cada pessoa da roda. Se não fizer, beba 3 goles.','Imite a voz de alguém da roda e o grupo tenta adivinhar quem é. Se ninguém acertar, beba 1 gole.','Conte uma história engraçada em 30 segundos. Se o grupo não rir, beba 2 goles.','Faça 10 agachamentos agora. Se não fizer, beba 3 goles.','Cante o refrão de uma música escolhida pelo grupo. Se não cantar, beba 2 goles.','Feche os olhos e aponte para a pessoa que estiver à sua frente. Se errar, beba 1 gole.','Fale o alfabeto de trás para frente. Se errar, beba 2 goles.','Diga 5 países que começam com a letra B. Se não conseguir, beba 2 goles.','Faça uma pose de modelo por 10 segundos. Se não fizer, beba 2 goles.','Equilibre uma colher no nariz por 5 segundos. Se não conseguir, beba 1 gole.','Faça a mímica de um filme e o grupo tenta adivinhar. Se ninguém acertar, beba 2 goles.','Passe 1 minuto sem dizer a palavra “não”. Se falar, beba 2 goles.','Diga o nome completo de todos os jogadores. Se esquecer algum, beba 2 goles.','Faça cara de bravo por 10 segundos sem rir. Se rir, beba 1 gole.','Conte o seu maior mico em 20 segundos. Se não contar, beba 3 goles.','Fale como a pessoa à sua esquerda por 30 segundos. Se não fizer, beba 2 goles.','Descreva a pessoa à sua direita em 3 palavras. Se ela discordar, beba 1 gole.'];
-        const INS = ['estiver usando relógio ou pulseira','estiver de tênis','estiver usando algo azul','estiver de óculos','tiver tatuagem','estiver sem meias','tiver mais de 100 fotos de comida na galeria','estiver com o celular em modo silencioso','abriu o aplicativo do banco hoje','estiver com mais de 10 abas abertas no navegador','estiver com a tela do celular trincada','tiver mais de 50 mensagens não lidas','estiver usando brinco ou piercing','estiver de bermuda ou short','tiver um pet em casa','tiver mais de 20 notificações não lidas','tiver nascido em um mês com 31 dias','estiver de cabelo preso','tiver irmão ou irmã mais velho(a)','tiver quebrado o celular este ano','estiver usando algo vermelho','tiver a letra A no nome','estiver descalço','tiver carro','estiver de barba','usar o modo escuro no celular','tiver mais de 3 aplicativos de delivery instalados'];
-        const ACO = ['ficar um mês sem celular em troca de R$ 5.000','abrir mão do seu café ou refrigerante favorito por um ano em troca de R$ 2.000','cantar no karaokê na frente de desconhecidos em troca de R$ 1.000','passar uma semana sem tomar banho quente por R$ 1.500','nunca mais usar o Instagram em troca de R$ 15.000','ganhar um mês de férias pagas, mas sem poder usar a internet','ficar um ano sem comer carne em troca de R$ 8.000','ir de pijama para o trabalho por uma semana em troca de R$ 2.000','ficar 6 meses sem ver séries e filmes em troca de R$ 10.000','morar 6 meses em outro país por R$ 20.000','dormir no chão por um mês em troca de R$ 4.000','pagar a próxima rodada de todos em troca de um jantar grátis por um mês','nunca mais usar sapatos em troca de R$ 25.000','ficar uma semana sem falar com seu parceiro(a) em troca de R$ 3.000','ficar um ano sem redes sociais em troca de uma viagem','cortar o cabelo do jeito que o grupo escolher em troca de R$ 1.500','fazer um discurso no casamento de um desconhecido em troca de R$ 1.000','acordar às 5h todos os dias durante 3 meses em troca de R$ 6.000','ficar um ano sem fazer compras online em troca de R$ 5.000','usar a mesma roupa por 7 dias em troca de R$ 2.500','ficar um mês sem música em troca de R$ 2.000','limpar a casa de todos da roda em troca de R$ 4.000','pular de paraquedas em troca de R$ 2.000','comer a pimenta mais forte do mundo em troca de R$ 1.000','ficar 24 horas sem falar nada em troca de R$ 1.000'];
-        const ALT = ['Quem é mais provável de chegar atrasado ao próprio casamento?','Quem é mais provável de perder o celular hoje?','Quem mais reclama do trânsito?','Quem é mais provável de ganhar na loteria e sumir?','Quem é mais ciumento(a) da roda?','Quem tem o pior gosto musical?','Quem seria o primeiro a morrer num filme de terror?','Quem mais come escondido?','Quem é mais provável de chorar em um filme?','Quem tem mais fotos no celular?','Quem é mais provável de esquecer a carteira em casa?','Quem dirige pior?','Quem é o mais gastão da roda?','Quem tem o sono mais pesado?','Quem mais mente sobre a hora em que está chegando?','Quem seria a pior pessoa para guardar um segredo?','Quem é mais provável de adotar mais um pet sem pensar?','Quem mais ronca?','Quem é mais provável de virar influenciador?','Quem é mais provável de discutir com um atendente de telemarketing?','Quem demora mais para responder mensagem?','Quem é mais teimoso(a)?'];
-        // Revelação individual: 'self' = só quem tirou a carta; 'vote' = o grupo vota em alguém
-        const IND_SELF = ['conta a maior vergonha que já passou em uma festa. Se o grupo achar fraca, beba 2 goles.','revela o último segredo que guardou de alguém. Se não contar, beba 2 goles.','conta a pior mentira que já contou para um amigo ou parceiro(a). Se o grupo não acreditar, beba 2 goles.','conta como foi o pior encontro da vida. Se o grupo não rir, beba 2 goles.','diz qual foi a última coisa que pesquisou no Google. Se não disser, beba 2 goles.','conta o hábito mais estranho que tem. Se o grupo achar comum, beba 1 gole.','revela o maior mico que já pagou no trabalho. Se não contar, beba 2 goles.','conta o que faria se ganhasse R$ 1 milhão amanhã. Se o grupo achar sem graça, beba 1 gole.'];
-        const IND_VOTE = ['já ter passado vergonha em um encontro.','já ter mentido a idade.','já ter mandado mensagem para o ex de madrugada.','já ter chorado no trabalho.','já ter dormido em um evento importante.','já ter fingido estar doente para faltar.','já ter esquecido o aniversário do(a) parceiro(a).'];
-        // ===== Mais cartas (scope: self = individual, all = todos, vote = grupo vota) =====
-const REV2 = ['já mandou um áudio e tentou apagar antes de a pessoa ouvir.','já fingiu que gostou de uma comida só para não ofender quem cozinhou.','já ficou horas em uma fila só para desistir no final.','já chamou alguém pelo nome errado por meses.','já esqueceu a senha do próprio celular.','já foi dormir prometendo acordar cedo e perdeu a hora.','já deu uma resposta errada com total confiança.','já comeu escondido para não dividir.','já passou vontade por vergonha de pedir algo no restaurante.','já saiu de uma festa sem se despedir de ninguém.','já mentiu que estava doente para faltar a um compromisso.','já se fingiu de morto em uma brincadeira.','já tomou um susto e gritou mais do que devia.','já deu risada de algo só porque todo mundo riu.','já esqueceu o fogão ou o ferro de passar ligado.','já assistiu a um filme de terror com os olhos tapados.','já teve medo de ir ao banheiro de noite.','já tentou cozinhar algo e deu muito errado.','já deixou a comida queimar por distração.','já passou mais de uma hora decidindo o que assistir.','já fingiu que não viu um conhecido na rua.','já ficou trancado do lado de fora de casa.','já bateu o carro ou a moto, mesmo que de leve.','já foi convidado a sair de algum lugar.','já falou algo e logo percebeu que não devia.','já se meteu em uma briga que não era sua.','já cantou parabéns desafinado de propósito.','já pegou carona e fingiu que ia pagar depois.','já chorou de rir até doer a barriga.','já levou um tombo feio e fingiu que não doeu.','já ficou sem graça com um elogio exagerado.','já comeu tudo sozinho de madrugada.','já dormiu com a TV ligada a noite toda.','já esqueceu um presente e comprou em cima da hora.','já se arrependeu de uma mensagem enviada de madrugada.','já foi trabalhar ou estudar sem dormir nada.','já comprou algo por impulso e se arrependeu no dia seguinte.','já viajou e esqueceu algo essencial em casa.','já inventou um compromisso para sair de um lugar.','já fingiu ouvir uma história pela décima vez.','já ficou sem internet em um momento crucial.','já deixou a música errada tocando no som alto.','já foi a um casamento só pela comida e pela bebida.','já errou um passo de dança e fingiu que era de propósito.','já se achou mais bêbado do que realmente estava.','já tomou banho de chuva por diversão.','já pulou uma refeição por preguiça de cozinhar.','já ligou sem querer para alguém e ficou ouvindo chamar.','já contou um machucado bobo como se fosse uma grande aventura.','já pagou mico em uma videochamada.'];
-const COM2 = ['já foi o último a saber de uma fofoca.','já dividiu o Uber e esqueceu de mandar a parte.','já esqueceu o que ia falar no meio da frase.','já ficou rindo sozinho lembrando de algo.','já pediu desculpa para um objeto depois de bater nele.','já tropeçou no próprio pé sem motivo.','já fez uma promessa de ano novo e desistiu em janeiro.','já fingiu estar ouvindo música para não conversar.','já passou da hora de dormir vendo só mais um episódio.','já se sentiu a pessoa mais velha da festa.','já foi ao mercado e voltou sem o que precisava.','já mandou um pix para a pessoa errada.','já usou o mesmo pijama por mais de uma semana.','já ficou duas horas olhando fotos antigas.','já viu o dia amanhecer conversando com alguém.','já correu atrás do ônibus e perdeu mesmo assim.','já escondeu uma bagunça jogando tudo no armário.','já disse “estou saindo agora” sem ter tomado banho ainda.','já cantou a música errada em um karaokê.','já fez amizade com um desconhecido no meio de uma festa.','já foi dormir com fome por preguiça de cozinhar.','já disse “vamos marcar” sem a menor intenção de marcar.','já se emocionou em um casamento de pessoas que nem conhecia.','já torceu para o evento ser cancelado.','já pediu a sobremesa só para provar a dos outros.','já ficou olhando a chuva pela janela sem fazer nada.','já inventou uma desculpa para chegar mais tarde.','já caiu de sono no meio de uma conversa.','já dirigiu sem saber exatamente para onde ia.','já esqueceu o guarda-chuva em algum lugar.','já deu uma volta extra só para terminar uma música no carro.','já ganhou algo em um sorteio.','já perdeu uma aposta boba para um amigo.','já conversou com o pet como se ele entendesse tudo.','já tirou foto da comida antes de comer.','já se arrumou todo e o rolê foi cancelado.','já comeu a última fatia sem perguntar.','já passou a noite em claro conversando bobagens.','já deixou o celular cair na própria cara deitado.','já saiu de casa com a cara amassada de travesseiro.','já se perdeu em um shopping.','já mandou uma figurinha na hora errada.','já se escondeu em uma festa chata.','já inventou um nome falso para um desconhecido.','já dormiu em um transporte e passou do ponto.'];
+        deck.push(
+            ...REV.map(t => X('Revelação', 'all', 'Beba se você ' + t)),
+            ...COM.map(t => X('Comum', 'all', 'Beba se você ' + t)),
+            ...DES.map(t => X('Desafio', 'self', t)),
+            ...INS.map(t => X('Inspeção', 'all', 'Quem ' + t + ' bebe.')),
+            ...ACO.map(t => ({ cat: 'Acordo', scope: 'self', text: `Você toparia ${t} em troca de R$ 50.000? Se NÃO aceitar, beba.`, rule: 'refuse' })),
+            ...ALT.map(q => X('Modo Alternativo', 'vote', `O grupo vota: ${q} O mais votado bebe.`))
+        );
 
-const _MIM = ['um filme','uma profissão','um animal','um esporte','uma música','um personagem de desenho','um aplicativo','uma comida','uma celebridade','uma novela','um objeto da casa','uma cena de terror','um super-herói','um instrumento musical','uma atividade do dia a dia'];
-const _CANT = ['um sertanejo','um funk','um pagode','um rock','uma MPB','um forró','uma música de desenho animado','um jingle de propaganda','uma música de festa junina','uma música romântica','uma música de axé','uma balada internacional'];
-const _DANC = ['funk','forró','sertanejo','como se estivesse em um clipe','como um robô','como se ninguém estivesse olhando','como em um casamento','como um pinguim','como a pessoa à sua esquerda','em câmera lenta','a coreografia de uma música viral','samba'];
-const _IMIT = ['um bebê chorando','um locutor de futebol','um professor bravo','um cantor famoso','um bicho do mato','um político discursando','um narrador de documentário','uma criança birrenta'];
-const DES_SELF = [
-  ..._MIM.map(x => 'Mímica: o grupo escolhe ' + x + ' e você representa sem falar. Se ninguém acertar em 30 segundos, beba 2 goles.'),
-  ..._CANT.map(x => 'Cante um trecho de ' + x + ' com muita emoção. Se o grupo achar sem graça, beba 2 goles.'),
-  ..._DANC.map(x => 'Dance ' + x + ' por 15 segundos. Se o grupo achar fraco, beba 2 goles.'),
-  ..._IMIT.map(x => 'Imite ' + x + ' por 15 segundos. Se o grupo não rir, beba 2 goles.'),
-  'Faça um discurso de 20 segundos como se fosse o noivo ou a noiva de um casamento. Se o grupo não aplaudir, beba 2 goles.',
-  'Conte uma piada. Se ninguém rir, beba 2 goles.',
-  'Faça uma declaração de amor para a pessoa à sua direita, sem rir. Se rir, beba 2 goles.',
-  'Narre como locutor esportivo alguém da roda bebendo. Se o grupo achar ruim, beba 1 gole.',
-  'Fale por 30 segundos com um sotaque diferente do seu. Se o grupo não acreditar, beba 2 goles.',
-  'Faça 5 flexões de braço. Se não fizer, beba 3 goles.',
-  'Fique 30 segundos em posição de prancha. Se não aguentar, beba 2 goles.',
-  'Diga um trava-língua difícil três vezes seguidas. Se errar, beba 2 goles.',
-  'Faça uma propaganda de 20 segundos vendendo o copo de alguém da roda. Se o grupo não comprar, beba 2 goles.',
-  'Faça um rap de 4 versos sobre a pessoa à sua esquerda. Se o grupo não curtir, beba 3 goles.',
-  'Faça o seu melhor choro falso por 10 segundos. Se não convencer, beba 1 gole.',
-  'Imite a sua própria risada mais escandalosa. Se o grupo não rir, beba 2 goles.'
-];
-const DES_ALL = [
-  ..._MIM.slice(0, 10).map(x => 'Todos: a roda inteira faz a mímica de ' + x + ' ao mesmo tempo. O grupo vota no pior e ele bebe.'),
-  ...['parabéns pra você','uma música de festa junina','o refrão de um sertanejo famoso','uma música de desenho animado','o hino do seu time','um jingle de comercial','uma música dos anos 2000','uma música em inglês'].map(x => 'Todos cantam juntos ' + x + '. Quem errar a letra ou parar primeiro bebe.'),
-  ...['funk','forró','sertanejo','música eletrônica','a coreografia de uma música viral','como em um casamento','como robôs','no estilo mais ridículo possível','em câmera lenta'].map(x => 'Todos: dancem ' + x + ' por 20 segundos. O grupo vota no mais desengonçado, e ele bebe.'),
-  ...['nomes de frutas','marcas de carro','países','filmes de comédia','nomes de cidades','animais','artistas brasileiros','comidas típicas','times de futebol','profissões'].map(x => 'Todos: digam, um de cada vez, ' + x + ' sem repetir. Quem travar ou repetir bebe.'),
-  'Todos: joguem pedra, papel e tesoura em eliminatória. Quem perder a final bebe.',
-  'Todos: fiquem em silêncio por 30 segundos sem rir. Quem rir primeiro bebe.',
-  'Todos: levantem ao mesmo tempo. O último a ficar de pé bebe.',
-  'Todos: toquem o nariz ao mesmo tempo quando alguém gritar “já”. O último bebe.',
-  'Todos: fechem os olhos e apontem para quem mentiria melhor. O mais apontado bebe.',
-  'Todos: façam cara de bravo olhando um para o outro. Quem rir primeiro bebe.',
-  'Todos: batam palmas no ritmo de uma música escolhida pelo grupo. Quem errar o ritmo bebe.',
-  'Todos: contem até 30, um de cada vez, e quem estiver no número 7 ou múltiplo de 7 diz “pum”. Quem errar bebe.'
-];
-const INS2 = ['estiver usando algo verde','estiver usando algo branco','estiver de boné ou chapéu','tiver cabelo cacheado','tiver cabelo curto','já tiver quebrado um osso','for filho(a) único(a)','for o(a) mais novo(a) da roda','for o(a) mais velho(a) da roda','tiver mais de 1,80 m','tiver menos de 1,65 m','estiver usando colar ou corrente','estiver com unha pintada','tiver cicatriz visível','não souber nadar','nunca tiver andado de avião','tiver dormido menos de 6 horas esta noite','já tiver tomado café hoje','tiver comido carne hoje','for de signo de fogo (Áries, Leão ou Sagitário)','for de signo de água (Câncer, Escorpião ou Peixes)','tiver nascido em outro estado','estiver de casaco ou moletom','estiver com a mesma roupa de ontem','estiver de calça jeans','estiver usando anel ou aliança','tiver o nome com mais de 7 letras','tiver olhos claros','tiver mais de 2 tatuagens','tiver furos nas orelhas','estiver de chinelo','estiver com o cabelo molhado','já tiver visto o nascer do sol este mês','já tiver ido ao dentista este ano','estiver de camiseta de banda ou de time','tiver um apelido de infância vergonhoso','tiver mais de 30 anos','tiver menos de 25 anos','for canhoto(a)','tiver gato em casa'];
+        deck = deck.filter((c, i, self) => i === self.findIndex((t) => t.text === c.text));
 
-const ABS = [['beber um copo de xixi',300000],['passar 1 mês em uma casa lotada de aranhas',500000],['comer um pedaço de barata em todas as refeições por 1 semana',400000],['dormir 1 noite dentro de um caixão fechado',150000],['passar 24 horas em uma sala escura com cobras soltas',800000],['comer uma colher de minhocas vivas',120000],['tomar um shake de sardinha, ovo cru e leite azedo',100000],['lamber o chão de um banheiro público',250000],['ficar 1 semana sem tomar banho e sem escovar os dentes',80000],['passar a noite sozinho em um cemitério',200000],['viver 1 mês em uma ilha deserta comendo só peixe cru',300000],['ficar 2 horas preso em um elevador com um rato',150000],['beber um copo de água de aquário',60000],['comer um prato de grilos fritos',50000],['colocar a mão por 1 minuto em uma caixa cheia de baratas',350000],['raspar a cabeça e as sobrancelhas',100000],['comer um prato de ração de cachorro',80000],['acampar sozinho no meio da mata por 1 mês',120000],['ficar 1 semana trancado em um quarto escuro sem celular',150000],['mergulhar em uma gaiola entre tubarões',200000],['pular de bungee jump de uma ponte de 100 metros',70000],['beber um copo com um pouquinho de saliva de cada pessoa da roda',250000],['beber um copo pequeno de vinagre',30000],['beber um copo de leite batido com sardinha',70000],['comer uma cebola crua inteira como se fosse uma maçã',40000],['dormir 1 mês em um quarto cheio de bonecas antigas',400000],['ficar 1 mês sem falar com ninguém da sua família',90000],['ficar 48 horas sem dormir',60000],['tomar um banho de gelo por 10 minutos',40000],['comer uma pimenta malagueta inteira e ficar 10 minutos sem beber água',20000],['viver 1 ano em uma casa assombrada',600000],['ficar enterrado até o pescoço por 1 hora',100000]];
-const MILD = [['ficar um mês sem açúcar',2000],['dormir no sofá por um mês',3000],['acordar às 6h todos os dias por 1 mês',3000],['ficar uma semana sem redes sociais',1500],['usar roupa social todos os dias por 1 mês',2500],['ir ao trabalho de bicicleta por 3 meses',4000],['ficar um mês sem delivery',2500],['passar o verão inteiro sem ar-condicionado',8000],['comer a mesma refeição por 1 semana',2000],['tomar banho gelado por 1 mês',5000],['ficar uma semana sem falar palavrão',1000],['passar um fim de semana sem eletrônicos',1500],['andar com a roupa do avesso o dia todo',500],['usar uma fantasia em público por um dia',2000],['fazer 100 flexões por dia por uma semana',3000]];
+        // Substituição Automática de Goles por Shots e limitação de punição a 3
+        deck.forEach(c => {
+            c.text = c.text.replace(/\bgoles\b/gi, 'shots').replace(/\bgole\b/gi, 'shot');
+            c.text = c.text.replace(/(\d+)\s*shots?/gi, (match, num) => {
+                let n = parseInt(num);
+                if (n > 3) n = 3;
+                return `${n} ${n === 1 ? 'shot' : 'shots'}`;
+            });
+        });
 
-const ALT_X = ['Quem gasta mais dinheiro com comida por mês?','Quem demora mais para se arrumar para sair?','Quem tem o pior gosto para filmes?','Quem é o mais gastão da roda?','Quem tem o sono mais pesado?','Quem mais ronca?','Quem demora mais para responder mensagem?','Quem é o mais teimoso?','Quem dirige pior?','Quem tem o pior gosto musical?','Quem mais come escondido?','Quem é o mais ciumento?'];
-const ALT2 = ['perder a hora no dia mais importante','chorar na formatura dos filhos','virar famoso na internet','esquecer o próprio aniversário','ser o primeiro a dormir na festa','ser o último a ir embora','pagar a conta de todo mundo sem pensar','brigar com o garçom','cantar no karaokê sem ser chamado','se perder em um lugar que conhece','comer a última fatia de pizza sem avisar','falar mal de alguém e a pessoa ouvir','adotar um animal de rua hoje','sobreviver a um apocalipse zumbi','ganhar um reality show','cair em um golpe','mandar mensagem para o ex bêbado','casar primeiro entre todos','virar monge','ficar milionário','acreditar em teoria da conspiração','contar um segredo sem querer','ficar bêbado primeiro','passar mal na montanha-russa','ter medo de barata','gritar em um filme de terror','ficar sem bateria na hora errada','dormir no meio de uma conversa','rir no momento errado','esquecer o nome de alguém importante','dirigir muito rápido','se meter em briga de bar','dançar em cima da mesa','fazer um discurso bêbado em um casamento','se apaixonar em uma viagem','ser pego mentindo','usar roupa do avesso sem perceber','ficar preso em uma sala trancada','levar o cachorro para todo lugar','falar sozinho na rua','se atrasar para o aeroporto','esquecer o passaporte','chorar vendo um vídeo de animal','correr de um cachorro','achar que é o melhor cozinheiro do mundo','ser o melhor dançarino da roda','organizar a festa surpresa','procurar o ex nas redes sociais','dar conselho de amor sem entender nada','ter uma vida dupla secreta','virar vegetariano de repente','abandonar tudo e morar no mato','fazer uma tatuagem bêbado','ter um pet exótico','falar três línguas','pedir sempre a mesma comida','cancelar o rolê em cima da hora','falar alto no cinema','ficar famoso por um vídeo vergonhoso','acordar sem lembrar da noite anterior','comprar algo inútil em promoção','pedir música no bar','passar o dia inteiro de pijama','chegar cedo demais em qualquer lugar','dar risada na hora de uma bronca','esquecer onde guardou as chaves','invadir o palco em um show','tomar banho gelado sem reclamar','acordar às 5 da manhã por vontade própria','assistir a uma série inteira em um dia','se esconder em uma festa chata','dormir de sapato','perder o voo','ser o chato da festa','comprar um carro só pela cor','falar com a planta','pedir demissão de impulso','virar youtuber','sair correndo de uma barata'];
-
-const money = v => 'R$ ' + v.toLocaleString('pt-BR');
-function mkAcordo(deal, v, rule, i) {
-    const all = i % 2 === 1;
-    const q = (all ? 'Quem toparia ' : 'Você toparia ') + deal + (v ? ' por ' + money(v) : '') + '? ';
-    const pen = rule === 'refuse' ? (all ? 'Quem NÃO topar, bebe.' : 'Se NÃO aceitar, beba.') : (all ? 'Quem aceitar, bebe.' : 'Se aceitar, beba.');
-    return { cat: 'Acordo', scope: all ? 'all' : 'self', rule: rule, text: q + pen };
-}
-const altText = q => 'O grupo escolhe: ' + q + ' O mais votado bebe.';
-const X = (cat, scope, text) => ({ cat: cat, scope: scope, text: text });
-
-for (let i = deck.length - 1; i >= 0; i--) if (deck[i].cat === 'Modo Alternativo') deck.splice(i, 1);
-deck.push(
-    ...REV.map(t => X('Revelação', 'all', 'Beba se você ' + t)),
-    ...REV2.map(t => X('Revelação', 'all', 'Beba se você ' + t)),
-    ...IND_SELF.map(t => X('Revelação', 'self', 'Quem tirou a carta ' + t)),
-    ...IND_VOTE.map(t => X('Revelação', 'vote', 'O grupo vota: quem é a pessoa mais provável de ' + t + ' A pessoa mais votada bebe.')),
-    ...COM.map(t => X('Comum', 'all', 'Beba se você ' + t)),
-    ...COM2.map(t => X('Comum', 'all', 'Beba se você ' + t)),
-    ...DES.map(t => X('Desafio', 'self', t)),
-    ...DES_SELF.map(t => X('Desafio', 'self', t)),
-    ...DES_ALL.map(t => X('Desafio', 'all', t)),
-    ...INS.map(t => X('Inspeção', 'all', 'Quem ' + t + ' bebe.')),
-    ...INS2.map(t => X('Inspeção', 'all', 'Quem ' + t + ' bebe.')),
-    ...ACO.map((t, i) => mkAcordo(t, 0, 'accept', i)),
-    ...ABS.map(([d, v], i) => mkAcordo(d, v, 'refuse', i)),
-    ...MILD.map(([d, v], i) => mkAcordo(d, v, 'accept', i + 1)),
-    ...ALT.map(q => X('Modo Alternativo', 'vote', altText(q))),
-    ...ALT_X.map(q => X('Modo Alternativo', 'vote', altText(q))),
-    ...ALT2.map(t => X('Modo Alternativo', 'vote', altText('Quem é mais provável de ' + t + '?')))
-);
-const SCOPE_DEFAULT = { 'Revelação': 'all', 'Comum': 'all', 'Inspeção': 'all', 'Desafio': 'self', 'Acordo': 'self', 'Modo Alternativo': 'vote' };
-deck.forEach(c => {
-    if (!c.scope) c.scope = SCOPE_DEFAULT[c.cat];
-    if (c.cat === 'Acordo' && !c.rule) c.rule = /Se sim|coragem/.test(c.text) ? 'refuse' : 'accept';
-});
-(function () { const seen = new Set(); for (let i = 0; i < deck.length; i++) { if (seen.has(deck[i].text)) { deck.splice(i, 1); i--; } else seen.add(deck[i].text); } })();
-function scopeLabel(c) {
-    if (c.scope === 'self') return 'INDIVIDUAL';
-    if (c.scope === 'vote') return c.cat === 'Revelação' ? 'INDIVIDUAL · O GRUPO VOTA' : 'O GRUPO VOTA';
-    return 'TODOS';
-}
-
+        const CAT_COLORS = {
+            'Revelação': { bg: '#FF3B30', fg: '#FFFFFF' },
+            'Desafio': { bg: '#000000', fg: '#FFFFFF' },
+            'Inspeção': { bg: '#FF9F0A', fg: '#FFFFFF' },
+            'Acordo': { bg: '#5E5CE6', fg: '#FFFFFF' },
+            'Modo Alternativo': { bg: '#32ADE6', fg: '#FFFFFF' },
+            'Comum': { bg: '#8E8E93', fg: '#FFFFFF' },
+            'Regra do Chefe': { bg: '#FF3B30', fg: '#FFFFFF' },
+            'Tirar a Sorte': { bg: '#FFD700', fg: '#000000' }
+        };
 
         let players = [];
-        const CAT_COLORS = {
-            'Revelação': { bg: '#00e5ff', fg: '#000' },
-            'Desafio': { bg: '#4ade80', fg: '#000' },
-            'Inspeção': { bg: '#ffd700', fg: '#000' },
-            'Acordo': { bg: '#ff007f', fg: '#fff' },
-            'Modo Alternativo': { bg: '#ff8c00', fg: '#000' },
-            'Comum': { bg: '#b52aff', fg: '#fff' }
-        };
         let playedCards = [];
         let currentTurnIndex = 0;
         let activeCard = null;
-        let allChecked = false;
-
-        function capitalize(str) {
-            return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-        }
+        let countDrinks = false;
+        let activeRule = null;
 
         function handleEnter(e) { if (e.key === 'Enter') addPlayer(); }
 
         function addPlayer() {
             const input = document.getElementById('player-input');
-            let name = input.value.trim();
-            if (name) {
-                name = capitalize(name);
-                if (!players.some(p => p.name === name)) {
-                    players.push({ name: name, drinks: 0 });
-                    input.value = '';
-                    input.focus();
-                    updatePlayerList();
-                } else {
-                    alert("Este jogador já está na roda!");
-                }
+            let name = input.value.trim().charAt(0).toUpperCase() + input.value.trim().slice(1).toLowerCase();
+            if (name && !players.some(p => p.name === name)) {
+                players.push({ name: name, drinks: 0 });
+                input.value = '';
+                updatePlayerList();
             }
         }
 
         function updatePlayerList() {
-            saveState();
             const ul = document.getElementById('players-ul');
             ul.innerHTML = '';
             players.forEach((p, idx) => {
-                let li = document.createElement('li');
-                li.innerHTML = `<span>${p.name}</span> <span style="color:red; cursor:pointer;" onclick="removePlayer(${idx})">X</span>`;
-                ul.appendChild(li);
+                ul.innerHTML += `<li><span>${p.name}</span> <span class="remove-btn" onclick="removePlayer(${idx})">✕</span></li>`;
             });
-            document.getElementById('player-count').innerText = `${players.length} jogador${players.length !== 1 ? 'es' : ''} na roda`;
+            document.getElementById('player-count').innerText = `${players.length} JOGADORES`;
         }
 
-        function removePlayer(idx) {
-            players.splice(idx, 1);
-            updatePlayerList();
-        }
-
-        let countDrinks = false;
-
-        // ===== Salvar progresso no aparelho (sobrevive a atualizar a página) =====
-        const STORE_KEY = 'sefezbebe_v1';
-        let currentScreen = 'setup-screen';
-        let restoring = false;
-
-        function saveState() {
-            if (restoring) return;
-            try {
-                const st = {
-                    players: players,
-                    playedTexts: playedCards.map(c => c.text),
-                    turn: currentTurnIndex,
-                    active: activeCard ? activeCard.text : null,
-                    screen: currentScreen,
-                    count: document.getElementById('count-drinks').checked
-                };
-                if (typeof DARES !== 'undefined') st.dar = { order: darOrder, idx: darIdx };
-                localStorage.setItem(STORE_KEY, JSON.stringify(st));
-            } catch (e) {}
-        }
-
-        function resetGame() {
-            restoring = true;
-            try { localStorage.removeItem(STORE_KEY); } catch (e) {}
-            location.reload();
-        }
-
-        function restoreState() {
-            let st = null;
-            try { st = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); } catch (e) {}
-            if (!st) return;
-            restoring = true;
-            try {
-                if (Array.isArray(st.players)) {
-                    players = st.players.map(p => ({ name: String(p.name), drinks: +p.drinks || 0 }));
-                    updatePlayerList();
-                }
-                document.getElementById('count-drinks').checked = !!st.count;
-                const byText = new Map(deck.map(c => [c.text, c]));
-                playedCards = (st.playedTexts || []).map(t => byText.get(t)).filter(Boolean);
-                currentTurnIndex = players.length ? ((+st.turn || 0) % players.length) : 0;
-                activeCard = st.active ? (byText.get(st.active) || null) : null;
-                if (typeof DARES !== 'undefined' && st.dar && Array.isArray(st.dar.order) && st.dar.order.length === DARES.length) {
-                    darOrder = st.dar.order;
-                    darIdx = Math.min(st.dar.idx | 0, darOrder.length - 1);
-                }
-                const gameScreens = ['turn-screen', 'card-screen', 'assign-drinks-screen', 'ranking-screen'];
-                if (gameScreens.includes(st.screen) && players.length >= 2) {
-                    applyCountMode();
-                    let target = st.screen;
-                    if (target === 'assign-drinks-screen') {
-                        if (activeCard && playedCards[playedCards.length - 1] === activeCard) playedCards.pop();
-                        target = activeCard ? 'card-screen' : 'turn-screen';
-                    }
-                    if (target === 'card-screen' && !activeCard) target = 'turn-screen';
-                    updateHistoryUI();
-                    updateTurnUI();
-                    if (target === 'card-screen') renderActiveCard();
-                    else if (target === 'ranking-screen' && countDrinks) endGame();
-                    else showScreen(target === 'ranking-screen' ? 'turn-screen' : target);
-                } else if (st.screen === 'dares-screen' && typeof DARES !== 'undefined' && darOrder.length) {
-                    darTab('play');
-                    renderDare();
-                    showScreen('dares-screen');
-                } else if (st.screen === 'setup-screen') {
-                    showScreen('setup-screen');
-                }
-            } catch (e) {}
-            restoring = false;
-            saveState();
-        }
-        document.getElementById('count-drinks').addEventListener('change', saveState);
-
-        
-
-        function applyCountMode() {
-            countDrinks = document.getElementById('count-drinks').checked;
-            document.getElementById('btn-next-card').textContent = countDrinks ? 'Quem Bebeu?' : 'Próxima carta';
-            document.getElementById('menu-ranking').style.display = countDrinks ? '' : 'none';
-            document.getElementById('menu-end').textContent = countDrinks ? '🏁 Encerrar e ver ranking' : '🏁 Encerrar jogo';
-        }
+        function removePlayer(idx) { players.splice(idx, 1); updatePlayerList(); }
 
         function startGame() {
-            applyCountMode();
-            if (players.length < 2) {
-                alert("Adicione pelo menos 2 jogadores para jogar!");
-                return;
-            }
-            showScreen('turn-screen');
+            countDrinks = document.getElementById('count-drinks').checked;
+            if (players.length < 2) return alert("Adicione pelo menos 2 jogadores!");
+            document.getElementById('btn-next-card').textContent = countDrinks ? 'Quem Bebeu? 🥃' : 'Finalizar Carta ✓';
+            document.getElementById('menu-ranking').style.display = countDrinks ? 'flex' : 'none';
+            document.getElementById('menu-end').textContent = countDrinks ? '🏁 Encerrar e ver ranking' : '🏁 Encerrar jogo';
             updateTurnUI();
+            showScreen('turn-screen');
         }
 
         function updateTurnUI() {
             document.getElementById('current-player-name').textContent = players[currentTurnIndex].name;
-            document.getElementById('cards-played-count').innerText = `Cartas jogadas: ${playedCards.length}/${deck.length}`;
+            document.getElementById('cards-played-count').innerText = `CARTAS: ${playedCards.length}/${deck.length}`;
+            
+            const banner = document.getElementById('active-rule-banner');
+            if (activeRule && activeRule.turnsLeft > 0) {
+                banner.style.display = 'flex';
+                document.getElementById('rule-author').textContent = activeRule.author;
+                document.getElementById('rule-turns-left').textContent = `${activeRule.turnsLeft} rodadas restantes`;
+            } else {
+                banner.style.display = 'none';
+                activeRule = null;
+            }
         }
 
         function drawCard(category) {
             let availableCards = deck.filter(c => !playedCards.some(pc => pc.text === c.text));
-            if (category !== 'Comum') {
-                availableCards = availableCards.filter(c => c.cat === category);
-            }
+            if (category !== 'Comum') availableCards = availableCards.filter(c => c.cat === category);
             
-            if (availableCards.length === 0) {
-                alert(`Acabaram as cartas da categoria ${category}! Escolha outra.`);
-                return;
-            }
+            if (availableCards.length === 0) return alert(`Acabaram as cartas de ${category}!`);
             
-            const randIndex = Math.floor(Math.random() * availableCards.length);
-            activeCard = availableCards[randIndex];
+            activeCard = availableCards[Math.floor(Math.random() * availableCards.length)];
             renderActiveCard();
         }
 
         function renderActiveCard() {
+            const cc = CAT_COLORS[activeCard.cat];
+            const bg = document.getElementById('display-card-bg');
+            bg.style.backgroundColor = cc.bg;
+            bg.style.color = cc.fg;
+            
+            // Mantém visível de quem é a vez na tela da carta
+            document.getElementById('card-current-player').innerText = players[currentTurnIndex].name;
+            document.getElementById('card-screen-count').innerText = `${playedCards.length + 1}/${deck.length}`;
             
             document.getElementById('display-category').innerText = activeCard.cat;
-            const cc = CAT_COLORS[activeCard.cat];
-            const sc = document.getElementById('display-scope');
-            sc.textContent = scopeLabel(activeCard);
-                sc.style.cssText = `display:inline-block; border:2px solid ${cc.bg}; color:${cc.bg}; padding:4px 14px; border-radius:999px; font-size:13px; font-weight:800; letter-spacing:1px; margin-bottom:18px;`;
-            const catBox = document.getElementById('display-category');
-            catBox.style.background = cc.bg;
-            catBox.style.color = cc.fg;
-            catBox.style.fontSize = '16px';
-            catBox.style.fontWeight = '800';
-            catBox.style.padding = '8px 24px';
-            catBox.style.borderRadius = '10px';
-            catBox.style.marginBottom = '20px';
-            document.querySelector('.card-display').style.borderColor = cc.bg;
-            document.querySelector('.card-display').style.boxShadow = 'none';
+            document.getElementById('display-scope').innerText = activeCard.scope === 'self' ? 'INDIVIDUAL' : (activeCard.scope === 'vote' ? 'O GRUPO VOTA' : 'TODOS BEBEM');
             document.getElementById('display-text').innerText = activeCard.text;
+            
+            // Exibir ou ocultar a roleta dependendo se a carta é 'Tirar a Sorte'
+            const rouletteSection = document.getElementById('roulette-section');
+            const btnSpin = document.getElementById('btn-spin');
+            
+            if (activeCard.cat === 'Tirar a Sorte') {
+                rouletteSection.style.display = 'block';
+                document.getElementById('roulette-result').innerText = 'Toque em Sortear!';
+                btnSpin.disabled = false;
+                btnSpin.style.opacity = '1';
+            } else {
+                rouletteSection.style.display = 'none';
+            }
+            
+            const btnNext = document.getElementById('btn-next-card');
+            if(activeCard.cat === 'Regra do Chefe') {
+                btnNext.textContent = "Ativar Regra na Roda 👑";
+            } else {
+                btnNext.textContent = countDrinks ? 'Quem Bebeu? 🥃' : 'Finalizar Carta ✓';
+            }
+            
             showScreen('card-screen');
         }
 
-        function skipCard() {
-            showScreen('turn-screen');
+        // Animação e lógica da Roleta
+        function spinRoulette() {
+            if (players.length === 0) return;
+            const resDisplay = document.getElementById('roulette-result');
+            const btnSpin = document.getElementById('btn-spin');
+            btnSpin.disabled = true;
+            btnSpin.style.opacity = '0.5';
+
+            let counter = 0;
+            const totalSteps = 20;
+            const interval = setInterval(() => {
+                const randomPlayer = players[Math.floor(Math.random() * players.length)].name;
+                const randomShots = Math.floor(Math.random() * 2) + 1; // 1 a 2 shots no máximo
+                resDisplay.innerText = `${randomPlayer} (${randomShots} ${randomShots === 1 ? 'shot' : 'shots'})`;
+                counter++;
+                
+                if (counter >= totalSteps) {
+                    clearInterval(interval);
+                    // Sorteio Final
+                    const finalPlayerObj = players[Math.floor(Math.random() * players.length)];
+                    const finalShots = Math.floor(Math.random() * 2) + 1;
+                    resDisplay.innerText = `🎯 ${finalPlayerObj.name} vai tomar ${finalShots} ${finalShots === 1 ? 'shot' : 'shots'}!`;
+                    
+                    // Computa automaticamente os shots se a contagem estiver ativa
+                    if (countDrinks) {
+                        finalPlayerObj.drinks += finalShots;
+                    }
+                    
+                    btnSpin.innerText = 'Sorteio Concluído ✓';
+                }
+            }, 80);
         }
 
         function goToAssignDrinks() {
-            if (!countDrinks) { playedCards.push(activeCard); updateHistoryUI(); nextTurn(); return; }
+            if(activeCard.cat === 'Regra do Chefe') {
+                activeRule = {
+                    author: players[currentTurnIndex].name,
+                    turnsLeft: players.length * 3
+                };
+                playedCards.push(activeCard);
+                nextTurn();
+                return;
+            }
+
+            // Se for 'Tirar a Sorte', o shot já foi computado na roleta, pula tela de escolha manual
+            if(activeCard.cat === 'Tirar a Sorte') {
+                playedCards.push(activeCard);
+                nextTurn();
+                return;
+            }
+
+            if (!countDrinks) { playedCards.push(activeCard); nextTurn(); return; }
+            
             playedCards.push(activeCard);
-            updateHistoryUI();
-            showScreen('assign-drinks-screen');
             
             if (activeCard.cat === 'Acordo' && activeCard.scope === 'self') {
-                document.getElementById('single-rule').textContent = activeCard.rule === 'refuse' ? 'Regra: se NÃO aceitar, você bebe.' : 'Regra: se aceitar, você bebe.';
-                // Modo Exclusivo para Carta Acordo
                 document.getElementById('multiple-selection-block').style.display = 'none';
                 document.getElementById('single-selection-block').style.display = 'block';
+                document.getElementById('single-rule').textContent = activeCard.rule === 'refuse' ? 'Se NÃO aceitar, bebe.' : 'Se aceitar, bebe.';
             } else {
-                // Modo Seleção Multipla (Padrão)
                 document.getElementById('multiple-selection-block').style.display = 'block';
                 document.getElementById('single-selection-block').style.display = 'none';
-                renderCheckboxes();
-            }
-        }
-
-        function renderCheckboxes() {
-            renderCheckboxesBase();
-            const hint = document.getElementById('assign-hint');
-            const c = activeCard;
-            let t;
-            if (c.cat === 'Revelação' && c.scope === 'self') {
-                const chk = document.getElementById(`drink-${currentTurnIndex}`);
-                chk.checked = true;
-                chk.closest('.checkbox-row').classList.add('selected');
-                t = 'Carta individual: já marcamos quem tirou a carta. Ajuste se precisar.';
-            } else if (c.scope === 'vote') {
-                t = 'Votação: marque a pessoa mais votada pelo grupo.';
-            } else if (c.cat === 'Desafio') {
-                t = 'Marque quem perdeu ou não cumpriu o desafio.';
-            } else if (c.cat === 'Acordo') {
-                t = c.rule === 'refuse' ? 'Marque quem NÃO aceitou o acordo (esses bebem).' : 'Marque quem aceitou o acordo (esses bebem).';
-            } else if (c.cat === 'Inspeção') {
-                t = 'Marque quem se encaixa na inspeção.';
-            } else {
-                t = 'Marque todos que já viveram a situação.';
-            }
-            hint.textContent = t;
-        }
-
-        function renderCheckboxesBase() {
-
-            const container = document.getElementById('drinks-checkboxes');
-            container.innerHTML = '';
-            allChecked = false;
-            document.getElementById('btn-toggle-all').innerText = "Marcar Todos";
-
-            players.forEach((p, index) => {
-                let div = document.createElement('div');
-                div.className = 'checkbox-row';
-                div.innerHTML = `
-                    <input type="checkbox" id="drink-${index}" value="${index}">
-                    <span class="chk-name">${p.name}</span>
-                `;
                 
-                // Se clicar na div/label, marca o checkbox (melhor usabilidade mobile)
-                div.addEventListener('click', (e) => {
-                    if(e.target.tagName !== 'INPUT') {
-                        const chk = document.getElementById(`drink-${index}`);
+                let hint = "Selecione quem bebeu.";
+                if(activeCard.scope === 'self') hint = "Ajuste se o jogador bebeu.";
+                else if(activeCard.scope === 'vote') hint = "Marque quem recebeu mais votos.";
+                document.getElementById('assign-hint').textContent = hint;
+                
+                const container = document.getElementById('drinks-checkboxes');
+                container.innerHTML = '';
+                players.forEach((p, i) => {
+                    let div = document.createElement('div');
+                    div.className = 'checkbox-row' + ((activeCard.scope === 'self' && i === currentTurnIndex) ? ' selected' : '');
+                    div.innerHTML = `
+                        <div class="chk-box"></div>
+                        <span class="chk-name">${p.name}</span>
+                        <input type="checkbox" id="drink-${i}" style="display:none;" ${(activeCard.scope === 'self' && i === currentTurnIndex) ? 'checked' : ''}>
+                    `;
+                    div.onclick = function() {
+                        const chk = document.getElementById(`drink-${i}`);
                         chk.checked = !chk.checked;
-                        div.classList.toggle('selected', chk.checked);
-                    }
+                        this.classList.toggle('selected', chk.checked);
+                    };
+                    container.appendChild(div);
                 });
-                
-                container.appendChild(div);
-            });
+            }
+            showScreen('assign-drinks-screen');
         }
 
+        function skipCard() { showScreen('turn-screen'); }
+        
         function toggleAllDrinks() {
-            allChecked = !allChecked;
-            document.getElementById('btn-toggle-all').innerText = allChecked ? "Desmarcar Todos" : "Marcar Todos";
-            players.forEach((_, i) => {
-                const c = document.getElementById(`drink-${i}`);
-                c.checked = allChecked;
-                c.closest('.checkbox-row').classList.toggle('selected', allChecked);
+            const rows = document.querySelectorAll('#drinks-checkboxes .checkbox-row');
+            const allChecked = Array.from(document.querySelectorAll('input[type="checkbox"]')).every(c => c.checked);
+            rows.forEach((r, i) => {
+                document.getElementById(`drink-${i}`).checked = !allChecked;
+                r.classList.toggle('selected', !allChecked);
             });
         }
 
         function confirmDrinks() {
-            players.forEach((p, i) => {
-                if (document.getElementById(`drink-${i}`).checked) {
-                    p.drinks++;
-                }
-            });
+            players.forEach((p, i) => { if (document.getElementById(`drink-${i}`).checked) p.drinks++; });
             nextTurn();
         }
 
-        // Lógica de Acordo: Pontua apenas quem puxou a carta
         function confirmSingleDrink(accepted) {
-            const rule = activeCard.rule;
-            if ((rule === 'accept' && accepted) || (rule === 'refuse' && !accepted)) {
+            if ((activeCard.rule === 'accept' && accepted) || (activeCard.rule === 'refuse' && !accepted)) {
                 players[currentTurnIndex].drinks++;
             }
             nextTurn();
@@ -821,132 +709,86 @@ function scopeLabel(c) {
 
         function nextTurn() {
             currentTurnIndex = (currentTurnIndex + 1) % players.length;
+            if(activeRule) activeRule.turnsLeft--;
             updateTurnUI();
             showScreen('turn-screen');
         }
 
         function endGame() {
-            if (!countDrinks) { if (confirm('Encerrar o jogo?')) resetGame(); return; }
-            showScreen('ranking-screen');
+            if (!countDrinks) return resetGame();
             const ul = document.getElementById('ranking-ul');
             ul.innerHTML = '';
-            
-            let sortedPlayers = [...players].sort((a, b) => b.drinks - a.drinks);
-            sortedPlayers.forEach((p, i) => {
-                let li = document.createElement('li');
-                li.innerHTML = `<span>${i + 1}º ${p.name}</span> <span style="color: var(--neon-cyan); font-size: 20px;">${p.drinks} 🥃</span>`;
-                ul.appendChild(li);
+            [...players].sort((a, b) => b.drinks - a.drinks).forEach((p, i) => {
+                ul.innerHTML += `<li class="ranking-item"><span class="rank-pos">${i+1}º ${p.name}</span><span class="rank-score">${p.drinks} 🥃</span></li>`;
             });
-        }
-
-        function toggleMenu(e) {
-            if (e) e.stopPropagation();
-            const p = document.getElementById('menu-panel');
-            const open = p.classList.toggle('open');
-            document.getElementById('menu-btn').setAttribute('aria-expanded', open);
-        }
-
-        function closeMenu() {
-            document.getElementById('menu-panel').classList.remove('open');
-            document.getElementById('menu-btn').setAttribute('aria-expanded', 'false');
-        }
-
-        function menuGo(action) {
-            closeMenu();
-            if (action === 'history') toggleHistory();
-            else if (action === 'ranking') toggleRanking();
-            else if (action === 'catalog') toggleCatalog();
-            else if (action === 'end') endGame();
-        }
-
-        document.addEventListener('click', closeMenu);
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
-
-        function toggleRanking() {
-            const modal = document.getElementById('ranking-modal');
-            if (!modal.classList.contains('active')) {
-                const ul = document.getElementById('ranking-modal-ul');
-                ul.innerHTML = '';
-                [...players].sort((a, b) => b.drinks - a.drinks).forEach((p, i) => {
-                    const li = document.createElement('li');
-                    const left = document.createElement('span');
-                    left.textContent = `${i + 1}º ${p.name}`;
-                    const right = document.createElement('span');
-                    right.style.cssText = 'color: var(--neon-cyan); font-size: 20px;';
-                    right.textContent = `${p.drinks} 🥃`;
-                    li.append(left, right);
-                    ul.appendChild(li);
-                });
-            }
-            modal.classList.toggle('active');
-        }
-
-        function toggleCatalog() {
-            const modal = document.getElementById('catalog-modal');
-            if (!modal.classList.contains('active')) renderCatalog();
-            modal.classList.toggle('active');
-        }
-
-        function renderCatalog() {
-            const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-            const order = ['Revelação', 'Desafio', 'Inspeção', 'Acordo', 'Modo Alternativo', 'Comum'];
-            const groups = {};
-            order.forEach(k => groups[k] = []);
-            deck.forEach(c => groups[c.cat].push(c));
-
-            let html = `<p style="text-align:center; font-size:18px; font-weight:bold; margin:0;">${deck.length} cartas no total</p><div class="cat-summary" style="justify-content:center;">`;
-            order.forEach(k => {
-                html += `<span class="cat-chip" style="background:${CAT_COLORS[k].bg}; color:${CAT_COLORS[k].fg};">${k}: ${groups[k].length}</span>`;
-            });
-            html += '</div>';
-
-            order.forEach(k => {
-                const list = groups[k];
-                const n = { self: 0, all: 0, vote: 0 };
-                list.forEach(c => n[c.scope]++);
-                const parts = [];
-                if (n.all) parts.push(`${n.all} para todos`);
-                if (n.self) parts.push(`${n.self} individuais`);
-                if (n.vote) parts.push(`${n.vote} com votação do grupo`);
-                html += `<details class="cat-block" style="border-left-color:${CAT_COLORS[k].bg};"><summary style="color:${CAT_COLORS[k].bg};">${k} — ${list.length} cartas<span class="sub">${parts.join(' · ')}</span></summary><ol>`;
-                list.forEach(c => {
-                    html += `<li><span class="scope-tag">${scopeLabel(c)}</span>${esc(c.text)}</li>`;
-                });
-                html += '</ol></details>';
-            });
-            document.getElementById('catalog-content').innerHTML = html;
-        }
-
-        function toggleHistory() {
-
-            const modal = document.getElementById('history-modal');
-            modal.classList.toggle('active');
-        }
-
-        function updateHistoryUI() {
-            const list = document.getElementById('history-list');
-            list.innerHTML = '';
-            if (playedCards.length === 0) {
-                list.innerHTML = '<p style="text-align:center; color: #888;">Nenhuma carta jogada ainda.</p>';
-            } else {
-                playedCards.forEach((c, i) => {
-                    list.innerHTML += `
-                        <div class="history-item">
-                            <strong style="color: var(--neon-purple);">[${c.cat}]</strong><br>
-                            ${c.text}
-                        </div>`;
-                });
-            }
+            showScreen('ranking-screen');
         }
 
         function showScreen(id) {
-            currentScreen = id;
-            saveState();
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
-    
-        restoreState();
+
+        /* Menus e Modais */
+        function toggleMenu() { document.getElementById('menu-overlay').classList.toggle('active'); }
+        function menuAction(act) {
+            toggleMenu();
+            if(act === 'end') endGame();
+            if(act === 'ranking') openModal('modal-ranking', renderModalRanking);
+            if(act === 'history') openModal('modal-history', renderModalHistory);
+            if(act === 'catalog') openModal('modal-catalog', renderModalCatalog);
+        }
+        function openModal(id, renderFunc) {
+            if(renderFunc) renderFunc();
+            document.getElementById(id).classList.add('active');
+        }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        
+        function renderModalRanking() {
+            const ul = document.getElementById('ranking-modal-ul');
+            ul.innerHTML = '';
+            [...players].sort((a, b) => b.drinks - a.drinks).forEach((p, i) => {
+                ul.innerHTML += `<li class="ranking-item"><span class="rank-pos">${i+1}º ${p.name}</span><span class="rank-score">${p.drinks} 🥃</span></li>`;
+            });
+        }
+        
+        function renderModalHistory() {
+            const list = document.getElementById('history-list');
+            list.innerHTML = playedCards.length === 0 ? '<p style="color:#8E8E93;">Nenhuma carta jogada ainda.</p>' : '';
+            playedCards.forEach(c => {
+                list.innerHTML += `<div style="padding: 16px; background: white; border: 1px solid #E5DED1; border-radius: 16px;">
+                    <strong style="color: ${CAT_COLORS[c.cat] ? CAT_COLORS[c.cat].bg : '#000'}; font-size: 0.9rem; text-transform: uppercase;">${c.cat}</strong>
+                    <p style="font-weight: 600; margin-top: 8px;">${c.text.replace(/<br>/g, " ")}</p>
+                </div>`;
+            });
+        }
+        
+        function renderModalCatalog() {
+            const content = document.getElementById('catalog-content');
+            const order = ['Revelação', 'Desafio', 'Inspeção', 'Acordo', 'Modo Alternativo', 'Regra do Chefe', 'Tirar a Sorte', 'Comum'];
+            const groups = {};
+            order.forEach(k => groups[k] = []);
+            deck.forEach(c => { if(groups[c.cat]) groups[c.cat].push(c); });
+
+            let html = `<p style="text-align:center; font-weight:800; font-size: 1.2rem; margin-bottom: 24px;">Total de ${deck.length} cartas</p>`;
+            order.forEach(k => {
+                const list = groups[k];
+                if(list.length === 0) return;
+                const badgeColor = CAT_COLORS[k] ? CAT_COLORS[k].bg : '#000';
+                html += `<details class="cat-block" style="border-left-color:${badgeColor};">
+                            <summary style="color:${badgeColor};">${k} — ${list.length} cartas</summary>
+                            <ol>`;
+                list.forEach(c => {
+                    const sc = c.scope === 'self' ? 'INDIVIDUAL' : (c.scope === 'vote' ? 'GRUPO VOTA' : 'TODOS');
+                    let cleanText = c.text.replace(/<[^>]*>?/gm, ' ');
+                    html += `<li><span class="scope-tag" style="color:${badgeColor}; border-color:${badgeColor};">${sc}</span> ${cleanText}</li>`;
+                });
+                html += '</ol></details>';
+            });
+            content.innerHTML = html;
+        }
+        
+        function resetGame() { location.reload(); }
     </script>
 </body>
 </html>
