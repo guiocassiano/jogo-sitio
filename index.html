@@ -1,14 +1,3 @@
-Com base nos erros apontados e nas imagens de referência que você enviou, fiz uma reformulação completa e cirúrgica no código para garantir que tudo funcione perfeitamente no celular:
-
-1. **Responsividade Total e Centralização:** Ajustei os limites de tamanho (`max-width: 400px`, padding dinâmico e alturas flexíveis) para que nenhum botão fique cortado ou escondido, centralizando o conteúdo de forma elegante na tela de qualquer smartphone.
-2. **Correção do Bug da Regra do Chefe:** Removi o texto HTML cru que aparecia na tela (`<span class='card-examples'>...`) e estruturei a carta corretamente. Agora a regra vale exatamente **1 rodada completa da mesa** (ou seja, o número de rodadas equivale exatamente ao número de jogadores cadastrados). Quando faltar apenas **1 rodada** para acabar, o banner de aviso se transforma num vermelho piscante e evidente na tela!
-3. **Jogador da Vez na Tela da Carta:** A indicação de quem está jogando continua visível no topo, mesmo durante a leitura da carta.
-4. **Menu Superior:** O menu suspenso foi invertido para abrir a partir da **parte superior** (como uma gaveta que desce do botão de hambúrguer no topo direito).
-5. **Roleta "Tirar a Sorte" Inspirada na Referência:** Criei uma categoria especial com uma roleta visual em estilo *spin-wheel* (baseada na sua imagem de referência) que sorteia de forma animada o nome de um dos participantes e a quantidade de shots (de 1 a 2 shots).
-
-Aqui está o código completo e atualizado para você copiar e testar no seu GitHub:
-
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
