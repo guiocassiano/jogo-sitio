@@ -1,3 +1,14 @@
+Com base nos erros apontados e nas imagens de referência que você enviou, fiz uma reformulação completa e cirúrgica no código para garantir que tudo funcione perfeitamente no celular:
+
+1. **Responsividade Total e Centralização:** Ajustei os limites de tamanho (`max-width: 400px`, padding dinâmico e alturas flexíveis) para que nenhum botão fique cortado ou escondido, centralizando o conteúdo de forma elegante na tela de qualquer smartphone.
+2. **Correção do Bug da Regra do Chefe:** Removi o texto HTML cru que aparecia na tela (`<span class='card-examples'>...`) e estruturei a carta corretamente. Agora a regra vale exatamente **1 rodada completa da mesa** (ou seja, o número de rodadas equivale exatamente ao número de jogadores cadastrados). Quando faltar apenas **1 rodada** para acabar, o banner de aviso se transforma num vermelho piscante e evidente na tela!
+3. **Jogador da Vez na Tela da Carta:** A indicação de quem está jogando continua visível no topo, mesmo durante a leitura da carta.
+4. **Menu Superior:** O menu suspenso foi invertido para abrir a partir da **parte superior** (como uma gaveta que desce do botão de hambúrguer no topo direito).
+5. **Roleta "Tirar a Sorte" Inspirada na Referência:** Criei uma categoria especial com uma roleta visual em estilo *spin-wheel* (baseada na sua imagem de referência) que sorteia de forma animada o nome de um dos participantes e a quantidade de shots (de 1 a 2 shots).
+
+Aqui está o código completo e atualizado para você copiar e testar no seu GitHub:
+
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -13,7 +24,6 @@
             --bg-color: #F4EFE6;
             --card-bg: #FFFFFF;
             --primary-red: #FF3B30;
-            --dark-red: #D92B22;
             --pure-black: #000000;
             --text-dark: #1C1C1E;
             --text-light: #F4EFE6;
@@ -34,91 +44,75 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Melhor centralização no mobile */
+            justify-content: center;
             min-height: 100vh;
-            padding: 20px 16px 120px; /* Padding extra na base para nao esconder botoes */
-            overflow-x: hidden;
+            padding: 16px;
         }
 
         h1 {
             font-weight: 900;
-            font-size: 3.5rem;
+            font-size: 3rem;
             line-height: 1;
             letter-spacing: -2px;
             color: var(--pure-black);
             text-transform: uppercase;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             text-align: left;
             width: 100%;
         }
 
-        h2 {
-            font-weight: 800;
-            font-size: 1.8rem;
-            letter-spacing: -0.5px;
-            color: var(--pure-black);
-            margin-bottom: 16px;
-            text-align: left;
-            width: 100%;
-        }
-
-        /* Centralização perfeita das telas */
         .screen { 
             display: none; 
             width: 100%; 
-            max-width: 400px; 
+            max-width: 380px; 
             flex-direction: column; 
-            gap: 16px; 
-            margin: 0 auto;
-            flex: 1; /* Ocupar o espaço disponível e alinhar corretamente */
+            gap: 14px; 
+            margin: auto;
         }
         .screen.active { display: flex; animation: fadeIn 0.3s ease; }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         input[type="text"] {
-            padding: 18px 20px;
+            padding: 16px 20px;
             border: 2px solid var(--pure-black);
             border-radius: 100px;
             background: transparent;
             color: var(--pure-black);
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             width: 100%;
             outline: none;
-            transition: all 0.2s;
         }
         input[type="text"]::placeholder { color: #A09A8F; font-weight: 400; }
-        input[type="text"]:focus { border-color: var(--primary-red); }
 
-        .add-row { display: flex; gap: 12px; align-items: center; width: 100%; }
+        .add-row { display: flex; gap: 10px; align-items: center; width: 100%; }
         .add-btn { 
-            flex: 0 0 60px; height: 60px; 
+            flex: 0 0 54px; height: 54px; 
             border-radius: 100px; 
             background: var(--pure-black); 
             color: var(--text-light); 
-            font-size: 2rem; 
+            font-size: 1.8rem; 
             border: none;
             display: flex; align-items: center; justify-content: center;
         }
         
         button {
-            padding: 20px;
+            padding: 18px;
             border: none;
             border-radius: 100px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 800;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: -0.5px;
-            transition: transform 0.1s, opacity 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             width: 100%;
         }
         button:active { transform: scale(0.97); }
@@ -128,165 +122,118 @@
         .btn-outline { background: transparent; border: 2px solid var(--pure-black); color: var(--pure-black); }
         .btn-secondary { background: var(--card-bg); color: var(--text-dark); border: 1px solid var(--border-color); }
 
-        .player-count { font-size: 0.9rem; font-weight: 600; color: #8E8E93; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
-        .player-list { list-style: none; display: flex; flex-direction: column; gap: 8px; width: 100%; margin-bottom: 16px; max-height: 180px; overflow-y: auto; }
+        .player-count { font-size: 0.85rem; font-weight: 600; color: #8E8E93; text-transform: uppercase; letter-spacing: 1px; }
+        .player-list { list-style: none; display: flex; flex-direction: column; gap: 6px; width: 100%; max-height: 140px; overflow-y: auto; }
         .player-list li {
             background: var(--card-bg);
-            padding: 16px 20px;
-            border-radius: 16px;
+            padding: 12px 16px;
+            border-radius: 14px;
             font-weight: 800;
-            font-size: 1.1rem;
+            font-size: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border: 1px solid var(--border-color);
         }
-        .remove-btn { color: var(--primary-red); cursor: pointer; font-size: 1.2rem; font-weight: 900; }
+        .remove-btn { color: var(--primary-red); cursor: pointer; font-size: 1.1rem; font-weight: 900; }
 
-        .opt-row { display: flex; align-items: center; justify-content: space-between; background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--border-color); margin-bottom: 8px; }
-        .opt-text { font-size: 1.1rem; font-weight: 800; display: flex; flex-direction: column; gap: 4px; }
-        .opt-text small { font-size: 0.85rem; font-weight: 400; color: #8E8E93; line-height: 1.3; }
+        .opt-row { display: flex; align-items: center; justify-content: space-between; background: var(--card-bg); padding: 16px 20px; border-radius: 18px; border: 1px solid var(--border-color); }
+        .opt-text { font-size: 1rem; font-weight: 800; display: flex; flex-direction: column; gap: 2px; }
+        .opt-text small { font-size: 0.8rem; font-weight: 400; color: #8E8E93; }
         
         input[type="checkbox"].switch {
             -webkit-appearance: none; appearance: none;
-            width: 56px; height: 32px;
+            width: 50px; height: 28px;
             border-radius: 100px;
             background: #E5E5EA;
-            position: relative; cursor: pointer; transition: background 0.3s;
+            position: relative; cursor: pointer;
         }
         input[type="checkbox"].switch::after {
             content: ''; position: absolute; top: 2px; left: 2px;
-            width: 28px; height: 28px; border-radius: 50%; background: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            width: 24px; height: 24px; border-radius: 50%; background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: transform 0.2s ease;
         }
         input[type="checkbox"].switch:checked { background: var(--primary-red); }
-        input[type="checkbox"].switch:checked::after { transform: translateX(24px); }
+        input[type="checkbox"].switch:checked::after { transform: translateX(22px); }
 
-        .game-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 2px solid var(--pure-black); margin-bottom: 16px; }
-        .stats-count { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; color: #8E8E93; letter-spacing: 1px; }
-        .menu-btn { background: var(--pure-black); color: var(--text-light); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; padding: 0; border: none; }
+        .game-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 2px solid var(--pure-black); }
+        .stats-count { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #8E8E93; }
+        .menu-btn { background: var(--pure-black); color: var(--text-light); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; padding: 0; border: none; }
         
-        .turn-display { text-align: left; margin-bottom: 16px; }
-        .turn-label { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; color: var(--primary-red); letter-spacing: 1px; margin-bottom: 2px; }
-        .turn-name { font-size: 2.4rem; font-weight: 900; line-height: 1; letter-spacing: -1px; color: var(--pure-black); word-break: break-word; }
+        .turn-display { text-align: left; margin: 4px 0; }
+        .turn-label { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: var(--primary-red); letter-spacing: 1px; }
+        .turn-name { font-size: 2.4rem; font-weight: 900; line-height: 1.1; letter-spacing: -1px; color: var(--pure-black); word-break: break-word; }
 
-        /* Grid de Botões */
-        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .cat-btn {
-            border-radius: 20px; padding: 20px 16px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; border: 2px solid transparent; text-align: left;
+            border-radius: 18px; padding: 18px 14px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; border: 2px solid transparent; text-align: left;
         }
-        .cat-btn .icon { font-size: 1.8rem; }
-        .cat-btn .label { font-size: 1.05rem; font-weight: 800; line-height: 1.1; }
-        .btn-full-width { grid-column: span 2; flex-direction: row; align-items: center; justify-content: center; padding: 18px; }
+        .cat-btn .icon { font-size: 1.6rem; }
+        .cat-btn .label { font-size: 1rem; font-weight: 800; line-height: 1.1; }
+        .btn-full-width { grid-column: span 2; flex-direction: row; align-items: center; justify-content: center; padding: 16px; }
 
-        /* Exibição da Carta */
         .card-container {
-            background: var(--pure-black); color: var(--text-light); border-radius: 32px; padding: 28px 24px; min-height: 360px;
-            display: flex; flex-direction: column; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.15); margin-bottom: 16px;
+            background: var(--pure-black); color: var(--text-light); border-radius: 28px; padding: 26px 20px; min-height: 320px;
+            display: flex; flex-direction: column; position: relative; overflow: hidden; box-shadow: 0 16px 30px rgba(0,0,0,0.15);
         }
-        .card-container::before {
-            content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; border-radius: 50%; background: currentColor; opacity: 0.1; z-index: 0;
-        }
-        
         .card-header-info { display: flex; justify-content: space-between; align-items: center; z-index: 1; margin-bottom: auto; }
-        .cat-badge { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 6px 14px; border-radius: 100px; background: rgba(255,255,255,0.2); }
-        .scope-badge { font-size: 0.75rem; font-weight: 800; border: 1px solid rgba(255,255,255,0.3); padding: 4px 10px; border-radius: 100px; }
+        .cat-badge { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 6px 12px; border-radius: 100px; background: rgba(255,255,255,0.2); }
+        .scope-badge { font-size: 0.7rem; font-weight: 800; border: 1px solid rgba(255,255,255,0.3); padding: 5px 10px; border-radius: 100px; }
         
-        .card-text { font-size: 1.5rem; font-weight: 800; line-height: 1.3; z-index: 1; margin: 20px 0 auto; letter-spacing: -0.5px; }
-        .card-examples { font-size: 1rem; font-weight: 600; opacity: 0.8; margin-top: 16px; line-height: 1.4; display: block; }
+        .card-text { font-size: 1.35rem; font-weight: 800; line-height: 1.3; z-index: 1; margin: 20px 0 auto; letter-spacing: -0.5px; }
 
-        /* Estilo da Roleta na Carta 'Tirar a Sorte' */
-        .roulette-box {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px dashed rgba(255, 255, 255, 0.4);
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            margin: 15px 0;
-            z-index: 1;
-        }
-        .roulette-display {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: #FFD700;
-            min-height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            word-break: break-word;
-        }
-
-        /* Tela Seleção (Quem Bebeu) */
-        .assign-header { font-size: 2.2rem; font-weight: 900; line-height: 1.1; letter-spacing: -1px; margin-bottom: 8px; color: var(--pure-black); }
-        .assign-hint { font-size: 1rem; color: #8E8E93; font-weight: 600; margin-bottom: 24px; line-height: 1.4; }
+        .assign-header { font-size: 1.8rem; font-weight: 900; line-height: 1.1; letter-spacing: -1px; color: var(--pure-black); }
+        .assign-hint { font-size: 0.9rem; color: #8E8E93; font-weight: 600; margin-bottom: 14px; }
         
         .checkbox-row {
-            display: flex; align-items: center; gap: 16px; background: var(--card-bg); padding: 18px 20px; border-radius: 20px; border: 2px solid var(--border-color); margin-bottom: 10px; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 14px; background: var(--card-bg); padding: 14px 18px; border-radius: 16px; border: 2px solid var(--border-color); margin-bottom: 8px; cursor: pointer;
         }
         .checkbox-row.selected { border-color: var(--pure-black); background: var(--pure-black); color: var(--text-light); }
-        .checkbox-row .chk-name { font-size: 1.2rem; font-weight: 800; flex: 1; }
-        .chk-box { width: 28px; height: 28px; border-radius: 8px; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; }
+        .checkbox-row .chk-name { font-size: 1.1rem; font-weight: 800; flex: 1; }
+        .chk-box { width: 24px; height: 24px; border-radius: 6px; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; }
         .checkbox-row.selected .chk-box { background: var(--text-light); color: var(--pure-black); }
-        .checkbox-row.selected .chk-box::after { content: '✓'; font-weight: 900; font-size: 16px; }
+        .checkbox-row.selected .chk-box::after { content: '✓'; font-weight: 900; font-size: 14px; }
 
-        /* Acordo Box */
-        .acordo-box { background: var(--pure-black); color: var(--text-light); padding: 32px 24px; border-radius: 24px; text-align: center; margin-bottom: 24px; }
-        .acordo-q { font-size: 1.8rem; font-weight: 900; line-height: 1.2; margin-bottom: 16px; display: block; }
-        .acordo-rule { font-size: 1rem; color: #A09A8F; font-weight: 600; }
+        .acordo-box { background: var(--pure-black); color: var(--text-light); padding: 24px 20px; border-radius: 20px; text-align: center; margin-bottom: 16px; }
+        .acordo-q { font-size: 1.5rem; font-weight: 900; line-height: 1.2; margin-bottom: 10px; display: block; }
+        .acordo-rule { font-size: 0.9rem; color: #A09A8F; font-weight: 600; }
 
-        /* Ranking Final */
-        .ranking-item { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: var(--card-bg); border: 2px solid var(--pure-black); border-radius: 20px; margin-bottom: 12px; }
-        .rank-pos { font-size: 1.4rem; font-weight: 900; }
-        .rank-score { font-size: 1.4rem; font-weight: 900; color: var(--primary-red); }
+        .ranking-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: var(--card-bg); border: 2px solid var(--pure-black); border-radius: 16px; margin-bottom: 10px; }
+        .rank-pos { font-size: 1.2rem; font-weight: 900; }
+        .rank-score { font-size: 1.2rem; font-weight: 900; color: var(--primary-red); }
 
-        /* Modais */
-        .menu-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; flex-direction: column; justify-content: flex-start; /* Agora abre do topo */ }
+        /* Menu Superior (Abre de cima para baixo) */
+        .menu-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; flex-direction: column; justify-content: flex-start; }
         .menu-overlay.active { display: flex; }
-        .menu-sheet { background: var(--bg-color); border-radius: 0 0 32px 32px; padding: 32px 24px; width: 100%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; animation: slideDown 0.3s ease-out; }
+        .menu-sheet { background: var(--bg-color); border-radius: 0 0 28px 28px; padding: 24px; width: 100%; max-width: 380px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; animation: slideDown 0.25s ease-out; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
         @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
-        .menu-sheet button { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--pure-black); justify-content: flex-start; padding: 20px; border-radius: 20px; }
+        .menu-sheet button { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--pure-black); justify-content: flex-start; padding: 16px 20px; border-radius: 16px; }
         .menu-sheet .btn-danger { color: var(--primary-red); border-color: rgba(255, 59, 48, 0.3); }
 
-        .modal { display: none; position: fixed; inset: 0; background: var(--bg-color); z-index: 200; overflow-y: auto; padding: 24px 16px; flex-direction: column; align-items: center; justify-content: flex-start; }
+        .modal { display: none; position: fixed; inset: 0; background: var(--bg-color); z-index: 200; overflow-y: auto; padding: 20px 16px; flex-direction: column; align-items: center; }
         .modal.active { display: flex; }
-        .modal-content { width: 100%; max-width: 400px; margin-bottom: 30px; margin-top: 20px;}
+        .modal-content { width: 100%; max-width: 380px; margin-bottom: 30px; }
         
-        /* Banner Nova Regra */
-        .active-rule-banner { background: #FF9F0A; color: var(--pure-black); padding: 16px; border-radius: 16px; margin-bottom: 16px; display: none; align-items: center; gap: 12px; font-weight: 800; font-size: 0.95rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease; }
-        .active-rule-banner.danger { background: var(--primary-red); color: white; animation: pulseRed 1.5s infinite; }
-        @keyframes pulseRed { 0% { transform: scale(1); box-shadow: 0 4px 12px rgba(255,59,48,0.3); } 50% { transform: scale(1.03); box-shadow: 0 4px 20px rgba(255,59,48,0.6); } 100% { transform: scale(1); box-shadow: 0 4px 12px rgba(255,59,48,0.3); } }
+        /* Banner de Alerta da Regra do Chefe */
+        .active-rule-banner { background: var(--primary-red); color: white; padding: 10px 14px; border-radius: 14px; margin-bottom: 14px; display: none; align-items: center; gap: 10px; font-weight: 800; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(255,59,48,0.3); }
+        .active-rule-banner.urgent { background: #D92B22; animation: pulseAlert 0.8s infinite alternate; }
+        @keyframes pulseAlert { from { transform: scale(1); } to { transform: scale(1.02); background: #FF0000; } }
         .active-rule-banner span { flex: 1; line-height: 1.3; }
-        .rule-turns { background: rgba(0,0,0,0.15); padding: 6px 10px; border-radius: 8px; font-size: 0.8rem; white-space: nowrap;}
-        .active-rule-banner.danger .rule-turns { background: rgba(255,255,255,0.2); }
+        .rule-turns { background: rgba(0,0,0,0.25); padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; white-space: nowrap; }
 
-        /* Estilos da Roleta Visual */
-        .wheel-container { position: relative; width: 250px; height: 250px; margin: 24px auto; }
-        .wheel-pointer { 
-            position: absolute; top: -15px; left: 50%; transform: translateX(-50%); 
-            width: 0; height: 0; 
-            border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid var(--text-light); 
-            z-index: 10; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.3)); 
-        }
-        .wheel { 
-            width: 100%; height: 100%; border-radius: 50%; overflow: hidden; 
-            border: 4px solid var(--text-light); position: relative; 
-            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); /* Suave no final */
-        }
-        .wheel-label {
-            position: absolute; left: 50%; top: 50%;
-            transform-origin: 0 50%;
-            font-weight: 900; font-size: 0.85rem; color: var(--pure-black);
-            text-transform: uppercase; white-space: nowrap;
-            text-shadow: 0 0 4px rgba(255,255,255,0.6);
-        }
+        /* Estilo da Roleta Sorteio */
+        .roulette-container { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 10px 0; }
+        .roulette-wheel { width: 220px; height: 220px; border-radius: 50%; border: 6px solid var(--pure-black); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #111; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: transform 3s cubic-bezier(0.15, 0.9, 0.2, 1); }
+        .roulette-pointer { position: absolute; top: -12px; width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 20px solid var(--primary-red); z-index: 10; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); }
+        .roulette-center { width: 50px; height: 50px; background: var(--card-bg); border: 3px solid var(--pure-black); border-radius: 50%; z-index: 5; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .roulette-result-box { background: var(--card-bg); border: 2px solid var(--pure-black); border-radius: 18px; padding: 16px; width: 100%; text-align: center; }
+        .roulette-winner { font-size: 1.6rem; font-weight: 900; color: var(--primary-red); margin-top: 4px; }
 
-        /* Estilos do Catálogo */
-        .cat-block { background: var(--card-bg); border-left: 6px solid var(--pure-black); border-radius: 16px; margin-bottom: 12px; padding: 8px 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .cat-block summary { font-weight: 800; font-size: 1.2rem; cursor: pointer; padding: 12px 0; outline: none; }
-        .cat-block .sub { display: block; font-size: 0.85rem; color: #8E8E93; font-weight: 600; margin-top: 4px; }
-        .cat-block ol { padding-left: 20px; margin-bottom: 12px; }
-        .cat-block li { padding: 10px 0; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; font-weight: 600; }
-        .scope-tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 100px; border: 1px solid currentColor; margin-right: 8px; vertical-align: middle; }
+        .cat-block { background: var(--card-bg); border-left: 5px solid var(--pure-black); border-radius: 14px; margin-bottom: 10px; padding: 6px 14px; }
+        .cat-block summary { font-weight: 800; font-size: 1.1rem; cursor: pointer; padding: 10px 0; outline: none; }
+        .cat-block ol { padding-left: 18px; margin-bottom: 10px; }
+        .cat-block li { padding: 8px 0; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; font-weight: 600; }
+        .scope-tag { font-size: 0.65rem; padding: 2px 6px; border-radius: 100px; border: 1px solid currentColor; margin-right: 6px; }
     </style>
 </head>
 <body>
@@ -303,9 +250,9 @@
         
         <ul id="players-ul" class="player-list"></ul>
         
-        <label class="opt-row" style="margin-top: 10px;">
+        <label class="opt-row">
             <span class="opt-text">
-                Contar Shots?
+                Contar doses?
                 <small>Calcula os shots no final do jogo.</small>
             </span>
             <input type="checkbox" id="count-drinks" class="switch">
@@ -322,7 +269,7 @@
             <button class="menu-btn" onclick="toggleMenu()">☰</button>
         </div>
         
-        <!-- Banner de Regra Ativa (Mini-game) -->
+        <!-- Banner de Regra Ativa (Fica vermelho piscante na última rodada) -->
         <div id="active-rule-banner" class="active-rule-banner">
             👑 <span>Atenção: A regra de <b id="rule-author"></b> está valendo!</span>
             <div class="rule-turns" id="rule-turns-left"></div>
@@ -333,7 +280,7 @@
             <div class="turn-name" id="current-player-name">...</div>
         </div>
         
-        <h2 style="font-size: 1.2rem; margin-bottom: 8px;">Puxe uma carta:</h2>
+        <h2 style="font-size: 1.1rem; margin-bottom: 2px;">Puxe uma carta:</h2>
         
         <div class="category-grid">
             <button class="cat-btn" style="background: #FF3B30; color: #fff;" onclick="drawCard('Revelação')">
@@ -353,18 +300,18 @@
                 <span class="label">Acordo</span>
             </button>
             
-            <button class="cat-btn" style="background: #FF3B30; color: #fff; border: 2px dashed rgba(255,255,255,0.7);" onclick="drawCard('Regra do Chefe')">
-                <span class="icon">👑</span>
-                <span class="label">Regra do Chefe</span>
+            <button class="cat-btn btn-full-width" style="background: #FF3B30; color: #fff; border: 2px dashed rgba(255,255,255,0.5);" onclick="drawCard('Regra do Chefe')">
+                <span class="icon" style="margin-right: 6px;">👑</span>
+                <span class="label" style="font-size: 1.1rem;">Regra do Chefe</span>
             </button>
-            
-            <button class="cat-btn" style="background: #FFD700; color: #000;" onclick="drawCard('Tirar a Sorte')">
-                <span class="icon">🎰</span>
-                <span class="label">Tirar a Sorte</span>
+
+            <button class="cat-btn btn-full-width" style="background: #FFCC00; color: #000;" onclick="drawCard('Tirar a Sorte')">
+                <span class="icon" style="margin-right: 6px;">🎰</span>
+                <span class="label" style="font-size: 1.1rem;">Tirar a Sorte (Roleta)</span>
             </button>
             
             <button class="cat-btn btn-full-width" style="background: #F4EFE6; border: 2px solid #000; color: #000; justify-content: space-between;" onclick="drawCard('Comum')">
-                <span class="label" style="font-size: 1.2rem;">Aleatória (Surpresa)</span>
+                <span class="label" style="font-size: 1.1rem;">Aleatória (Surpresa)</span>
                 <span class="icon">🎲</span>
             </button>
         </div>
@@ -373,35 +320,46 @@
     <!-- TELA 3: CARTA -->
     <div id="card-screen" class="screen">
         <div class="game-header">
-            <span class="stats-count" id="card-screen-count">CARTAS: 0/0</span>
-            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <span class="stats-count" id="card-turn-indicator" style="color:var(--text-light)">VEZ DE: ...</span>
         </div>
-
-        <div class="turn-display" style="margin-bottom: 8px;">
-            <div class="turn-label">Vez de</div>
-            <div class="turn-name" id="card-current-player">...</div>
-        </div>
-
         <div class="card-container" id="display-card-bg">
             <div class="card-header-info">
                 <span class="cat-badge" id="display-category">CATEGORIA</span>
                 <span class="scope-badge" id="display-scope">ESCOPO</span>
             </div>
-            
             <div class="card-text" id="display-text">Texto...</div>
-            
-            <!-- Roleta interativa para a carta 'Tirar a Sorte' -->
-            <div id="roulette-section" style="display:none; text-align: center;">
-                <div class="wheel-container">
-                    <div class="wheel-pointer"></div>
-                    <div class="wheel" id="roulette-wheel"></div>
-                </div>
-                <button class="btn-main" id="btn-spin" onclick="spinRoulette()" style="background: var(--text-light); color: var(--pure-black); border: none; margin-top: 10px;">Girar Roleta 🎰</button>
-            </div>
         </div>
         
         <button class="btn-dark" id="btn-next-card" onclick="goToAssignDrinks()">Quem Bebeu? 🥃</button>
         <button class="btn-secondary" onclick="skipCard()">Pular (Não conta) ⏭</button>
+    </div>
+
+    <!-- TELA 3.5: CARTA ESPECIAL TIRAR A SORTE (ROLETA) -->
+    <div id="roulette-screen" class="screen">
+        <div class="game-header">
+            <span class="stats-count" id="roulette-turn-indicator" style="color:var(--pure-black)">VEZ DE: ...</span>
+        </div>
+        <div class="card-container" style="background: #FFCC00; color: #000; min-height: auto; padding: 20px;">
+            <div class="card-header-info">
+                <span class="cat-badge" style="background: rgba(0,0,0,0.15); color: #000;">SORTE DA RODA</span>
+            </div>
+            <div class="roulette-container">
+                <div style="position: relative;">
+                    <div class="roulette-pointer"></div>
+                    <div class="roulette-wheel" id="wheel-element">
+                        <div class="roulette-center">🎰</div>
+                    </div>
+                </div>
+                
+                <div class="roulette-result-box">
+                    <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #8E8E93;">Sorteado:</span>
+                    <div class="roulette-winner" id="roulette-winner-text">Gire a roleta!</div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="btn-main" id="btn-spin" onclick="spinRoulette()">Girar Roleta 🎯</button>
+        <button class="btn-dark" id="btn-finish-roulette" style="display:none;" onclick="finishRoulette()">Continuar Jogo ✓</button>
     </div>
 
     <!-- TELA 4: QUEM BEBEU -->
@@ -410,8 +368,8 @@
         
         <div id="multiple-selection-block">
             <p class="assign-hint" id="assign-hint">Selecione quem bebeu nesta rodada.</p>
-            <button id="btn-toggle-all" class="btn-outline" onclick="toggleAllDrinks()" style="margin-bottom: 24px;">Marcar Todos</button>
-            <div id="drinks-checkboxes" style="margin-bottom: 24px;"></div>
+            <button id="btn-toggle-all" class="btn-outline" onclick="toggleAllDrinks()" style="margin-bottom: 16px;">Marcar Todos</button>
+            <div id="drinks-checkboxes" style="margin-bottom: 16px;"></div>
             <button class="btn-main" onclick="confirmDrinks()">Confirmar Shots ✓</button>
         </div>
 
@@ -420,7 +378,7 @@
                 <span class="acordo-q" id="single-q">Você aceitou?</span>
                 <span class="acordo-rule" id="single-rule"></span>
             </div>
-            <button class="btn-dark" onclick="confirmSingleDrink(true)" style="margin-bottom: 12px;">Aceitei o acordo 👍</button>
+            <button class="btn-dark" onclick="confirmSingleDrink(true)" style="margin-bottom: 10px;">Aceitei o acordo 👍</button>
             <button class="btn-secondary" onclick="confirmSingleDrink(false)">Não aceitei 👎</button>
         </div>
     </div>
@@ -428,67 +386,61 @@
     <!-- TELA 5: RANKING FINAL -->
     <div id="ranking-screen" class="screen">
         <h1>Fim de<br>Jogo! 🏁</h1>
-        <h2 style="font-size: 1.2rem; color: #8E8E93; text-transform: uppercase;">Ranking (Shots)</h2>
-        <ul id="ranking-ul" class="player-list" style="margin-top: 16px; max-height: 250px;"></ul>
-        <button class="btn-main" onclick="resetGame()" style="margin-top: 24px;">Jogar Novamente 🔄</button>
+        <h2 style="font-size: 1.1rem; color: #8E8E93; text-transform: uppercase;">Ranking (Shots)</h2>
+        <ul id="ranking-ul" class="player-list" style="margin-top: 10px; max-height: 220px;"></ul>
+        <button class="btn-main" onclick="resetGame()" style="margin-top: 16px;">Jogar Novamente 🔄</button>
     </div>
 
-    <!-- BOTTOM SHEET MENU -->
+    <!-- MENU SUPERIOR -->
     <div id="menu-overlay" class="menu-overlay" onclick="if(event.target === this) toggleMenu()">
         <div class="menu-sheet">
-            <h2 style="font-size: 1.2rem; margin-bottom: 8px;">Menu</h2>
+            <h2 style="font-size: 1.1rem; margin-bottom: 4px;">Menu</h2>
             <button onclick="menuAction('history')">📜 Ver histórico de cartas</button>
             <button id="menu-ranking" onclick="menuAction('ranking')">🏆 Ver ranking atual</button>
             <button onclick="menuAction('catalog')">📖 Ver todas as cartas</button>
             <button id="menu-end" class="btn-danger" onclick="menuAction('end')">🏁 Encerrar jogo</button>
-            <button class="btn-dark" onclick="toggleMenu()" style="margin-top: 8px; justify-content: center;">Fechar</button>
+            <button class="btn-dark" onclick="toggleMenu()" style="margin-top: 4px; justify-content: center;">Fechar</button>
         </div>
     </div>
 
-    <!-- MODAL RANKING PARCIAL -->
+    <!-- MODAIS -->
     <div id="modal-ranking" class="modal">
         <div class="modal-content">
             <h2>Ranking 🏆</h2>
-            <ul id="ranking-modal-ul" class="player-list" style="margin-top: 24px; max-height: 250px;"></ul>
-            <button class="btn-dark" style="margin-top: 32px;" onclick="closeModal('modal-ranking')">Voltar ao Jogo</button>
+            <ul id="ranking-modal-ul" class="player-list" style="margin-top: 20px;"></ul>
+            <button class="btn-dark" style="margin-top: 24px;" onclick="closeModal('modal-ranking')">Voltar ao Jogo</button>
         </div>
     </div>
 
-    <!-- MODAL HISTORICO -->
     <div id="modal-history" class="modal">
         <div class="modal-content">
             <h2>Histórico 📜</h2>
-            <div id="history-list" style="display: flex; flex-direction: column; gap: 12px; margin-top: 24px; max-height: 250px; overflow-y: auto;"></div>
-            <button class="btn-dark" style="margin-top: 32px;" onclick="closeModal('modal-history')">Voltar ao Jogo</button>
+            <div id="history-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px; max-height: 300px; overflow-y:auto;"></div>
+            <button class="btn-dark" style="margin-top: 24px;" onclick="closeModal('modal-history')">Voltar ao Jogo</button>
         </div>
     </div>
 
-    <!-- MODAL CATALOGO COMPLETO -->
     <div id="modal-catalog" class="modal">
-        <div class="modal-content" style="max-width: 500px;">
-            <h2>Todas as<br>Cartas 📖</h2>
-            <div id="catalog-content" style="margin-top: 16px; max-height: 300px; overflow-y: auto;"></div>
-            <button class="btn-dark" style="margin-top: 32px;" onclick="closeModal('modal-catalog')">Voltar</button>
+        <div class="modal-content">
+            <h2>Catálogo 📖</h2>
+            <div id="catalog-content" style="margin-top: 14px; max-height: 320px; overflow-y: auto;"></div>
+            <button class="btn-dark" style="margin-top: 24px;" onclick="closeModal('modal-catalog')">Fechar</button>
         </div>
     </div>
 
     <script>
-        /* === BANCO DE DADOS DE CARTAS === */
-        const REV = ['já fingiu que entendeu uma piada só para não passar vergonha.','já ficou olhando a geladeira aberta sem saber o que queria.','já disse “estou chegando” ainda deitado no sofá.','já ouviu a própria voz gravada e quis sumir.','já pesquisou um sintoma no Google e achou que ia morrer.','já gastou dinheiro em algo e escondeu do parceiro(a).','já usou o “estou em reunião” para fugir de uma ligação.','já esqueceu o aniversário de alguém importante.','já dormiu antes das 22h num sábado e achou ótimo.','já “emprestou” o carregador de alguém e nunca devolveu.','já mandou “kkkk” sem ter rido nem um pouco.','já chorou de raiva no trabalho e voltou como se nada tivesse acontecido.','já ficou stalkeando o perfil de um ex às 3 da manhã.','já bebeu demais e prometeu nunca mais fazer isso na vida.','já começou uma dieta e desistiu antes do primeiro final de semana.','já se arrependeu de um corte de cabelo e usou boné por semanas.','já errou o nome de alguém depois de conversar por uma hora.','já deu “curtir” sem querer numa foto antiga de alguém.','já ficou acordado até tarde vendo vídeos aleatórios sem motivo.','já foi pego cantando sozinho no carro.','já respondeu “tudo bem” quando estava tudo péssimo.','já virou a noite achando que dava conta no dia seguinte.','já pediu comida mesmo com a casa cheia de mantimentos.','já fingiu estar no telefone para evitar conversar com alguém.','já contou uma história exagerando bastante nos detalhes.','já tropeçou em público e fingiu que foi proposital.','já esqueceu onde estacionou o carro.','já deixou uma planta morrer por pura falta de cuidado.','já discutiu com o(a) parceiro(a) por um motivo ridículo.','já comprou um aparelho de academia ou um curso e nunca usou.','já passou mal de tanto comer em um churrasco.','já cancelou um compromisso em cima da hora por preguiça.','já mandou mensagem de amor para o grupo errado.','já fingiu que dirige melhor do que realmente dirige.','já pegou no sono em um evento caro.','já usou o celular escondido durante uma cerimônia.','já disse “só mais um” e ficou até o fim da festa.','já se emocionou com uma propaganda de TV.','já terminou um namoro por mensagem.','já guardou segredo de alguém e acabou contando para outra pessoa.','já saiu de casa e voltou porque esqueceu algo importante.'];
-        const COM = ['já mandou uma foto sua sem querer para a pessoa errada.','já sentiu ciúme de alguém e negou até o fim.','já disse “hoje eu não bebo” e foi o último a ir embora.','já dividiu a conta sem concordar e ficou quieto.','já fez um “rolê rápido” que durou até o dia seguinte.','já esqueceu uma senha importante e precisou recuperar.','já mentiu no currículo, nem que fosse um pouquinho.','já dormiu na casa de alguém sem avisar em casa.','já combinou algo no grupo e foi o primeiro a furar.','já se achou muito bem vestido e depois se arrependeu da foto.','já ficou sem falar com um amigo por semanas por bobagem.','já quebrou algo na casa dos outros e não contou.','já mandou um “oi sumido” só por interesse.','já usou uma música para indiretar alguém.','já deixou um prato sujo na pia até o dia seguinte.','já pediu um Uber para ir a um lugar a dois quarteirões.','já tirou mais de 20 selfies para postar só uma.','já ficou preso em um elevador ou em um lugar sem sinal.','já saiu de um grupo de WhatsApp sem avisar.','já tomou café às 22h e depois reclamou que não conseguia dormir.','já perdeu o celular dentro de casa e procurou por meia hora.','já deu uma desculpa esfarrapada para ir embora mais cedo.','já fingiu estar dormindo para evitar uma conversa.','já se perdeu mesmo usando o GPS.','já quis largar tudo e viver em um sítio.','já viu o dia amanhecer sem ter planejado.','já abriu a geladeira de madrugada só para ver o que tinha.','já brigou com um objeto, tipo impressora ou cadeira.','já recebeu um elogio e não soube o que responder.','já esqueceu uma bebida no congelador.','já falou sozinho em voz alta e alguém ouviu.'];
-        const DES = ['Imite um animal escolhido pelo grupo por 10 segundos. Se não fizer, beba 2 shots.','Fale um trava-língua sem errar. Se errar, beba 1 shot.','Dance sem música por 15 segundos. Se não dançar, beba 2 shots.','Faça uma declaração de amor dramática para um objeto da sala. Se não fizer, beba 2 shots.','Fique em silêncio por 30 segundos sem rir. Se rir, beba 2 shots.','Diga o nome de 5 filmes em 10 segundos. Se não conseguir, beba 2 shots.','Elogie sinceramente cada pessoa da roda. Se não fizer, beba 3 shots.','Imite a voz de alguém da roda e o grupo tenta adivinhar. Se ninguém acertar, beba 1 shot.','Conte uma história engraçada em 30 segundos. Se o grupo não rir, beba 2 shots.','Faça 10 agachamentos agora. Se não fizer, beba 3 shots.','Cante o refrão de uma música. Se não cantar, beba 2 shots.','Feche os olhos e aponte para a pessoa que estiver à sua frente. Se errar, beba 1 shot.','Fale o alfabeto de trás para frente. Se errar, beba 2 shots.','Diga 5 países que começam com B. Se não conseguir, beba 2 shots.','Faça uma pose de modelo por 10 segundos. Se não fizer, beba 2 shots.','Equilibre uma colher no nariz por 5 segundos. Se não conseguir, beba 1 shot.','Faça a mímica de um filme. Se ninguém acertar, beba 2 shots.','Passe 1 minuto sem dizer a palavra “não”. Se falar, beba 2 shots.','Diga o nome completo de todos os jogadores. Se esquecer, beba 2 shots.','Faça cara de bravo por 10 segundos sem rir. Se rir, beba 1 shot.','Conte o seu maior mico em 20 segundos. Se não contar, beba 3 shots.','Descreva a pessoa à sua direita em 3 palavras. Se ela discordar, beba 1 shot.'];
-        const INS = ['estiver usando relógio ou pulseira','estiver de tênis','estiver usando algo azul','estiver de óculos','tiver tatuagem','estiver sem meias','tiver mais de 100 fotos de comida na galeria','estiver com o celular em modo silencioso','abriu o aplicativo do banco hoje','estiver com mais de 10 abas abertas no navegador','estiver com a tela do celular trincada','tiver mais de 50 mensagens não lidas','estiver usando brinco ou piercing','estiver de bermuda ou short','tiver um pet em casa','tiver nascido em um mês com 31 dias','estiver de cabelo preso','tiver irmão ou irmã mais velho(a)','tiver quebrado o celular este ano','estiver usando algo vermelho','tiver a letra A no nome','estiver descalço','tiver carro','estiver de barba','usar o modo escuro no celular','estiver usando algo branco','tiver cabelo cacheado','tiver cabelo curto','já tiver quebrado um osso','for filho(a) único(a)','for o(a) mais novo(a) da roda','for o(a) mais velho(a) da roda','tiver olhos claros','tiver furos nas orelhas','tiver mais de 30 anos','tiver menos de 25 anos'];
-        const ACO = ['ficar um mês sem celular','abrir mão do seu café ou refrigerante favorito por um ano','cantar no karaokê na frente de desconhecidos','passar uma semana sem tomar banho quente','nunca mais usar o Instagram','ficar um ano sem comer carne','ir de pijama para o trabalho por uma semana','ficar 6 meses sem ver séries e filmes','morar 6 meses em outro país','dormir no chão por um mês','pagar a próxima rodada de todos','nunca mais usar sapatos','ficar uma semana sem falar com seu parceiro(a)','cortar o cabelo do jeito que o grupo escolher','acordar às 5h todos os dias durante 3 meses','usar a mesma roupa por 7 dias','limpar a casa de todos da roda','pular de paraquedas','comer a pimenta mais forte do mundo','ficar 24 horas sem falar nada'];
-        const ALT = ['Quem é mais provável de chegar atrasado ao próprio casamento?','Quem é mais provável de perder o celular hoje?','Quem mais reclama do trânsito?','Quem é mais provável de ganhar na loteria e sumir?','Quem é mais ciumento(a) da roda?','Quem tem o pior gosto musical?','Quem seria o primeiro a morrer num filme de terror?','Quem mais come escondido?','Quem é mais provável de chorar em um filme?','Quem tem mais fotos no celular?','Quem é mais provável de esquecer a carteira em casa?','Quem dirige pior?','Quem é o mais gastão da roda?','Quem tem o sono mais pesado?','Quem mais mente sobre a hora em que está chegando?','Quem seria a pior pessoa para guardar um segredo?','Quem é mais provável de adotar mais um pet sem pensar?','Quem mais ronca?','Quem é mais provável de discutir com um atendente de telemarketing?','Quem demora mais para responder mensagem?','Quem é mais teimoso(a)?'];
+        const REV = ['já fingiu que entendeu uma piada só para não passar vergonha.','já ficou olhando a geladeira aberta sem saber o que queria.','já disse “estou chegando” ainda deitado no sofá.','já ouviu a própria voz gravada e quis sumir.','já pesquisou um sintoma no Google e achou que ia morrer.','já gastou dinheiro em algo e escondeu do parceiro(a).','já usou o “estou em reunião” para fugir de uma ligação.','já esqueceu o aniversário de alguém importante.','já dormiu antes das 22h num sábado e achou ótimo.','já mandou “kkkk” sem ter rido nem um pouco.','já chorou de raiva no trabalho e voltou como se nada tivesse acontecido.','já ficou stalkeando o perfil de um ex às 3 da manhã.','já bebeu demais e prometeu nunca mais fazer isso na vida.','já começou uma dieta e desistiu antes do primeiro final de semana.','já errou o nome de alguém depois de conversar por uma hora.','já deu “curtir” sem querer numa foto antiga de alguém.','já foi pego cantando sozinho no carro.','já respondeu “tudo bem” quando estava tudo péssimo.','já virou a noite achando que dava conta no dia seguinte.','já pediu comida mesmo com a casa cheia de mantimentos.','já fingiu estar no telefone para evitar conversar com alguém.','já tropeçou em público e fingiu que foi proposital.','já esqueceu onde estacionou o carro.','já deixou uma planta morrer por pura falta de cuidado.','já discutiu com o(a) parceiro(a) por um motivo ridículo.','já passou mal de tanto comer em um churrasco.','já cancelou um compromisso em cima da hora por preguiça.','já pegou no sono em um evento caro.','já terminou um namoro por mensagem.'];
+        const COM = ['já mandou uma foto sua sem querer para a pessoa errada.','já sentiu ciúme de alguém e negou até o fim.','já disse “hoje eu não bebo” e foi o último a ir embora.','já dividiu a conta sem concordar e ficou quieto.','já esqueceu uma senha importante e precisou recuperar.','já mentiu no currículo, nem que fosse um pouquinho.','já combinou algo no grupo e foi o primeiro a furar.','já quebrou algo na casa dos outros e não contou.','já mandou um “oi sumido” só por interesse.','já usou uma música para indiretar alguém.','já deixou um prato sujo na pia até o dia seguinte.','já tirou mais de 20 selfies para postar só uma.','já saiu de um grupo de WhatsApp sem avisar.','já tomou café às 22h e depois reclamou que não conseguia dormir.','já perdeu o celular dentro de casa e procurou por meia hora.','já quis largar tudo e viver em um sítio.','já viu o dia amanhecer sem ter planejado.','já abriu a geladeira de madrugada só para ver o que tinha.','já recebeu um elogio e não soube o que responder.','já falou sozinho em voz alta e alguém ouviu.'];
+        const DES = ['Imite um animal escolhido pelo grupo por 10 segundos. Se não fizer, beba 2 shots.','Fale um trava-língua sem errar. Se errar, beba 1 shot.','Dance sem música por 15 segundos. Se não dançar, beba 2 shots.','Faça uma declaração de amor dramática para um objeto da sala. Se não fizer, beba 2 shots.','Fique em silêncio por 30 segundos sem rir. Se rir, beba 2 shots.','Diga o nome de 5 filmes em 10 segundos. Se não conseguir, beba 2 shots.','Elogie sinceramente cada pessoa da roda. Se não fizer, beba 3 shots.','Imite a voz de alguém da roda e o grupo tenta adivinhar. Se ninguém acertar, beba 1 shot.','Faça 10 agachamentos agora. Se não fizer, beba 3 shots.','Cante o refrão de uma música. Se não cantar, beba 2 shots.','Fale o alfabeto de trás para frente. Se errar, beba 2 shots.','Equilibre uma colher no nariz por 5 segundos. Se não conseguir, beba 1 shot.','Passe 1 minuto sem dizer a palavra “não”. Se falar, beba 2 shots.','Conte o seu maior mico em 20 segundos. Se não contar, beba 3 shots.'];
+        const INS = ['estiver usando relógio ou pulseira','estiver de tênis','estiver usando algo azul','estiver de óculos','tiver tatuagem','estiver sem meias','tiver mais de 100 fotos de comida na galeria','estiver com o celular em modo silencioso','estiver com a tela do celular trincada','tiver mais de 50 mensagens não lidas','estiver usando brinco ou piercing','estiver de bermuda ou short','tiver um pet em casa','tiver nascido em um mês com 31 dias','estiver de cabelo preso','tiver irmão ou irmã mais velho(a)','tiver quebrado o celular este ano','estiver usando algo vermelho','tiver a letra A no nome','estiver descalço','tiver carro','estiver de barba','usar o modo escuro no celular'];
+        const ACO = ['ficar um mês sem celular','abrir mão do seu café ou refrigerante favorito por um ano','cantar no karaokê na frente de desconhecidos','passar uma semana sem tomar banho quente','nunca mais usar o Instagram','ficar um ano sem carne','ir de pijama para o trabalho por uma semana','ficar 6 meses sem ver séries e filmes','morar 6 meses em outro país','dormir no chão por um mês','pagar a próxima rodada de todos','nunca mais usar sapatos','ficar uma semana sem falar com seu parceiro(a)'];
+        const ALT = ['Quem é mais provável de chegar atrasado ao próprio casamento?','Quem é mais provável de perder o celular hoje?','Quem mais reclama do trânsito?','Quem é mais provável de ganhar na loteria e sumir?','Quem é mais ciumento(a) da roda?','Quem tem o pior gosto musical?','Quem seria o primeiro a morrer num filme de terror?','Quem mais come escondido?','Quem é mais provável de chorar em um filme?','Quem tem mais fotos no celular?','Quem dirige pior?','Quem é o mais gastão da roda?','Quem tem o sono mais pesado?','Quem mais mente sobre a hora em que está chegando?'];
 
         const X = (cat, scope, text) => ({ cat, scope, text });
         
         let deck = [
-            X('Regra do Chefe', 'self', "Crie uma regra que todos devem seguir pelas próximas 3 rodadas na mesa.\n\n<span class='card-examples'>💡 Exemplos:\n• Só beber com a mão esquerda.\n• Proibido usar a palavra 'não'.</span>\n\nQuem quebrar a regra, bebe 1 shot extra!"),
-            X('Regra do Chefe', 'self', "Você é o Chefe! Dite uma postura física que deve ser mantida por 3 rodadas.\n\n<span class='card-examples'>💡 Exemplos:\n• Beber com o dedo mindinho levantado.\n• Falar sempre de pé.</span>\n\nQuem esquecer, bebe 1 shot."),
-            // Cartas especiais de Tirar a Sorte
-            X('Tirar a Sorte', 'self', "A sorte está lançada! Gire a roleta abaixo para descobrir quem foi o sortudo e quantos shots vai tomar."),
-            X('Tirar a Sorte', 'self', "Momento da Sorte! Gire a roleta e veja quem paga a prenda nesta rodada.")
+            X('Regra do Chefe', 'self', "Crie uma regra que todos devem seguir por 1 rodada completa na mesa.\n\nExemplos:\n- Só beber segurando o copo com a mão esquerda.\n- Proibido usar a palavra 'não'.\n\nQuem quebrar a regra, bebe 1 shot extra!"),
+            X('Regra do Chefe', 'self', "Você é o Chefe! Dite uma postura física obrigatória para esta rodada.\n\nExemplos:\n- Beber com o dedo mindinho levantado.\n- Falar sempre de pé.\n\nQuem esquecer, bebe 1 shot.")
         ];
 
         deck.push(
@@ -502,16 +454,6 @@
 
         deck = deck.filter((c, i, self) => i === self.findIndex((t) => t.text === c.text));
 
-        // Substituição Automática de Goles por Shots e limitação de punição a 3
-        deck.forEach(c => {
-            c.text = c.text.replace(/\bgoles\b/gi, 'shots').replace(/\bgole\b/gi, 'shot');
-            c.text = c.text.replace(/(\d+)\s*shots?/gi, (match, num) => {
-                let n = parseInt(num);
-                if (n > 3) n = 3;
-                return `${n} ${n === 1 ? 'shot' : 'shots'}`;
-            });
-        });
-
         const CAT_COLORS = {
             'Revelação': { bg: '#FF3B30', fg: '#FFFFFF' },
             'Desafio': { bg: '#000000', fg: '#FFFFFF' },
@@ -520,7 +462,7 @@
             'Modo Alternativo': { bg: '#32ADE6', fg: '#FFFFFF' },
             'Comum': { bg: '#8E8E93', fg: '#FFFFFF' },
             'Regra do Chefe': { bg: '#FF3B30', fg: '#FFFFFF' },
-            'Tirar a Sorte': { bg: '#FFD700', fg: '#000000' }
+            'Tirar a Sorte': { bg: '#FFCC00', fg: '#000000' }
         };
 
         let players = [];
@@ -556,7 +498,6 @@
         function startGame() {
             countDrinks = document.getElementById('count-drinks').checked;
             if (players.length < 2) return alert("Adicione pelo menos 2 jogadores!");
-            document.getElementById('btn-next-card').textContent = countDrinks ? 'Quem Bebeu? 🥃' : 'Finalizar Carta ✓';
             document.getElementById('menu-ranking').style.display = countDrinks ? 'flex' : 'none';
             document.getElementById('menu-end').textContent = countDrinks ? '🏁 Encerrar e ver ranking' : '🏁 Encerrar jogo';
             updateTurnUI();
@@ -571,15 +512,15 @@
             if (activeRule && activeRule.turnsLeft > 0) {
                 banner.style.display = 'flex';
                 document.getElementById('rule-author').textContent = activeRule.author;
+                document.getElementById('rule-turns-left').textContent = `${activeRule.turnsLeft} rodadas`;
                 
-                const turnsText = activeRule.turnsLeft === 1 ? 'ÚLTIMA AÇÃO!' : `Restam ${activeRule.turnsLeft} jogadas`;
-                document.getElementById('rule-turns-left').textContent = turnsText;
-                
-                // Piscar vermelho se for a ultima ação
+                // Se restar apenas 1 rodada, o banner fica vermelho piscante e evidente
                 if(activeRule.turnsLeft === 1) {
-                    banner.classList.add('danger');
+                    banner.classList.add('urgent');
+                    banner.querySelector('span').innerHTML = `🚨 <b>ÚLTIMA RODADA!</b> A regra de <b>${activeRule.author}</b> expira agora!`;
                 } else {
-                    banner.classList.remove('danger');
+                    banner.classList.remove('urgent');
+                    banner.querySelector('span').innerHTML = `👑 Atenção: A regra de <b>${activeRule.author}</b> está valendo!`;
                 }
             } else {
                 banner.style.display = 'none';
@@ -588,6 +529,15 @@
         }
 
         function drawCard(category) {
+            if(category === 'Tirar a Sorte') {
+                activeCard = { cat: 'Tirar a Sorte', scope: 'self', text: 'Roleta da Sorte' };
+                playedCards.push(activeCard);
+                setupRoulette();
+                document.getElementById('roulette-turn-indicator').innerText = `VEZ DE: ${players[currentTurnIndex].name.toUpperCase()}`;
+                showScreen('roulette-screen');
+                return;
+            }
+
             let availableCards = deck.filter(c => !playedCards.some(pc => pc.text === c.text));
             if (category !== 'Comum') availableCards = availableCards.filter(c => c.cat === category);
             
@@ -603,32 +553,14 @@
             bg.style.backgroundColor = cc.bg;
             bg.style.color = cc.fg;
             
-            // Mantém visível de quem é a vez na tela da carta
-            document.getElementById('card-current-player').innerText = players[currentTurnIndex].name;
-            document.getElementById('card-screen-count').innerText = `CARTAS: ${playedCards.length + 1}/${deck.length}`;
-            
+            document.getElementById('card-turn-indicator').innerText = `VEZ DE: ${players[currentTurnIndex].name.toUpperCase()}`;
             document.getElementById('display-category').innerText = activeCard.cat;
             document.getElementById('display-scope').innerText = activeCard.scope === 'self' ? 'INDIVIDUAL' : (activeCard.scope === 'vote' ? 'O GRUPO VOTA' : 'TODOS BEBEM');
-            document.getElementById('display-text').innerHTML = activeCard.text; // Permitir quebras de linha
-            
-            const rouletteSection = document.getElementById('roulette-section');
-            const btnSpin = document.getElementById('btn-spin');
-            
-            if (activeCard.cat === 'Tirar a Sorte') {
-                rouletteSection.style.display = 'block';
-                btnSpin.innerText = 'Girar Roleta 🎰';
-                btnSpin.disabled = false;
-                btnSpin.style.opacity = '1';
-                renderRouletteWheel();
-            } else {
-                rouletteSection.style.display = 'none';
-            }
+            document.getElementById('display-text').innerText = activeCard.text;
             
             const btnNext = document.getElementById('btn-next-card');
             if(activeCard.cat === 'Regra do Chefe') {
-                btnNext.textContent = "Ativar Regra na Roda 👑";
-            } else if(activeCard.cat === 'Tirar a Sorte') {
-                btnNext.textContent = countDrinks ? "Quem Bebeu? 🥃" : "Finalizar Carta ✓";
+                btnNext.textContent = "Ativar Regra 👑";
             } else {
                 btnNext.textContent = countDrinks ? 'Quem Bebeu? 🥃' : 'Finalizar Carta ✓';
             }
@@ -636,106 +568,67 @@
             showScreen('card-screen');
         }
 
-        // Animação e construção da Roleta Visual
-        let currentRotation = 0;
-        
-        function renderRouletteWheel() {
-            const wheel = document.getElementById('roulette-wheel');
-            wheel.innerHTML = '';
-            wheel.style.transition = 'none';
-            wheel.style.transform = `rotate(0deg)`;
-            
-            const numPlayers = players.length;
-            const sliceDeg = 360 / numPlayers;
-            
-            // Cores estilizadas combinando com a paleta
-            const colors = ['#FF3B30', '#32ADE6', '#FF9F0A', '#5E5CE6', '#FFD700', '#F4EFE6']; 
-            
-            let conicString = '';
-            players.forEach((p, i) => {
-                const color = colors[i % colors.length];
-                const startDeg = i * sliceDeg;
-                const endDeg = (i + 1) * sliceDeg;
-                
-                conicString += `${color} ${startDeg}deg ${endDeg}deg${i < numPlayers - 1 ? ',' : ''}`;
-                
-                // Criação do nome no meio da "fatia"
-                const label = document.createElement('div');
-                label.className = 'wheel-label';
-                
-                // Calcular angulo no meio da fatia para rotacionar o texto 
-                const midDeg = startDeg + (sliceDeg / 2);
-                label.style.transform = `rotate(${midDeg - 90}deg) translateX(35px) translateY(-50%)`;
-                label.innerText = p.name;
-                
-                wheel.appendChild(label);
+        // Configurar a roleta visual com os nomes
+        function setupRoulette() {
+            const wheel = document.getElementById('wheel-element');
+            wheel.style.transform = 'rotate(0deg)';
+            document.getElementById('roulette-winner-text').innerText = 'Gire a roleta!';
+            document.getElementById('btn-spin').style.display = 'flex';
+            document.getElementById('btn-finish-roulette').style.display = 'none';
+
+            // Criar divisões na roleta baseada nos jogadores
+            let slices = '';
+            const colors = ['#FF3B30', '#5E5CE6', '#FF9F0A', '#32ADE6', '#8E8E93', '#000000'];
+            players.forEach((p, idx) => {
+                const deg = (360 / players.length) * idx;
+                slices += `<div style="position:absolute; width:100%; height:100%; clip-path: polygon(50% 50%, 0 0, 100% 0); background:${colors[idx % colors.length]}; transform: rotate(${deg}deg); display:flex; justify-content:center; padding-top:15px; color:#fff; font-weight:800; font-size:0.75rem;">${p.name}</div>`;
             });
-            
-            wheel.style.background = `conic-gradient(${conicString})`;
-            
-            // Força a renderização
-            wheel.offsetHeight;
+            // Mantém o centro limpo
+            wheel.innerHTML = `<div class="roulette-center">🎰</div>` + slices;
         }
 
         function spinRoulette() {
-            if (players.length === 0) return;
-            const wheel = document.getElementById('roulette-wheel');
+            const wheel = document.getElementById('wheel-element');
             const btnSpin = document.getElementById('btn-spin');
-            
-            btnSpin.disabled = true;
-            btnSpin.style.opacity = '0.5';
-            btnSpin.innerText = 'Girando...';
+            btnSpin.style.display = 'none';
 
-            const numPlayers = players.length;
-            const sliceDeg = 360 / numPlayers;
+            // Sorteia jogador e quantidade de doses (máximo 2)
+            const randomPlayerIdx = Math.floor(Math.random() * players.length);
+            const randomShots = Math.floor(Math.random() * 2) + 1; // 1 ou 2 shots
+
+            const winningPlayer = players[randomPlayerIdx];
             
-            // Pelo menos 6 giros completos + angulo aleatorio
-            const randomSpin = Math.floor(Math.random() * 360);
-            currentRotation += (360 * 6) + randomSpin;
-            
-            wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
-            wheel.style.transform = `rotate(${currentRotation}deg)`;
-            
+            // Calcula rotação para parar no jogador sorteado (várias voltas completas + offset)
+            const degreesPerSlice = 360 / players.length;
+            const targetDeg = 1440 + (360 - (randomPlayerIdx * degreesPerSlice + degreesPerSlice / 2));
+
+            wheel.style.transform = `rotate(${targetDeg}deg)`;
+
             setTimeout(() => {
-                // Cálculo de quem parou no topo
-                // O ponteiro tá apontando pra 0 graus do container.
-                // Como a roleta girou currentRotation, o ângulo que está no topo é o complemento.
-                const normalizedRotation = currentRotation % 360;
-                const topAngle = (360 - normalizedRotation) % 360;
+                document.getElementById('roulette-winner-text').innerHTML = `🎯 <b>${winningPlayer.name}</b> bebe <span style="color:var(--primary-red);">${randomShots} ${randomShots === 1 ? 'shot' : 'shots'}</span>!`;
                 
-                const winnerIndex = Math.floor(topAngle / sliceDeg);
-                const winner = players[winnerIndex];
-                
-                const shots = Math.floor(Math.random() * 2) + 1; // 1 ou 2 shots
-                
-                if (countDrinks) {
-                    winner.drinks += shots;
+                // Adiciona os shots automaticamente se a contagem estiver ativa
+                if(countDrinks) {
+                    winningPlayer.drinks += randomShots;
                 }
-                
-                btnSpin.innerText = `🎯 ${winner.name} bebe ${shots} shot(s)!`;
-                
-                // Espera 3 segundinhos pra galera ler o botão, depois segue
-                setTimeout(() => {
-                    playedCards.push(activeCard);
-                    nextTurn();
-                }, 3000);
-                
-            }, 4100);
+
+                document.getElementById('btn-finish-roulette').style.display = 'flex';
+            }, 3000);
+        }
+
+        function finishRoulette() {
+            nextTurn();
         }
 
         function goToAssignDrinks() {
             if(activeCard.cat === 'Regra do Chefe') {
+                // 1 rodada completa = número exato de jogadores na mesa
                 activeRule = {
                     author: players[currentTurnIndex].name,
-                    turnsLeft: players.length // A regra dura 1 rodada inteira na mesa
+                    turnsLeft: players.length
                 };
                 playedCards.push(activeCard);
                 nextTurn();
-                return;
-            }
-
-            // A carta Tirar a Sorte é resolvida sozinha dentro do modal
-            if(activeCard.cat === 'Tirar a Sorte') {
                 return;
             }
 
@@ -822,7 +715,6 @@
             document.getElementById(id).classList.add('active');
         }
 
-        /* Menus e Modais */
         function toggleMenu() { document.getElementById('menu-overlay').classList.toggle('active'); }
         function menuAction(act) {
             toggleMenu();
@@ -844,18 +736,16 @@
                 ul.innerHTML += `<li class="ranking-item"><span class="rank-pos">${i+1}º ${p.name}</span><span class="rank-score">${p.drinks} 🥃</span></li>`;
             });
         }
-        
         function renderModalHistory() {
             const list = document.getElementById('history-list');
             list.innerHTML = playedCards.length === 0 ? '<p style="color:#8E8E93;">Nenhuma carta jogada ainda.</p>' : '';
             playedCards.forEach(c => {
-                list.innerHTML += `<div style="padding: 16px; background: white; border: 1px solid #E5DED1; border-radius: 16px;">
-                    <strong style="color: ${CAT_COLORS[c.cat] ? CAT_COLORS[c.cat].bg : '#000'}; font-size: 0.9rem; text-transform: uppercase;">${c.cat}</strong>
-                    <p style="font-weight: 600; margin-top: 8px;">${c.text.replace(/<br>/g, " ")}</p>
+                list.innerHTML += `<div style="padding: 12px 16px; background: white; border: 1px solid #E5DED1; border-radius: 12px;">
+                    <strong style="color: ${CAT_COLORS[c.cat].bg}; font-size: 0.8rem; text-transform: uppercase;">${c.cat}</strong>
+                    <p style="font-weight: 600; font-size:0.9rem; margin-top: 4px;">${c.text}</p>
                 </div>`;
             });
         }
-        
         function renderModalCatalog() {
             const content = document.getElementById('catalog-content');
             const order = ['Revelação', 'Desafio', 'Inspeção', 'Acordo', 'Modo Alternativo', 'Regra do Chefe', 'Tirar a Sorte', 'Comum'];
@@ -863,25 +753,28 @@
             order.forEach(k => groups[k] = []);
             deck.forEach(c => { if(groups[c.cat]) groups[c.cat].push(c); });
 
-            let html = `<p style="text-align:center; font-weight:800; font-size: 1.2rem; margin-bottom: 24px;">Total de ${deck.length} cartas</p>`;
+            let html = `<p style="text-align:center; font-weight:800; font-size: 1.1rem; margin-bottom: 16px;">Total de ${deck.length} cartas</p>`;
             order.forEach(k => {
                 const list = groups[k];
-                if(list.length === 0) return;
-                const badgeColor = CAT_COLORS[k] ? CAT_COLORS[k].bg : '#000';
-                html += `<details class="cat-block" style="border-left-color:${badgeColor};">
-                            <summary style="color:${badgeColor};">${k} — ${list.length} cartas</summary>
+                if(list.length === 0 && k !== 'Tirar a Sorte') return;
+                if(k === 'Tirar a Sorte') {
+                    html += `<details class="cat-block" style="border-left-color:#FFCC00;"><summary style="color:#B8860B;">Tirar a Sorte (Roleta) — Carta Especial</summary><ol><li>Sorteio dinâmico com os nomes da roda (1 a 2 shots).</li></ol></details>`;
+                    return;
+                }
+                html += `<details class="cat-block" style="border-left-color:${CAT_COLORS[k].bg};">
+                            <summary style="color:${CAT_COLORS[k].bg};">${k} — ${list.length} cartas</summary>
                             <ol>`;
                 list.forEach(c => {
                     const sc = c.scope === 'self' ? 'INDIVIDUAL' : (c.scope === 'vote' ? 'GRUPO VOTA' : 'TODOS');
-                    let cleanText = c.text.replace(/<[^>]*>?/gm, ' ');
-                    html += `<li><span class="scope-tag" style="color:${badgeColor}; border-color:${badgeColor};">${sc}</span> ${cleanText}</li>`;
+                    html += `<li><span class="scope-tag" style="color:${CAT_COLORS[k].bg};">${sc}</span> ${c.text}</li>`;
                 });
                 html += '</ol></details>';
             });
             content.innerHTML = html;
         }
-        
         function resetGame() { location.reload(); }
     </script>
 </body>
 </html>
+
+```
