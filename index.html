@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
             --bg-color: #F4EFE6;
@@ -18,7 +18,7 @@
             --text-light: #F4EFE6;
             --border-color: #E5DED1;
         }
-        
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -50,16 +50,16 @@
             width: 100%;
         }
 
-        .screen { 
-            display: none; 
-            width: 100%; 
-            max-width: 380px; 
-            flex-direction: column; 
-            gap: 14px; 
+        .screen {
+            display: none;
+            width: 100%;
+            max-width: 380px;
+            flex-direction: column;
+            gap: 14px;
             margin: auto;
         }
         .screen.active { display: flex; animation: fadeIn 0.3s ease; }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
@@ -79,16 +79,16 @@
         input[type="text"]::placeholder { color: #A09A8F; font-weight: 400; }
 
         .add-row { display: flex; gap: 10px; align-items: center; width: 100%; }
-        .add-btn { 
-            flex: 0 0 54px; height: 54px; 
-            border-radius: 100px; 
-            background: var(--pure-black); 
-            color: var(--text-light); 
-            font-size: 1.8rem; 
+        .add-btn {
+            flex: 0 0 54px; height: 54px;
+            border-radius: 100px;
+            background: var(--pure-black);
+            color: var(--text-light);
+            font-size: 1.8rem;
             border: none;
             display: flex; align-items: center; justify-content: center;
         }
-        
+
         button {
             padding: 18px;
             border: none;
@@ -105,7 +105,7 @@
             width: 100%;
         }
         button:active { transform: scale(0.97); }
-        
+
         .btn-main { background: var(--primary-red); color: var(--text-light); }
         .btn-dark { background: var(--pure-black); color: var(--text-light); }
         .btn-outline { background: transparent; border: 2px solid var(--pure-black); color: var(--pure-black); }
@@ -129,7 +129,7 @@
         .opt-row { display: flex; align-items: center; justify-content: space-between; background: var(--card-bg); padding: 16px 20px; border-radius: 18px; border: 1px solid var(--border-color); }
         .opt-text { font-size: 1rem; font-weight: 800; display: flex; flex-direction: column; gap: 2px; }
         .opt-text small { font-size: 0.8rem; font-weight: 400; color: #8E8E93; }
-        
+
         input[type="checkbox"].switch {
             -webkit-appearance: none; appearance: none;
             width: 50px; height: 28px;
@@ -148,7 +148,7 @@
         .game-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 2px solid var(--pure-black); }
         .stats-count { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #8E8E93; }
         .menu-btn { background: var(--pure-black); color: var(--text-light); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; padding: 0; border: none; }
-        
+
         .turn-display { text-align: left; margin: 4px 0; }
         .turn-label { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: var(--primary-red); letter-spacing: 1px; }
         .turn-name { font-size: 2.4rem; font-weight: 900; line-height: 1.1; letter-spacing: -1px; color: var(--pure-black); word-break: break-word; }
@@ -165,15 +165,17 @@
             background: var(--pure-black); color: var(--text-light); border-radius: 28px; padding: 26px 20px; min-height: 320px;
             display: flex; flex-direction: column; position: relative; overflow: hidden; box-shadow: 0 16px 30px rgba(0,0,0,0.15);
         }
-        .card-header-info { display: flex; justify-content: space-between; align-items: center; z-index: 1; margin-bottom: auto; }
+        .card-header-info { display: flex; justify-content: space-between; align-items: center; z-index: 1; }
         .cat-badge { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 6px 12px; border-radius: 100px; background: rgba(255,255,255,0.2); }
         .scope-badge { font-size: 0.7rem; font-weight: 800; border: 1px solid rgba(255,255,255,0.3); padding: 5px 10px; border-radius: 100px; }
-        
-        .card-text { font-size: 1.35rem; font-weight: 800; line-height: 1.3; z-index: 1; margin: 20px 0 auto; letter-spacing: -0.5px; }
+
+        .card-text { font-size: 1.35rem; font-weight: 800; line-height: 1.3; z-index: 1; margin: 0; letter-spacing: -0.5px; }
+        .card-body { margin: auto 0; padding: 20px 0 6px; z-index: 1; }
+        .card-sub { font-size: 0.85rem; font-weight: 600; line-height: 1.45; opacity: 0.65; margin-top: 16px; white-space: pre-line; }
 
         .assign-header { font-size: 1.8rem; font-weight: 900; line-height: 1.1; letter-spacing: -1px; color: var(--pure-black); }
         .assign-hint { font-size: 0.9rem; color: #8E8E93; font-weight: 600; margin-bottom: 14px; }
-        
+
         .checkbox-row {
             display: flex; align-items: center; gap: 14px; background: var(--card-bg); padding: 14px 18px; border-radius: 16px; border: 2px solid var(--border-color); margin-bottom: 8px; cursor: pointer;
         }
@@ -202,19 +204,22 @@
         .modal { display: none; position: fixed; inset: 0; background: var(--bg-color); z-index: 200; overflow-y: auto; padding: 20px 16px; flex-direction: column; align-items: center; }
         .modal.active { display: flex; }
         .modal-content { width: 100%; max-width: 380px; margin-bottom: 30px; }
-        
-        /* Banner de Alerta da Regra do Chefe */
-        .active-rule-banner { background: var(--primary-red); color: white; padding: 10px 14px; border-radius: 14px; margin-bottom: 14px; display: none; align-items: center; gap: 10px; font-weight: 800; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(255,59,48,0.3); }
+
+        /* Banner fixo da Regra do Chefe (aparece em todas as telas do jogo) */
+        .active-rule-banner { display: none; width: 100%; max-width: 380px; margin: 0 auto 12px; background: var(--primary-red); color: #fff; padding: 10px 14px; border-radius: 14px; align-items: center; gap: 10px; font-weight: 800; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(255,59,48,0.3); }
         .active-rule-banner.urgent { background: #D92B22; animation: pulseAlert 0.8s infinite alternate; }
         @keyframes pulseAlert { from { transform: scale(1); } to { transform: scale(1.02); background: #FF0000; } }
         .active-rule-banner span { flex: 1; line-height: 1.3; }
         .rule-turns { background: rgba(0,0,0,0.25); padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; white-space: nowrap; }
 
-        /* Estilo da Roleta Sorteio */
+        /* Roleta: fatias iguais (conic-gradient) e seta centralizada */
         .roulette-container { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 10px 0; }
-        .roulette-wheel { width: 220px; height: 220px; border-radius: 50%; border: 6px solid var(--pure-black); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #111; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: transform 3s cubic-bezier(0.15, 0.9, 0.2, 1); }
-        .roulette-pointer { position: absolute; top: -12px; width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 20px solid var(--primary-red); z-index: 10; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); }
-        .roulette-center { width: 50px; height: 50px; background: var(--card-bg); border: 3px solid var(--pure-black); border-radius: 50%; z-index: 5; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .wheel-wrap { position: relative; width: 220px; height: 220px; margin-top: 10px; }
+        .roulette-wheel { width: 220px; height: 220px; border-radius: 50%; border: 6px solid var(--pure-black); position: relative; overflow: hidden; background: #111; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: transform 3s cubic-bezier(0.15, 0.9, 0.2, 1); }
+        .roulette-pointer { position: absolute; top: -14px; left: 50%; width: 0; height: 0; margin-left: -11px; border-left: 11px solid transparent; border-right: 11px solid transparent; border-top: 22px solid var(--primary-red); z-index: 10; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); }
+        .roulette-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: var(--card-bg); border: 3px solid var(--pure-black); border-radius: 50%; z-index: 5; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .wl { position: absolute; top: 50%; left: 50%; width: 50%; height: 0; transform-origin: 0 0; display: flex; align-items: center; justify-content: flex-end; }
+        .wl span { max-width: 100%; padding: 0 12px 0 34px; color: #fff; font-weight: 800; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; text-shadow: 0 1px 2px rgba(0,0,0,0.35); }
         .roulette-result-box { background: var(--card-bg); border: 2px solid var(--pure-black); border-radius: 18px; padding: 16px; width: 100%; text-align: center; }
         .roulette-winner { font-size: 1.6rem; font-weight: 900; color: var(--primary-red); margin-top: 4px; }
 
@@ -223,22 +228,31 @@
         .cat-block ol { padding-left: 18px; margin-bottom: 10px; }
         .cat-block li { padding: 8px 0; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; font-weight: 600; }
         .scope-tag { font-size: 0.65rem; padding: 2px 6px; border-radius: 100px; border: 1px solid currentColor; margin-right: 6px; }
+
+        .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); background: #000; color: var(--text-light); padding: 12px 18px; border-radius: 100px; font-weight: 800; font-size: 0.9rem; opacity: 0; pointer-events: none; transition: 0.25s; z-index: 300; max-width: 90%; text-align: center; }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     </style>
 </head>
 <body>
 
+    <!-- Banner fixo da Regra do Chefe: fica visível em todas as telas do jogo até a regra acabar -->
+    <div id="active-rule-banner" class="active-rule-banner">
+        <span id="rule-text"></span>
+        <div class="rule-turns" id="rule-turns-left"></div>
+    </div>
+
     <!-- TELA 1: CADASTRO -->
     <div id="setup-screen" class="screen active">
         <h1>Se Fez,<br>Bebe!</h1>
-        
+
         <div class="add-row">
             <input type="text" id="player-input" placeholder="Nome do jogador..." onkeypress="handleEnter(event)" autocapitalize="words">
             <button class="add-btn" aria-label="Adicionar" onclick="addPlayer()">+</button>
         </div>
         <div class="player-count" id="player-count">0 JOGADORES</div>
-        
+
         <ul id="players-ul" class="player-list"></ul>
-        
+
         <label class="opt-row">
             <span class="opt-text">
                 Contar doses?
@@ -246,7 +260,7 @@
             </span>
             <input type="checkbox" id="count-drinks" class="switch">
         </label>
-        
+
         <button class="btn-main" onclick="startGame()">Começar 🍻</button>
         <button class="btn-outline" onclick="openModal('modal-catalog', renderModalCatalog)">Todas as Cartas 📖</button>
     </div>
@@ -257,20 +271,14 @@
             <span class="stats-count" id="cards-played-count">CARTAS: 0/0</span>
             <button class="menu-btn" onclick="toggleMenu()">☰</button>
         </div>
-        
-        <!-- Banner de Regra Ativa (Fica vermelho piscante na última rodada) -->
-        <div id="active-rule-banner" class="active-rule-banner">
-            👑 <span>Atenção: A regra de <b id="rule-author"></b> está valendo!</span>
-            <div class="rule-turns" id="rule-turns-left"></div>
-        </div>
-        
+
         <div class="turn-display">
             <div class="turn-label">Vez de</div>
             <div class="turn-name" id="current-player-name">...</div>
         </div>
-        
+
         <h2 style="font-size: 1.1rem; margin-bottom: 2px;">Puxe uma carta:</h2>
-        
+
         <div class="category-grid">
             <button class="cat-btn" style="background: #FF3B30; color: #fff;" onclick="drawCard('Revelação')">
                 <span class="icon">🤫</span>
@@ -288,17 +296,15 @@
                 <span class="icon">🤝</span>
                 <span class="label">Acordo</span>
             </button>
-            
-            <button class="cat-btn btn-full-width" style="background: #FF3B30; color: #fff; border: 2px dashed rgba(255,255,255,0.5);" onclick="drawCard('Regra do Chefe')">
-                <span class="icon" style="margin-right: 6px;">👑</span>
-                <span class="label" style="font-size: 1.1rem;">Regra do Chefe</span>
+            <button class="cat-btn" style="background: #AF52DE; color: #fff;" onclick="drawCard('Regra do Chefe')">
+                <span class="icon">👑</span>
+                <span class="label">Regra do Chefe</span>
+            </button>
+            <button class="cat-btn" style="background: #FFCC00; color: #000;" onclick="drawCard('Tirar a Sorte')">
+                <span class="icon">🎰</span>
+                <span class="label">Tirar a Sorte</span>
             </button>
 
-            <button class="cat-btn btn-full-width" style="background: #FFCC00; color: #000;" onclick="drawCard('Tirar a Sorte')">
-                <span class="icon" style="margin-right: 6px;">🎰</span>
-                <span class="label" style="font-size: 1.1rem;">Tirar a Sorte (Roleta)</span>
-            </button>
-            
             <button class="cat-btn btn-full-width" style="background: #F4EFE6; border: 2px solid #000; color: #000; justify-content: space-between;" onclick="drawCard('Comum')">
                 <span class="label" style="font-size: 1.1rem;">Aleatória (Surpresa)</span>
                 <span class="icon">🎲</span>
@@ -309,16 +315,20 @@
     <!-- TELA 3: CARTA -->
     <div id="card-screen" class="screen">
         <div class="game-header">
-            <span class="stats-count" id="card-turn-indicator" style="color:var(--text-light)">VEZ DE: ...</span>
+            <span class="stats-count" id="card-turn-indicator" style="color: var(--pure-black); font-size: 1rem;">VEZ DE: ...</span>
         </div>
         <div class="card-container" id="display-card-bg">
             <div class="card-header-info">
                 <span class="cat-badge" id="display-category">CATEGORIA</span>
                 <span class="scope-badge" id="display-scope">ESCOPO</span>
             </div>
-            <div class="card-text" id="display-text">Texto...</div>
+            <div class="card-body">
+                <div class="card-text" id="display-text">Texto...</div>
+                <div class="card-sub" id="display-ex" style="display: none;"></div>
+            </div>
         </div>
-        
+
+        <button class="btn-outline" id="btn-timer" style="display: none;" onclick="toggleTimer()"></button>
         <button class="btn-dark" id="btn-next-card" onclick="goToAssignDrinks()">Quem Bebeu? 🥃</button>
         <button class="btn-secondary" onclick="skipCard()">Pular (Não conta) ⏭</button>
     </div>
@@ -326,35 +336,35 @@
     <!-- TELA 3.5: CARTA ESPECIAL TIRAR A SORTE (ROLETA) -->
     <div id="roulette-screen" class="screen">
         <div class="game-header">
-            <span class="stats-count" id="roulette-turn-indicator" style="color:var(--pure-black)">VEZ DE: ...</span>
+            <span class="stats-count" id="roulette-turn-indicator" style="color: var(--pure-black); font-size: 1rem;">VEZ DE: ...</span>
         </div>
         <div class="card-container" style="background: #FFCC00; color: #000; min-height: auto; padding: 20px;">
             <div class="card-header-info">
                 <span class="cat-badge" style="background: rgba(0,0,0,0.15); color: #000;">SORTE DA RODA</span>
             </div>
             <div class="roulette-container">
-                <div style="position: relative;">
+                <div class="wheel-wrap">
                     <div class="roulette-pointer"></div>
-                    <div class="roulette-wheel" id="wheel-element">
-                        <div class="roulette-center">🎰</div>
-                    </div>
+                    <div class="roulette-wheel" id="wheel-element"></div>
+                    <div class="roulette-center">🎰</div>
                 </div>
-                
+
                 <div class="roulette-result-box">
                     <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #8E8E93;">Sorteado:</span>
                     <div class="roulette-winner" id="roulette-winner-text">Gire a roleta!</div>
                 </div>
             </div>
         </div>
-        
+
         <button class="btn-main" id="btn-spin" onclick="spinRoulette()">Girar Roleta 🎯</button>
-        <button class="btn-dark" id="btn-finish-roulette" style="display:none;" onclick="finishRoulette()">Continuar Jogo ✓</button>
+        <button class="btn-secondary" id="btn-skip-roulette" onclick="skipRoulette()">Pular sorteio (Não conta) ⏭</button>
+        <button class="btn-dark" id="btn-finish-roulette" style="display: none;" onclick="finishRoulette()">Continuar Jogo ✓</button>
     </div>
 
     <!-- TELA 4: QUEM BEBEU -->
     <div id="assign-drinks-screen" class="screen">
         <h2 class="assign-header">Quem virou<br>o copo?</h2>
-        
+
         <div id="multiple-selection-block">
             <p class="assign-hint" id="assign-hint">Selecione quem bebeu nesta rodada.</p>
             <button id="btn-toggle-all" class="btn-outline" onclick="toggleAllDrinks()" style="margin-bottom: 16px;">Marcar Todos</button>
@@ -385,6 +395,7 @@
         <div class="menu-sheet">
             <h2 style="font-size: 1.1rem; margin-bottom: 4px;">Menu</h2>
             <button onclick="menuAction('history')">📜 Ver histórico de cartas</button>
+            <button onclick="menuAction('players')">👥 Participantes</button>
             <button id="menu-ranking" onclick="menuAction('ranking')">🏆 Ver ranking atual</button>
             <button onclick="menuAction('catalog')">📖 Ver todas as cartas</button>
             <button id="menu-end" class="btn-danger" onclick="menuAction('end')">🏁 Encerrar jogo</button>
@@ -404,7 +415,7 @@
     <div id="modal-history" class="modal">
         <div class="modal-content">
             <h2>Histórico 📜</h2>
-            <div id="history-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px; max-height: 300px; overflow-y:auto;"></div>
+            <div id="history-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px; max-height: 300px; overflow-y: auto;"></div>
             <button class="btn-dark" style="margin-top: 24px;" onclick="closeModal('modal-history')">Voltar ao Jogo</button>
         </div>
     </div>
@@ -417,6 +428,21 @@
         </div>
     </div>
 
+    <div id="modal-players" class="modal">
+        <div class="modal-content">
+            <h2>Participantes 👥</h2>
+            <p style="font-size: 0.9rem; color: #8E8E93; font-weight: 600; margin-top: 6px;">Quem estiver desativado não aparece nas vezes, nas cartas, no sorteio nem na votação. Dá para ativar de novo a qualquer momento.</p>
+            <div class="add-row" style="margin-top: 16px;">
+                <input type="text" id="player-input-game" placeholder="Novo participante..." onkeypress="if (event.key === 'Enter') addPlayerInGame()" autocapitalize="words" maxlength="20">
+                <button class="add-btn" aria-label="Adicionar participante" onclick="addPlayerInGame()">+</button>
+            </div>
+            <ul id="players-modal-ul" class="player-list" style="margin-top: 12px; max-height: none;"></ul>
+            <button class="btn-dark" style="margin-top: 24px;" onclick="closeModal('modal-players')">Voltar ao Jogo</button>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
     <script>
         const REV = ['já fingiu que entendeu uma piada só para não passar vergonha.','já ficou olhando a geladeira aberta sem saber o que queria.','já disse “estou chegando” ainda deitado no sofá.','já ouviu a própria voz gravada e quis sumir.','já pesquisou um sintoma no Google e achou que ia morrer.','já gastou dinheiro em algo e escondeu do parceiro(a).','já usou o “estou em reunião” para fugir de uma ligação.','já esqueceu o aniversário de alguém importante.','já dormiu antes das 22h num sábado e achou ótimo.','já mandou “kkkk” sem ter rido nem um pouco.','já chorou de raiva no trabalho e voltou como se nada tivesse acontecido.','já ficou stalkeando o perfil de um ex às 3 da manhã.','já bebeu demais e prometeu nunca mais fazer isso na vida.','já começou uma dieta e desistiu antes do primeiro final de semana.','já errou o nome de alguém depois de conversar por uma hora.','já deu “curtir” sem querer numa foto antiga de alguém.','já foi pego cantando sozinho no carro.','já respondeu “tudo bem” quando estava tudo péssimo.','já virou a noite achando que dava conta no dia seguinte.','já pediu comida mesmo com a casa cheia de mantimentos.','já fingiu estar no telefone para evitar conversar com alguém.','já tropeçou em público e fingiu que foi proposital.','já esqueceu onde estacionou o carro.','já deixou uma planta morrer por pura falta de cuidado.','já discutiu com o(a) parceiro(a) por um motivo ridículo.','já passou mal de tanto comer em um churrasco.','já cancelou um compromisso em cima da hora por preguiça.','já pegou no sono em um evento caro.','já terminou um namoro por mensagem.'];
         const COM = ['já mandou uma foto sua sem querer para a pessoa errada.','já sentiu ciúme de alguém e negou até o fim.','já disse “hoje eu não bebo” e foi o último a ir embora.','já dividiu a conta sem concordar e ficou quieto.','já esqueceu uma senha importante e precisou recuperar.','já mentiu no currículo, nem que fosse um pouquinho.','já combinou algo no grupo e foi o primeiro a furar.','já quebrou algo na casa dos outros e não contou.','já mandou um “oi sumido” só por interesse.','já usou uma música para indiretar alguém.','já deixou um prato sujo na pia até o dia seguinte.','já tirou mais de 20 selfies para postar só uma.','já saiu de um grupo de WhatsApp sem avisar.','já tomou café às 22h e depois reclamou que não conseguia dormir.','já perdeu o celular dentro de casa e procurou por meia hora.','já quis largar tudo e viver em um sítio.','já viu o dia amanhecer sem ter planejado.','já abriu a geladeira de madrugada só para ver o que tinha.','já recebeu um elogio e não soube o que responder.','já falou sozinho em voz alta e alguém ouviu.'];
@@ -426,10 +452,23 @@
         const ALT = ['Quem é mais provável de chegar atrasado ao próprio casamento?','Quem é mais provável de perder o celular hoje?','Quem mais reclama do trânsito?','Quem é mais provável de ganhar na loteria e sumir?','Quem é mais ciumento(a) da roda?','Quem tem o pior gosto musical?','Quem seria o primeiro a morrer num filme de terror?','Quem mais come escondido?','Quem é mais provável de chorar em um filme?','Quem tem mais fotos no celular?','Quem dirige pior?','Quem é o mais gastão da roda?','Quem tem o sono mais pesado?','Quem mais mente sobre a hora em que está chegando?'];
 
         const X = (cat, scope, text) => ({ cat, scope, text });
-        
+
+        const R = (scope, text, ex) => ({ cat: 'Regra do Chefe', scope: scope, text: text, ex: ex });
         let deck = [
-            X('Regra do Chefe', 'self', "Crie uma regra que todos devem seguir por 1 rodada completa na mesa.\n\nExemplos:\n- Só beber segurando o copo com a mão esquerda.\n- Proibido usar a palavra 'não'.\n\nQuem quebrar a regra, bebe 1 shot extra!"),
-            X('Regra do Chefe', 'self', "Você é o Chefe! Dite uma postura física obrigatória para esta rodada.\n\nExemplos:\n- Beber com o dedo mindinho levantado.\n- Falar sempre de pé.\n\nQuem esquecer, bebe 1 shot.")
+            // Regras para TODOS (todos seguem durante a rodada)
+            R('rule', 'Você é o Chefe! Crie uma regra que todos devem seguir por 1 rodada completa. Quem quebrar a regra, bebe 1 shot.', ['Só beber segurando o copo com a mão esquerda.', 'Proibido usar a palavra “não”.']),
+            R('rule', 'Você é o Chefe! Dite uma postura física obrigatória para todos nesta rodada. Quem esquecer, bebe 1 shot.', ['Beber com o dedo mindinho levantado.', 'Falar sempre de pé.']),
+            R('rule', 'Você é o Chefe! Escolha uma palavra proibida para a mesa durante a rodada. Quem falar, bebe 1 shot.', ['Proibido dizer “beber”.', 'Proibido dizer nomes de pessoas.']),
+            R('rule', 'Você é o Chefe! Escolha um jeito obrigatório de brindar nesta rodada. Quem brindar errado, bebe 1 shot.', ['Brindar olhando nos olhos.', 'Brindar dizendo “saúde” em outra língua.']),
+            R('rule', 'Você é o Chefe! Escolha como todos devem falar com você nesta rodada. Quem falar diferente, bebe 1 shot.', ['Chamar você de “Majestade”.', 'Falar sempre com sotaque.']),
+            R('rule', 'Você é o Chefe! Crie um gesto que todos devem fazer antes de beber nesta rodada. Quem esquecer, bebe 1 shot.', ['Bater palma duas vezes.', 'Fazer uma continência.']),
+            // Regras DIRECIONADAS (o Chefe escolhe uma pessoa)
+            R('target', 'Você é o Chefe! Escolha uma pessoa para ficar em uma postura física obrigatória durante a rodada. Se ela esquecer, bebe 1 shot.', ['Ficar de pé o tempo todo.', 'Sentar no chão.']),
+            R('target', 'Você é o Chefe! Escolha uma pessoa que só poderá falar em rimas durante a rodada. Se não rimar, bebe 1 shot.', ['“Hoje eu vou ganhar, só falta brindar.”']),
+            R('target', 'Você é o Chefe! Escolha uma pessoa para ser sua assistente na rodada: ela atende qualquer pedido seu (dentro do razoável). Se recusar, bebe 1 shot.', ['Pedir um copo de água.', 'Pedir um elogio.']),
+            R('target', 'Você é o Chefe! Escolha uma pessoa que não pode dizer o próprio nome durante a rodada. Se disser, bebe 1 shot.', ['Ela pode se chamar de “eu”.']),
+            R('target', 'Você é o Chefe! Escolha uma pessoa que só poderá responder com mímica durante a rodada. Se falar, bebe 1 shot.', []),
+            R('target', 'Você é o Chefe! Escolha uma pessoa que deve imitar um animal à sua escolha toda vez que beber. Se esquecer, bebe 1 shot.', ['Miar depois de beber.', 'Latir depois de beber.'])
         ];
 
         deck.push(
@@ -450,7 +489,7 @@
             'Acordo': { bg: '#5E5CE6', fg: '#FFFFFF' },
             'Modo Alternativo': { bg: '#32ADE6', fg: '#FFFFFF' },
             'Comum': { bg: '#8E8E93', fg: '#FFFFFF' },
-            'Regra do Chefe': { bg: '#FF3B30', fg: '#FFFFFF' },
+            'Regra do Chefe': { bg: '#AF52DE', fg: '#FFFFFF' },
             'Tirar a Sorte': { bg: '#FFCC00', fg: '#000000' }
         };
 
@@ -459,15 +498,28 @@
         let currentTurnIndex = 0;
         let activeCard = null;
         let countDrinks = false;
-        let activeRule = null;
+        let activeRule = null; // { author, authorIdx }
+        let curScreen = 'setup-screen';
+        let roundPlayers = [], rouletteList = [];
+
+        const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+        function showMsg(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(showMsg._t);
+            showMsg._t = setTimeout(() => t.classList.remove('show'), 2800);
+        }
 
         function handleEnter(e) { if (e.key === 'Enter') addPlayer(); }
 
         function addPlayer() {
             const input = document.getElementById('player-input');
-            let name = input.value.trim().charAt(0).toUpperCase() + input.value.trim().slice(1).toLowerCase();
+            const raw = input.value.trim();
+            const name = raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase();
             if (name && !players.some(p => p.name === name)) {
-                players.push({ name: name, drinks: 0 });
+                players.push({ name: name, drinks: 0, active: true });
                 input.value = '';
                 updatePlayerList();
             }
@@ -477,7 +529,7 @@
             const ul = document.getElementById('players-ul');
             ul.innerHTML = '';
             players.forEach((p, idx) => {
-                ul.innerHTML += `<li><span>${p.name}</span> <span class="remove-btn" onclick="removePlayer(${idx})">✕</span></li>`;
+                ul.innerHTML += `<li><span>${esc(p.name)}</span> <span class="remove-btn" onclick="removePlayer(${idx})">✕</span></li>`;
             });
             document.getElementById('player-count').innerText = `${players.length} JOGADORES`;
         }
@@ -486,7 +538,7 @@
 
         function startGame() {
             countDrinks = document.getElementById('count-drinks').checked;
-            if (players.length < 2) return alert("Adicione pelo menos 2 jogadores!");
+            if (players.length < 2) return showMsg('Adicione pelo menos 2 jogadores!');
             document.getElementById('menu-ranking').style.display = countDrinks ? 'flex' : 'none';
             document.getElementById('menu-end').textContent = countDrinks ? '🏁 Encerrar e ver ranking' : '🏁 Encerrar jogo';
             updateTurnUI();
@@ -496,31 +548,32 @@
         function updateTurnUI() {
             document.getElementById('current-player-name').textContent = players[currentTurnIndex].name;
             document.getElementById('cards-played-count').innerText = `CARTAS: ${playedCards.length}/${deck.length}`;
-            
+            updateRuleBanner();
+        }
+
+        // Banner fixo: aparece em todas as telas do jogo até a vez voltar a quem criou a regra
+        function updateRuleBanner() {
             const banner = document.getElementById('active-rule-banner');
-            if (activeRule && activeRule.turnsLeft > 0) {
-                banner.style.display = 'flex';
-                document.getElementById('rule-author').textContent = activeRule.author;
-                document.getElementById('rule-turns-left').textContent = `${activeRule.turnsLeft} rodadas`;
-                
-                // Se restar apenas 1 rodada, o banner fica vermelho piscante e evidente
-                if(activeRule.turnsLeft === 1) {
-                    banner.classList.add('urgent');
-                    banner.querySelector('span').innerHTML = `🚨 <b>ÚLTIMA RODADA!</b> A regra de <b>${activeRule.author}</b> expira agora!`;
-                } else {
-                    banner.classList.remove('urgent');
-                    banner.querySelector('span').innerHTML = `👑 Atenção: A regra de <b>${activeRule.author}</b> está valendo!`;
-                }
+            const inGame = ['turn-screen', 'card-screen', 'roulette-screen', 'assign-drinks-screen'].includes(curScreen);
+            if (!activeRule || !inGame) { banner.style.display = 'none'; return; }
+
+            const n = players.length;
+            let left = 0, k = currentTurnIndex; // jogadas (de quem está ativo) até voltar ao autor
+            do { if (players[k].active) left++; k = (k + 1) % n; } while (k !== activeRule.authorIdx);
+            banner.style.display = 'flex';
+            document.getElementById('rule-turns-left').textContent = left === 1 ? 'última jogada' : `faltam ${left} jogadas`;
+            if (left === 1) {
+                banner.classList.add('urgent');
+                document.getElementById('rule-text').innerHTML = `🚨 <b>ÚLTIMA JOGADA!</b> A regra de ${ruleWho()} acaba depois desta vez.`;
             } else {
-                banner.style.display = 'none';
-                activeRule = null;
+                banner.classList.remove('urgent');
+                document.getElementById('rule-text').innerHTML = `👑 A regra de ${ruleWho()} está valendo!`;
             }
         }
 
         function drawCard(category) {
-            if(category === 'Tirar a Sorte') {
+            if (category === 'Tirar a Sorte') {
                 activeCard = { cat: 'Tirar a Sorte', scope: 'self', text: 'Roleta da Sorte' };
-                playedCards.push(activeCard);
                 setupRoulette();
                 document.getElementById('roulette-turn-indicator').innerText = `VEZ DE: ${players[currentTurnIndex].name.toUpperCase()}`;
                 showScreen('roulette-screen');
@@ -529,9 +582,9 @@
 
             let availableCards = deck.filter(c => !playedCards.some(pc => pc.text === c.text));
             if (category !== 'Comum') availableCards = availableCards.filter(c => c.cat === category);
-            
-            if (availableCards.length === 0) return alert(`Acabaram as cartas de ${category}!`);
-            
+
+            if (availableCards.length === 0) return showMsg(`Acabaram as cartas de ${category}!`);
+
             activeCard = availableCards[Math.floor(Math.random() * availableCards.length)];
             renderActiveCard();
         }
@@ -541,90 +594,102 @@
             const bg = document.getElementById('display-card-bg');
             bg.style.backgroundColor = cc.bg;
             bg.style.color = cc.fg;
-            
+
             document.getElementById('card-turn-indicator').innerText = `VEZ DE: ${players[currentTurnIndex].name.toUpperCase()}`;
             document.getElementById('display-category').innerText = activeCard.cat;
-            document.getElementById('display-scope').innerText = activeCard.scope === 'self' ? 'INDIVIDUAL' : (activeCard.scope === 'vote' ? 'O GRUPO VOTA' : 'TODOS BEBEM');
+            document.getElementById('display-scope').innerText = scopeLabel(activeCard, false);
             document.getElementById('display-text').innerText = activeCard.text;
-            
+            const exBox = document.getElementById('display-ex');
+            if (activeCard.ex && activeCard.ex.length) {
+                exBox.innerText = 'Exemplos:\n- ' + activeCard.ex.join('\n- ');
+                exBox.style.display = 'block';
+            } else {
+                exBox.style.display = 'none';
+            }
+            setupTimer(activeCard);
+
             const btnNext = document.getElementById('btn-next-card');
-            if(activeCard.cat === 'Regra do Chefe') {
+            if (activeCard.cat === 'Regra do Chefe') {
                 btnNext.textContent = "Ativar Regra 👑";
             } else {
                 btnNext.textContent = countDrinks ? 'Quem Bebeu? 🥃' : 'Finalizar Carta ✓';
             }
-            
+
             showScreen('card-screen');
         }
 
-        // Configurar a roleta visual com os nomes
+        // ===== Roleta: fatias com o mesmo tamanho e seta centralizada =====
         function setupRoulette() {
+            rouletteList = players.filter(p => p.active);
             const wheel = document.getElementById('wheel-element');
+            const n = rouletteList.length;
+            const s = 360 / n;
+            const palette = ['#FF3B30', '#5E5CE6', '#FF9F0A', '#32ADE6', '#8E8E93', '#000000'];
+
+            const sliceColors = rouletteList.map((_, i) => palette[i % palette.length]);
+            if (n > 1 && sliceColors[n - 1] === sliceColors[0]) sliceColors[n - 1] = palette[(n) % palette.length];
+
+            wheel.style.background = 'conic-gradient(from 0deg, ' +
+                sliceColors.map((c, i) => `${c} ${i * s}deg ${(i + 1) * s}deg`).join(', ') + ')';
+
+            // nomes na direção do raio, no meio de cada fatia
+            wheel.innerHTML = rouletteList.map((p, i) => {
+                const mid = (i + 0.5) * s;
+                return `<div class="wl" style="transform: rotate(${mid - 90}deg);"><span>${esc(p.name)}</span></div>`;
+            }).join('');
+
+            wheel.style.transition = 'none';
             wheel.style.transform = 'rotate(0deg)';
+            void wheel.offsetWidth;
+            wheel.style.transition = '';
+
             document.getElementById('roulette-winner-text').innerText = 'Gire a roleta!';
             document.getElementById('btn-spin').style.display = 'flex';
+            document.getElementById('btn-skip-roulette').style.display = 'flex';
             document.getElementById('btn-finish-roulette').style.display = 'none';
-
-            // Criar divisões na roleta baseada nos jogadores
-            let slices = '';
-            const colors = ['#FF3B30', '#5E5CE6', '#FF9F0A', '#32ADE6', '#8E8E93', '#000000'];
-            players.forEach((p, idx) => {
-                const deg = (360 / players.length) * idx;
-                slices += `<div style="position:absolute; width:100%; height:100%; clip-path: polygon(50% 50%, 0 0, 100% 0); background:${colors[idx % colors.length]}; transform: rotate(${deg}deg); display:flex; justify-content:center; padding-top:15px; color:#fff; font-weight:800; font-size:0.75rem;">${p.name}</div>`;
-            });
-            // Mantém o centro limpo
-            wheel.innerHTML = `<div class="roulette-center">🎰</div>` + slices;
         }
 
         function spinRoulette() {
             const wheel = document.getElementById('wheel-element');
-            const btnSpin = document.getElementById('btn-spin');
-            btnSpin.style.display = 'none';
+            document.getElementById('btn-spin').style.display = 'none';
+            document.getElementById('btn-skip-roulette').style.display = 'none';
 
-            // Sorteia jogador e quantidade de doses (máximo 2)
-            const randomPlayerIdx = Math.floor(Math.random() * players.length);
-            const randomShots = Math.floor(Math.random() * 2) + 1; // 1 ou 2 shots
+            const idx = Math.floor(Math.random() * rouletteList.length);
+            const shots = Math.floor(Math.random() * 2) + 1; // 1 ou 2 shots
+            const winner = rouletteList[idx];
 
-            const winningPlayer = players[randomPlayerIdx];
-            
-            // Calcula rotação para parar no jogador sorteado (várias voltas completas + offset)
-            const degreesPerSlice = 360 / players.length;
-            const targetDeg = 1440 + (360 - (randomPlayerIdx * degreesPerSlice + degreesPerSlice / 2));
-
-            wheel.style.transform = `rotate(${targetDeg}deg)`;
+            const s = 360 / rouletteList.length;
+            const jitter = (Math.random() - 0.5) * s * 0.6; // fica dentro da fatia
+            const target = 360 * 5 + (360 - (idx * s + s / 2)) + jitter;
+            wheel.style.transform = `rotate(${target}deg)`;
 
             setTimeout(() => {
-                document.getElementById('roulette-winner-text').innerHTML = `🎯 <b>${winningPlayer.name}</b> bebe <span style="color:var(--primary-red);">${randomShots} ${randomShots === 1 ? 'shot' : 'shots'}</span>!`;
-                
-                // Adiciona os shots automaticamente se a contagem estiver ativa
-                if(countDrinks) {
-                    winningPlayer.drinks += randomShots;
-                }
-
+                document.getElementById('roulette-winner-text').innerHTML = `🎯 <b>${esc(winner.name)}</b> bebe <span style="color:var(--primary-red);">${shots} ${shots === 1 ? 'shot' : 'shots'}</span>!`;
+                activeCard.text = `Roleta da Sorte: ${winner.name} bebeu ${shots} ${shots === 1 ? 'shot' : 'shots'}`;
+                if (countDrinks) winner.drinks += shots;
                 document.getElementById('btn-finish-roulette').style.display = 'flex';
-            }, 3000);
+            }, 3100);
         }
 
         function finishRoulette() {
+            playedCards.push(activeCard);
             nextTurn();
         }
 
+        function skipRoulette() { showScreen('turn-screen'); } // não conta e a vez continua com o mesmo jogador
+
         function goToAssignDrinks() {
-            if(activeCard.cat === 'Regra do Chefe') {
-                // 1 rodada completa = número exato de jogadores na mesa
-                activeRule = {
-                    author: players[currentTurnIndex].name,
-                    turnsLeft: players.length
-                };
-                playedCards.push(activeCard);
-                nextTurn();
+            if (activeCard.cat === 'Regra do Chefe') {
+                // vale até a vez voltar para quem criou (todos jogam uma carta)
+                if (activeCard.scope === 'target') pickTarget();
+                else activateRule(null);
                 return;
             }
 
             if (!countDrinks) { playedCards.push(activeCard); nextTurn(); return; }
-            
+
             playedCards.push(activeCard);
-            
+
             if (activeCard.cat === 'Acordo' && activeCard.scope === 'self') {
                 document.getElementById('multiple-selection-block').style.display = 'none';
                 document.getElementById('single-selection-block').style.display = 'block';
@@ -632,23 +697,25 @@
             } else {
                 document.getElementById('multiple-selection-block').style.display = 'block';
                 document.getElementById('single-selection-block').style.display = 'none';
-                
+
                 let hint = "Selecione quem bebeu.";
-                if(activeCard.scope === 'self') hint = "Ajuste se o jogador bebeu.";
-                else if(activeCard.scope === 'vote') hint = "Marque quem recebeu mais votos.";
+                if (activeCard.scope === 'self') hint = "Ajuste se o jogador bebeu.";
+                else if (activeCard.scope === 'vote') hint = "Marque quem recebeu mais votos.";
                 document.getElementById('assign-hint').textContent = hint;
-                
+
                 const container = document.getElementById('drinks-checkboxes');
                 container.innerHTML = '';
-                players.forEach((p, i) => {
+                roundPlayers = players.filter(p => p.active);
+                roundPlayers.forEach((p, i) => {
+                    const pre = (activeCard.scope === 'self' && p === players[currentTurnIndex]);
                     let div = document.createElement('div');
-                    div.className = 'checkbox-row' + ((activeCard.scope === 'self' && i === currentTurnIndex) ? ' selected' : '');
+                    div.className = 'checkbox-row' + (pre ? ' selected' : '');
                     div.innerHTML = `
                         <div class="chk-box"></div>
-                        <span class="chk-name">${p.name}</span>
-                        <input type="checkbox" id="drink-${i}" style="display:none;" ${(activeCard.scope === 'self' && i === currentTurnIndex) ? 'checked' : ''}>
+                        <span class="chk-name">${esc(p.name)}</span>
+                        <input type="checkbox" id="drink-${i}" style="display:none;" ${pre ? 'checked' : ''}>
                     `;
-                    div.onclick = function() {
+                    div.onclick = function () {
                         const chk = document.getElementById(`drink-${i}`);
                         chk.checked = !chk.checked;
                         this.classList.toggle('selected', chk.checked);
@@ -660,10 +727,10 @@
         }
 
         function skipCard() { showScreen('turn-screen'); }
-        
+
         function toggleAllDrinks() {
             const rows = document.querySelectorAll('#drinks-checkboxes .checkbox-row');
-            const allChecked = Array.from(document.querySelectorAll('input[type="checkbox"]')).every(c => c.checked);
+            const allChecked = Array.from(rows).every((r, i) => document.getElementById(`drink-${i}`).checked);
             rows.forEach((r, i) => {
                 document.getElementById(`drink-${i}`).checked = !allChecked;
                 r.classList.toggle('selected', !allChecked);
@@ -671,7 +738,7 @@
         }
 
         function confirmDrinks() {
-            players.forEach((p, i) => { if (document.getElementById(`drink-${i}`).checked) p.drinks++; });
+            roundPlayers.forEach((p, i) => { if (document.getElementById(`drink-${i}`).checked) p.drinks++; });
             nextTurn();
         }
 
@@ -682,9 +749,23 @@
             nextTurn();
         }
 
+        function moveToNextActive() {
+            const n = players.length;
+            let idx = currentTurnIndex, ended = false;
+            do {
+                idx = (idx + 1) % n;
+                if (activeRule && idx === activeRule.authorIdx) ended = true;
+            } while (!players[idx].active);
+            currentTurnIndex = idx;
+            if (ended) {
+                const author = activeRule.author;
+                activeRule = null;
+                showMsg(`A regra de ${author} acabou!`);
+            }
+        }
+
         function nextTurn() {
-            currentTurnIndex = (currentTurnIndex + 1) % players.length;
-            if(activeRule) activeRule.turnsLeft--;
+            moveToNextActive();
             updateTurnUI();
             showScreen('turn-screen');
         }
@@ -694,7 +775,7 @@
             const ul = document.getElementById('ranking-ul');
             ul.innerHTML = '';
             [...players].sort((a, b) => b.drinks - a.drinks).forEach((p, i) => {
-                ul.innerHTML += `<li class="ranking-item"><span class="rank-pos">${i+1}º ${p.name}</span><span class="rank-score">${p.drinks} 🥃</span></li>`;
+                ul.innerHTML += `<li class="ranking-item"><span class="rank-pos">${i + 1}º ${esc(p.name)}${p.active ? '' : ' · fora'}</span><span class="rank-score">${p.drinks} 🥃</span></li>`;
             });
             showScreen('ranking-screen');
         }
@@ -702,27 +783,31 @@
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+            curScreen = id;
+            if (id !== 'card-screen') stopTimer();
+            updateRuleBanner();
         }
 
         function toggleMenu() { document.getElementById('menu-overlay').classList.toggle('active'); }
         function menuAction(act) {
             toggleMenu();
-            if(act === 'end') endGame();
-            if(act === 'ranking') openModal('modal-ranking', renderModalRanking);
-            if(act === 'history') openModal('modal-history', renderModalHistory);
-            if(act === 'catalog') openModal('modal-catalog', renderModalCatalog);
+            if (act === 'end') endGame();
+            if (act === 'players') openModal('modal-players', renderModalPlayers);
+            if (act === 'ranking') openModal('modal-ranking', renderModalRanking);
+            if (act === 'history') openModal('modal-history', renderModalHistory);
+            if (act === 'catalog') openModal('modal-catalog', renderModalCatalog);
         }
         function openModal(id, renderFunc) {
-            if(renderFunc) renderFunc();
+            if (renderFunc) renderFunc();
             document.getElementById(id).classList.add('active');
         }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-        
+
         function renderModalRanking() {
             const ul = document.getElementById('ranking-modal-ul');
             ul.innerHTML = '';
             [...players].sort((a, b) => b.drinks - a.drinks).forEach((p, i) => {
-                ul.innerHTML += `<li class="ranking-item"><span class="rank-pos">${i+1}º ${p.name}</span><span class="rank-score">${p.drinks} 🥃</span></li>`;
+                ul.innerHTML += `<li class="ranking-item"><span class="rank-pos">${i + 1}º ${esc(p.name)}${p.active ? '' : ' · fora'}</span><span class="rank-score">${p.drinks} 🥃</span></li>`;
             });
         }
         function renderModalHistory() {
@@ -731,7 +816,7 @@
             playedCards.forEach(c => {
                 list.innerHTML += `<div style="padding: 12px 16px; background: white; border: 1px solid #E5DED1; border-radius: 12px;">
                     <strong style="color: ${CAT_COLORS[c.cat].bg}; font-size: 0.8rem; text-transform: uppercase;">${c.cat}</strong>
-                    <p style="font-weight: 600; font-size:0.9rem; margin-top: 4px;">${c.text}</p>
+                    <p style="font-weight: 600; font-size:0.9rem; margin-top: 4px; white-space: pre-line;">${esc(fullText(c))}</p>
                 </div>`;
             });
         }
@@ -740,13 +825,13 @@
             const order = ['Revelação', 'Desafio', 'Inspeção', 'Acordo', 'Modo Alternativo', 'Regra do Chefe', 'Tirar a Sorte', 'Comum'];
             const groups = {};
             order.forEach(k => groups[k] = []);
-            deck.forEach(c => { if(groups[c.cat]) groups[c.cat].push(c); });
+            deck.forEach(c => { if (groups[c.cat]) groups[c.cat].push(c); });
 
             let html = `<p style="text-align:center; font-weight:800; font-size: 1.1rem; margin-bottom: 16px;">Total de ${deck.length} cartas</p>`;
             order.forEach(k => {
                 const list = groups[k];
-                if(list.length === 0 && k !== 'Tirar a Sorte') return;
-                if(k === 'Tirar a Sorte') {
+                if (list.length === 0 && k !== 'Tirar a Sorte') return;
+                if (k === 'Tirar a Sorte') {
                     html += `<details class="cat-block" style="border-left-color:#FFCC00;"><summary style="color:#B8860B;">Tirar a Sorte (Roleta) — Carta Especial</summary><ol><li>Sorteio dinâmico com os nomes da roda (1 a 2 shots).</li></ol></details>`;
                     return;
                 }
@@ -754,16 +839,169 @@
                             <summary style="color:${CAT_COLORS[k].bg};">${k} — ${list.length} cartas</summary>
                             <ol>`;
                 list.forEach(c => {
-                    const sc = c.scope === 'self' ? 'INDIVIDUAL' : (c.scope === 'vote' ? 'GRUPO VOTA' : 'TODOS');
-                    html += `<li><span class="scope-tag" style="color:${CAT_COLORS[k].bg};">${sc}</span> ${c.text}</li>`;
+                    const sc = scopeLabel(c, true);
+                    html += `<li><span class="scope-tag" style="color:${CAT_COLORS[k].bg};">${sc}</span> <span style="white-space: pre-line;">${esc(fullText(c))}</span></li>`;
                 });
                 html += '</ol></details>';
             });
             content.innerHTML = html;
         }
+        function scopeLabel(c, short) {
+            const m = { self: 'INDIVIDUAL', vote: short ? 'GRUPO VOTA' : 'O GRUPO VOTA', rule: 'REGRA PARA TODOS', target: 'REGRA PARA 1 PESSOA' };
+            return m[c.scope] || (short ? 'TODOS' : 'TODOS BEBEM');
+        }
+        function fullText(c) {
+            return c.text + ((c.ex && c.ex.length) ? '\n\nExemplos:\n- ' + c.ex.join('\n- ') : '');
+        }
+
+        // ===== Regra do Chefe: para todos ou direcionada =====
+        function ruleWho() {
+            return `<b>${esc(activeRule.author)}</b>` + (activeRule.target ? ` para <b>${esc(activeRule.target)}</b>` : '');
+        }
+        function activateRule(targetIdx) {
+            activeRule = {
+                author: players[currentTurnIndex].name,
+                authorIdx: currentTurnIndex,
+                target: (targetIdx === null || targetIdx === undefined) ? null : players[targetIdx].name
+            };
+            playedCards.push(activeCard);
+            nextTurn();
+        }
+        function pickTarget() {
+            const old = document.getElementById('dlg');
+            if (old) old.remove();
+            const d = document.createElement('div');
+            d.id = 'dlg';
+            d.className = 'modal active';
+            d.style.cssText = 'display:flex; align-items:center; justify-content:center; z-index:250;';
+            const box = document.createElement('div');
+            box.style.cssText = 'width:100%; max-width:340px; display:flex; flex-direction:column; gap:8px;';
+            const h = document.createElement('h2');
+            h.textContent = 'Quem foi escolhido?';
+            h.style.cssText = 'font-size:1.5rem; font-weight:900; margin-bottom:6px;';
+            box.appendChild(h);
+            players.forEach((p, i) => {
+                if (i === currentTurnIndex || !p.active) return;
+                const b = document.createElement('button');
+                b.className = 'btn-dark';
+                b.textContent = p.name;
+                b.onclick = () => { d.remove(); activateRule(i); };
+                box.appendChild(b);
+            });
+            const c = document.createElement('button');
+            c.className = 'btn-secondary';
+            c.textContent = 'Cancelar';
+            c.onclick = () => d.remove();
+            box.appendChild(c);
+            d.appendChild(box);
+            document.body.appendChild(d);
+        }
+
+        // ===== Timer das cartas que têm tempo (ex.: "por 15 segundos") =====
+        let timerId = null, timerLeft = 0, timerTotal = 0, audioCtx = null;
+        const fmtTime = s => s >= 60 ? `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}` : `${s}s`;
+        function setupTimer(card) {
+            stopTimer();
+            const btn = document.getElementById('btn-timer');
+            const m = card.text.match(/(\d+)\s*(segundos?|minutos?)/i);
+            if (!m) { timerTotal = 0; btn.style.display = 'none'; return; }
+            timerTotal = parseInt(m[1], 10) * (/^min/i.test(m[2]) ? 60 : 1);
+            btn.style.display = 'flex';
+            timerIdle();
+        }
+        function timerIdle() {
+            const btn = document.getElementById('btn-timer');
+            btn.className = 'btn-outline';
+            btn.style.fontSize = '';
+            btn.textContent = `⏱ Iniciar timer (${fmtTime(timerTotal)})`;
+        }
+        function stopTimer() {
+            if (timerId) { clearInterval(timerId); timerId = null; }
+        }
+        function toggleTimer() {
+            if (timerId) { stopTimer(); timerIdle(); return; } // tocar durante a contagem = cancelar
+            try {
+                if (!audioCtx) { const C = window.AudioContext || window.webkitAudioContext; if (C) audioCtx = new C(); }
+                if (audioCtx && audioCtx.resume) audioCtx.resume();
+            } catch (e) {}
+            const btn = document.getElementById('btn-timer');
+            timerLeft = timerTotal;
+            btn.className = 'btn-dark';
+            btn.style.fontSize = '1.6rem';
+            btn.textContent = `⏱ ${fmtTime(timerLeft)}`;
+            timerId = setInterval(() => {
+                timerLeft--;
+                if (timerLeft <= 0) {
+                    stopTimer();
+                    btn.className = 'btn-main';
+                    btn.style.fontSize = '1.1rem';
+                    btn.textContent = '⏰ Acabou o tempo! (toque para repetir)';
+                    timerBeep();
+                } else {
+                    btn.textContent = `⏱ ${fmtTime(timerLeft)}`;
+                }
+            }, 1000);
+        }
+        function timerBeep() {
+            try {
+                if (audioCtx) {
+                    [0, 0.25, 0.5].forEach(t => {
+                        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.frequency.value = 880; g.gain.value = 0.2;
+                        o.start(audioCtx.currentTime + t); o.stop(audioCtx.currentTime + t + 0.15);
+                    });
+                }
+            } catch (e) {}
+            try { if (navigator.vibrate) navigator.vibrate([200, 100, 200]); } catch (e) {}
+        }
+
+        function renderModalPlayers() {
+            const ul = document.getElementById('players-modal-ul');
+            ul.innerHTML = '';
+            players.forEach((p, i) => {
+                const li = document.createElement('li');
+                li.style.opacity = p.active ? '1' : '0.5';
+                const left = document.createElement('span');
+                left.textContent = p.name + (i === currentTurnIndex ? ' · vez agora' : '') + (p.active ? '' : ' · fora') + (countDrinks && p.drinks ? ' · ' + p.drinks + ' 🥃' : '');
+                const btn = document.createElement('button');
+                btn.textContent = p.active ? 'Desativar' : 'Ativar';
+                btn.className = p.active ? 'btn-outline' : 'btn-dark';
+                btn.style.cssText = 'width:auto; padding:8px 14px; font-size:0.75rem;' + (p.active ? ' border-color:#FF3B30; color:#FF3B30;' : '');
+                btn.onclick = () => togglePlayerActive(i);
+                li.append(left, btn);
+                ul.appendChild(li);
+            });
+        }
+
+        function addPlayerInGame() {
+            const input = document.getElementById('player-input-game');
+            const raw = input.value.trim();
+            const name = raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase();
+            if (!name) return;
+            if (players.some(p => p.name === name)) { showMsg('Esse nome já está na lista.'); return; }
+            players.push({ name: name, drinks: 0, active: true }); // entra no fim da ordem, sem mudar a vez de ninguém
+            input.value = '';
+            input.focus();
+            renderModalPlayers();
+            updateRuleBanner();
+            showMsg(`${name} entrou no jogo!`);
+        }
+
+        function togglePlayerActive(i) {
+            const p = players[i];
+            if (p.active) {
+                if (players.filter(x => x.active).length <= 2) { showMsg('Precisa de pelo menos 2 jogadores ativos.'); return; }
+                p.active = false;
+                if (i === currentTurnIndex) { moveToNextActive(); updateTurnUI(); } // era a vez dele: passa para o próximo
+            } else {
+                p.active = true;
+            }
+            renderModalPlayers();
+            updateRuleBanner();
+        }
+
         function resetGame() { location.reload(); }
     </script>
 </body>
 </html>
-
-```
